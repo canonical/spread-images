@@ -1,4 +1,4 @@
-project: test-images
+project: spread-images
 
 backends:
     linode:
