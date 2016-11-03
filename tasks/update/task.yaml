@@ -1,0 +1,35 @@
+summary: Update Linode image.
+
+execute: |
+
+    case $SPREAD_REBOOT in
+
+    0)
+
+        uname -r > old-kernel
+
+        apt update
+        apt dist-upgrade -y
+
+        REBOOT
+        ;;
+
+    1)
+
+        # Remove old kernel.
+        old_kernel=$(cat old-kernel)
+        new_kernel=$(uname -r)
+        if [ $new_kernel != $old_kernel ]; then
+            apt remove -y $(dpkg -S /boot/vmlinuz-$old_kernel | sed 's/:.*//')
+        fi
+
+        # Ensure single kernel remains.
+        if ! ls /boot/vmlinuz-* | wc -l | grep '^1$'; then
+            echo "Unused kernels remain:"
+            ls /boot/vmlinuz-*
+            exit 1
+        fi
+
+        ;;
+
+    esac

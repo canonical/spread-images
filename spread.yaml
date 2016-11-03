@@ -1,0 +1,32 @@
+project: test-images
+
+backends:
+    linode:
+        key: "$(HOST: echo $SPREAD_LINODE_KEY)"
+        systems:
+            - ubuntu-16.04-64:
+                kernel: GRUB 2
+            - ubuntu-16.04-32:
+                kernel: GRUB 2
+
+path: /root/spread
+
+restore: |
+    apt autoremove -y
+
+    find \
+        /var/log \
+        /var/cache/apt \
+        /var/lib/apt/{lists,mirrors} \
+        -type f -exec rm -f {} \;
+
+    rm -rf \
+        /root/.bash_history \
+        /root/.viminfo \
+        /root/.bashrc \
+        /root/.cache \
+        /root/spread
+
+suites:
+    tasks/:
+        summary: Image maintenace tasks
