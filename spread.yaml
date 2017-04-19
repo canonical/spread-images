@@ -10,7 +10,6 @@ backends:
                 kernel: GRUB 2
             - debian-unstable-64:
                 kernel: GRUB 2
-                image: debian-sid
 
 path: /root/spread
 
