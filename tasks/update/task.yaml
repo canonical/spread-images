@@ -4,7 +4,6 @@ execute: |
 
     if [[ "$SPREAD_SYSTEM" = fedora-* ]]; then
         dnf upgrade -y
-        dnf clean all -y
     else
         case $SPREAD_REBOOT in
 

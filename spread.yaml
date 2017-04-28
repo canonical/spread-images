@@ -23,6 +23,7 @@ path: /root/spread
 restore: |
     if [[ "$SPREAD_SYSTEM" = fedora-* ]]; then
         dnf clean all -y
+        dnf clean metadata
         find /var/log -type f -exec rm -f {} \;
     else
         apt autoremove -y
