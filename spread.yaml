@@ -12,6 +12,8 @@ backends:
                 kernel: GRUB 2
             - ubuntu-17.04-64:
                 kernel: GRUB 2
+            - ubuntu-17.10-64:
+                kernel: GRUB 2
             - debian-unstable-64:
                 kernel: GRUB 2
 
