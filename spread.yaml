@@ -8,6 +8,10 @@ backends:
                 kernel: GRUB 2
             - ubuntu-16.04-32:
                 kernel: GRUB 2
+            - ubuntu-16.10-64:
+                kernel: GRUB 2
+            - ubuntu-17.04-64:
+                kernel: GRUB 2
             - ubuntu-17.10-64:
                 kernel: GRUB 2
             - debian-unstable-64:
