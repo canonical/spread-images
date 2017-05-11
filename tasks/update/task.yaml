@@ -8,8 +8,11 @@ execute: |
 
         uname -r > old-kernel
 
+        # apt update is hanging on security.ubuntu.com with IPv6.
+        sysctl -w net.ipv6.conf.all.disable_ipv6=1
         apt update
         apt dist-upgrade -y
+        sysctl -w net.ipv6.conf.all.disable_ipv6=0
 
         REBOOT
         ;;
