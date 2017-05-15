@@ -21,19 +21,26 @@ backends:
 path: /root/spread
 
 restore: |
-    if [[ "$SPREAD_SYSTEM" = fedora-* ]]; then
-        dnf clean all -y
-        dnf clean metadata
-        find /var/log -type f -exec rm -f {} \;
-    else
-        apt autoremove -y
+    case "$SPREAD_SYSTEM" in
+        fedora-*)
+            dnf clean all -y
+            dnf clean metadata
+            find /var/log -type f -exec rm -f {} \;
+            ;;
+        debian-*)
+            ;&
+        ubuntu-*)
+            apt autoremove -y
 
-        find \
-            /var/log \
-            /var/cache/apt \
-            /var/lib/apt/{lists,mirrors} \
-            -type f -exec rm -f {} \;
-    fi
+            find \
+                /var/log \
+                /var/cache/apt \
+                /var/lib/apt/{lists,mirrors} \
+                -type f -exec rm -f {} \;
+            ;;
+        *)
+            ;;
+    esac
 
     rm -rf \
         /root/.bash_history \
