@@ -6,6 +6,9 @@ execute: |
             dnf upgrade -y
             dnf autoremove -y
             ;;
+        opensuse-*)
+            zypper -q update -y
+            ;;
         ubuntu-*|debian-*)
             case $SPREAD_REBOOT in
 

@@ -17,6 +17,8 @@ backends:
             - debian-unstable-64:
                 kernel: GRUB 2
             - fedora-25-64
+            - opensuse-42.2-64:
+                image: openSUSE Leap 42.2
 
 path: /root/spread
 
@@ -25,6 +27,10 @@ restore: |
         fedora-*)
             dnf clean all -y
             dnf clean metadata
+            find /var/log -type f -exec rm -f {} \;
+            ;;
+        opensuse-*)
+            zypper -q clean --all
             find /var/log -type f -exec rm -f {} \;
             ;;
         debian-*|ubuntu-*)
