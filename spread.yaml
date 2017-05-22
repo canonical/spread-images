@@ -16,17 +16,29 @@ backends:
                 kernel: GRUB 2
             - debian-unstable-64:
                 kernel: GRUB 2
+            - fedora-25-64
 
 path: /root/spread
 
 restore: |
-    apt autoremove -y
+    case "$SPREAD_SYSTEM" in
+        fedora-*)
+            dnf clean all -y
+            dnf clean metadata
+            find /var/log -type f -exec rm -f {} \;
+            ;;
+        debian-*|ubuntu-*)
+            apt autoremove -y
 
-    find \
-        /var/log \
-        /var/cache/apt \
-        /var/lib/apt/{lists,mirrors} \
-        -type f -exec rm -f {} \;
+            find \
+                /var/log \
+                /var/cache/apt \
+                /var/lib/apt/{lists,mirrors} \
+                -type f -exec rm -f {} \;
+            ;;
+        *)
+            ;;
+    esac
 
     rm -rf \
         /root/.bash_history \
