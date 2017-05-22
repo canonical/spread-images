@@ -27,9 +27,7 @@ restore: |
             dnf clean metadata
             find /var/log -type f -exec rm -f {} \;
             ;;
-        debian-*)
-            ;&
-        ubuntu-*)
+        debian-*|ubuntu-*)
             apt autoremove -y
 
             find \
