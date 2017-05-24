@@ -8,6 +8,7 @@ execute: |
             ;;
         opensuse-*)
             zypper -q update -y
+            zypper packages --orphaned
             ;;
         ubuntu-*|debian-*)
             case $SPREAD_REBOOT in
