@@ -17,8 +17,7 @@ backends:
             - debian-unstable-64:
                 kernel: GRUB 2
             - fedora-25-64
-            - opensuse-42.2-64:
-                image: openSUSE Leap 42.2
+            - opensuse-42.2-64
 
 path: /root/spread
 
