@@ -18,6 +18,8 @@ backends:
                 kernel: GRUB 2
             - fedora-25-64
             - opensuse-42.2-64
+            - archlinux-64:
+                image: Arch 2017.04.01
 
 path: /root/spread
 
