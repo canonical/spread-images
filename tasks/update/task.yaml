@@ -1,38 +1,61 @@
 summary: Update Linode image.
 
 execute: |
+    case "$SPREAD_SYSTEM" in
+        archlinux-*)
+            pacman -Sy --noconfirm
+            pacman -Su --noconfirm
+            orphaned_packages="$(pacman -Qqdt || true)"
+            if [ -n "$orphaned_packages" ]; then
+                pacman -R --noconfirm "$orphaned_packages"
+            fi
+            ;;
+        fedora-*)
+            dnf upgrade -y
+            dnf autoremove -y
+            ;;
+        opensuse-*)
+            zypper -q update -y
+            zypper packages --orphaned
+            ;;
+        ubuntu-*|debian-*)
+            case $SPREAD_REBOOT in
 
-    case $SPREAD_REBOOT in
+            0)
 
-    0)
+                uname -r > old-kernel
 
-        uname -r > old-kernel
+                # apt update is hanging on security.ubuntu.com with IPv6.
+                sysctl -w net.ipv6.conf.all.disable_ipv6=1
+                apt update
+                apt dist-upgrade -y
+                sysctl -w net.ipv6.conf.all.disable_ipv6=0
 
-        # apt update is hanging on security.ubuntu.com with IPv6.
-        sysctl -w net.ipv6.conf.all.disable_ipv6=1
-        apt update
-        apt dist-upgrade -y
-        sysctl -w net.ipv6.conf.all.disable_ipv6=0
+                REBOOT
+                ;;
 
-        REBOOT
-        ;;
+            1)
 
-    1)
+                # Remove old kernel.
+                old_kernel=$(cat old-kernel)
+                new_kernel=$(uname -r)
+                if [ $new_kernel != $old_kernel ]; then
+                    apt remove -y $(dpkg -S /boot/vmlinuz-$old_kernel | sed 's/:.*//')
+                fi
 
-        # Remove old kernel.
-        old_kernel=$(cat old-kernel)
-        new_kernel=$(uname -r)
-        if [ $new_kernel != $old_kernel ]; then
-            apt remove -y $(dpkg -S /boot/vmlinuz-$old_kernel | sed 's/:.*//')
-        fi
+                # Ensure single kernel remains.
+                if ! ls /boot/vmlinuz-* | wc -l | grep '^1$'; then
+                    echo "Unused kernels remain:"
+                    ls /boot/vmlinuz-*
+                    exit 1
+                fi
 
-        # Ensure single kernel remains.
-        if ! ls /boot/vmlinuz-* | wc -l | grep '^1$'; then
-            echo "Unused kernels remain:"
-            ls /boot/vmlinuz-*
+                ;;
+
+            esac
+            ;;
+        *)
+            echo "ERROR: system $SPREAD_SYSTEM is not yet supported"
             exit 1
-        fi
-
-        ;;
-
+            ;;
     esac

@@ -16,17 +16,40 @@ backends:
                 kernel: GRUB 2
             - debian-unstable-64:
                 kernel: GRUB 2
+            - fedora-25-64
+            - opensuse-42.2-64
+            - archlinux-64:
+                image: Arch 2017.04.01
 
 path: /root/spread
 
 restore: |
-    apt autoremove -y
+    case "$SPREAD_SYSTEM" in
+        fedora-*)
+            dnf clean all -y
+            dnf clean metadata
+            find /var/log -type f -exec rm -f {} \;
+            ;;
+        opensuse-*)
+            zypper -q clean --all
+            find /var/log -type f -exec rm -f {} \;
+            ;;
+        debian-*|ubuntu-*)
+            apt autoremove -y
 
-    find \
-        /var/log \
-        /var/cache/apt \
-        /var/lib/apt/{lists,mirrors} \
-        -type f -exec rm -f {} \;
+            find \
+                /var/log \
+                /var/cache/apt \
+                /var/lib/apt/{lists,mirrors} \
+                -type f -exec rm -f {} \;
+            ;;
+        archlinux-*)
+            # Remove all packages from cache directory
+            pacman -Scc --noconfirm
+            ;;
+        *)
+            ;;
+    esac
 
     rm -rf \
         /root/.bash_history \
