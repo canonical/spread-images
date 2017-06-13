@@ -2,6 +2,14 @@ summary: Update Linode image.
 
 execute: |
     case "$SPREAD_SYSTEM" in
+        archlinux-*)
+            pacman -Sy --noconfirm
+            pacman -Su --noconfirm
+            orphaned_packages="$(pacman -Qqdt || true)"
+            if [ -n "$orphaned_packages" ]; then
+                pacman -R --noconfirm "$orphaned_packages"
+            fi
+            ;;
         fedora-*)
             dnf upgrade -y
             dnf autoremove -y

@@ -43,6 +43,10 @@ restore: |
                 /var/lib/apt/{lists,mirrors} \
                 -type f -exec rm -f {} \;
             ;;
+        archlinux-*)
+            # Remove all packages from cache directory
+            pacman -Scc --noconfirm
+            ;;
         *)
             ;;
     esac
