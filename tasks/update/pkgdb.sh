@@ -235,6 +235,7 @@ pkg_dependencies_ubuntu_generic(){
         libseccomp-dev
         libudev-dev
         netcat-openbsd
+        nfs-kernel-server
         pkg-config
         python3-docutils
         rng-tools
