@@ -1,5 +1,9 @@
 project: spread-images
 
+environment:
+    PROJECT_PATH: /root/spread-images
+    TESTSLIB: $PROJECT_PATH/lib
+
 backends:
     linode:
         key: "$(HOST: echo $SPREAD_LINODE_KEY)"
@@ -14,12 +18,19 @@ backends:
                 kernel: GRUB 2
             - ubuntu-17.10-64:
                 kernel: GRUB 2
-            - debian-unstable-64:
+            - debian-9-64:
+                kernel: GRUB 2
+            - debian-sid-64:
                 kernel: GRUB 2
             - fedora-25-64
+            - fedora-26-64:
+                kernel: GRUB 2
+            - fedora-27-64:
+                kernel: GRUB 2
+            - fedora-rawhide-64
             - opensuse-42.2-64
 
-path: /root/spread
+path: /root/spread-images
 
 restore: |
     case "$SPREAD_SYSTEM" in
@@ -56,7 +67,8 @@ restore: |
         /root/.viminfo \
         /root/.bashrc \
         /root/.cache \
-        /root/spread
+        /root/spread \
+        /root/spread-images
 
 suites:
     tasks/:

@@ -2,7 +2,6 @@ summary: Update Linode image.
 
 execute: |
 
-    TESTSLIB=.
     . "$TESTSLIB/pkgdb.sh"
 
     case "$SPREAD_SYSTEM" in
