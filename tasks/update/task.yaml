@@ -2,37 +2,58 @@ summary: Update Linode image.
 
 execute: |
 
-    case $SPREAD_REBOOT in
+    . "$TESTSLIB/pkgdb.sh"
 
-    0)
+    case "$SPREAD_SYSTEM" in
 
-        uname -r > old-kernel
+        ubuntu-*|debian-*)
 
-        # apt update is hanging on security.ubuntu.com with IPv6.
-        sysctl -w net.ipv6.conf.all.disable_ipv6=1
-        apt update
-        apt dist-upgrade -y
-        sysctl -w net.ipv6.conf.all.disable_ipv6=0
+            case $SPREAD_REBOOT in
 
-        REBOOT
-        ;;
+            0)
 
-    1)
+                uname -r > old-kernel
 
-        # Remove old kernel.
-        old_kernel=$(cat old-kernel)
-        new_kernel=$(uname -r)
-        if [ $new_kernel != $old_kernel ]; then
-            apt remove -y $(dpkg -S /boot/vmlinuz-$old_kernel | sed 's/:.*//')
-        fi
+                # apt update is hanging on security.ubuntu.com with IPv6.
+                sysctl -w net.ipv6.conf.all.disable_ipv6=1
+                distro_update_package_db
+                apt dist-upgrade -y
+                sysctl -w net.ipv6.conf.all.disable_ipv6=0
 
-        # Ensure single kernel remains.
-        if ! ls /boot/vmlinuz-* | wc -l | grep '^1$'; then
-            echo "Unused kernels remain:"
-            ls /boot/vmlinuz-*
+                REBOOT
+                ;;
+
+            1)
+
+                # Remove old kernel.
+                old_kernel=$(cat old-kernel)
+                new_kernel=$(uname -r)
+                if [ $new_kernel != $old_kernel ]; then
+                    apt remove -y $(dpkg -S /boot/vmlinuz-$old_kernel | sed 's/:.*//')
+                fi
+
+                # Ensure single kernel remains.
+                if ! ls /boot/vmlinuz-* | wc -l | grep '^1$'; then
+                    echo "Unused kernels remain:"
+                    ls /boot/vmlinuz-*
+                    exit 1
+                fi
+                ;;
+            esac
+            ;;
+
+        fedora-*)
+            distro_update_package_db
+            ;;
+
+        opensuse-*)
+            distro_update_package_db
+            ;;
+
+        *)
+            echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
             exit 1
-        fi
-
-        ;;
-
+            ;;
     esac
+
+    install_pkg_dependencies
