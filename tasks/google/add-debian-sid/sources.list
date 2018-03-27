@@ -1,0 +1,34 @@
+##
+## stable
+##
+
+deb     http://deb.debian.org/debian/ stable main contrib non-free
+deb-src http://deb.debian.org/debian/ stable main contrib non-free
+
+deb     http://deb.debian.org/debian/ stable-updates main contrib non-free
+deb-src http://deb.debian.org/debian/ stable-updates main contrib non-free
+
+deb     http://security.debian.org/ stable/updates main contrib non-free
+deb-src http://security.debian.org/ stable/updates main contrib non-free
+
+##
+## testing
+##
+
+deb     http://deb.debian.org/debian/ testing main contrib non-free
+deb-src http://deb.debian.org/debian/ testing main contrib non-free
+
+##
+## sid
+##
+
+deb     http://deb.debian.org/debian/ sid main contrib non-free
+deb-src http://deb.debian.org/debian/ sid main contrib non-free
+
+##
+## experimental
+##
+
+deb     http://deb.debian.org/debian/ experimental main contrib non-free
+deb-src http://deb.debian.org/debian/ experimental main contrib non-free
+
