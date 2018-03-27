@@ -3,7 +3,7 @@ summary: Add new debian sid image to google account
 environment:
     IMAGE: debian-sid-64-v$(date +'%Y%m%d')
     FAMILY: debian-sid-64
-    DESCRIPTION: debian sid 64
+    DESCRIPTION: Debian sid 64 bits
     DISK: $(hostname)
 
 execute: |
@@ -33,10 +33,12 @@ execute: |
     rm -rf /root/.bash_history /root/.viminfo /root/.bashrc /root/.cache
 
     # Project path is moved away to avoid path conflicts when this image is used with spread-images project again
-    snapshot $DISK
-    gcloud compute images delete "$IMAGE" || true
-    gcloud compute images create "$IMAGE" --description "$DESCRIPTION" --family "$FAMILY" --source-snapshot "$DISK"
-    deprecate "$FAMILY"
+    create_snapshot_from_disk "$DISK"
+    delete_image "$IMAGE"
+    create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+    deprecate_old_images "$FAMILY"
 
 restore: |
-    gcloud compute snapshots delete "$DISK" --quiet || true
+    . "$TESTSLIB/google.sh"
+
+    delete_snapshot "$DISK"
