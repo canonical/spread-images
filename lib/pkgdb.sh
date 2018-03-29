@@ -3,6 +3,41 @@
 # shellcheck source=tests/lib/quiet.sh
 . "$TESTSLIB/quiet.sh"
 
+distro_install_google_sdk() {
+    case "$SPREAD_SYSTEM" in
+        ubuntu-*|debian-*)
+            echo "so far not needed"
+            ;;
+        fedora-*)
+            if ! [ -f /etc/yum.repos.d/google-cloud.repo ]; then
+                cat >> /etc/yum.repos.d/google-cloud.repo <<-EOF
+[google-cloud-compute]
+name=Google Cloud Compute
+baseurl=https://packages.cloud.google.com/yum/repos/google-cloud-compute-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+       https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+            exit 1
+            fi
+            dnf makecache
+            dnf install -y google-cloud-sdk
+            ;;
+        opensuse-*)
+            echo "so far not needed"
+            ;;
+        arch-*)
+            echo "so far not needed"
+            ;;
+        *)
+            echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
+            exit 1
+            ;;
+    esac
+}
+
 distro_install_package() {
     # Parse additional arguments; once we find the first unknown
     # part we break argument parsing and process all further
@@ -130,6 +165,7 @@ distro_auto_remove_packages() {
 pkg_dependencies_ubuntu(){
     echo "
         jq
+        qemu-utils
         "
 }
 
@@ -163,6 +199,6 @@ pkg_dependencies(){
 
 install_pkg_dependencies(){
     pkgs=$(pkg_dependencies)
-    # shellcheck disable=SC2086
     distro_install_package $pkgs
+    distro_install_google_sdk
 }

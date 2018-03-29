@@ -8,12 +8,20 @@ create_image_from_snapshot(){
     gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT"
 }
 
+create_image_from_bucket(){
+    IMAGE=$1
+    FAMILY=$2
+    DESCRIPTION=$3
+    IMAGE_FILE=$4
+    gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-uri "gs://$BUCKET_NAME/$IMAGE_FILE"
+}
+
 delete_image(){
     IMAGE=$1
     image_name=$(gcloud compute images list --project $GCE_PROJECT --filter "family = $FAMILY AND name = $IMAGE" --format json | jq -r '.[]|.name')
 
-    if ! -z $image_name; then
-        gcloud compute images delete "$IMAGE"
+    if ! [ -z $image_name]; then
+        gcloud compute images delete "$IMAGE" --quiet
     fi
 }
 
@@ -35,10 +43,15 @@ deprecate_old_images (){
   fi
 }
 
+copy_image_to_bucket(){
+  IMAGE_FILE=$1
+  gsutil cp "$IMAGE_FILE" "gs://$BUCKET_NAME/"
+}
+
 create_snapshot_from_disk(){
     DISK=$1
     TEMPORAL_PATH=/tmp/spread
-    if [ -e $TEMPORAL_PATH ]; then
+    if [ -d $TEMPORAL_PATH ]; then
         rm -rf $TEMPORAL_PATH
     fi
     mv $PROJECT_PATH $TEMPORAL_PATH
