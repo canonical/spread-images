@@ -72,6 +72,10 @@ distro_install_package() {
             # shellcheck disable=SC2086
             quiet zypper install -y $ZYPPER_FLAGS "$@"
             ;;
+        arch-*)
+            # shellcheck disable=SC2086
+            pacman -Suq --needed --noconfirm "${pkg_names[@]}"
+            ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
             exit 1
@@ -104,6 +108,9 @@ distro_purge_package() {
         opensuse-*)
             quiet zypper remove -y "$@"
             ;;
+        arch-*)
+            pacman -Rnsc --noconfirm "$@"
+            ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
             exit 1
@@ -123,6 +130,9 @@ distro_update_package_db() {
         opensuse-*)
             quiet zypper --gpg-auto-import-keys refresh
             ;;
+        arch-*)
+            pacman -Syq
+            ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
             exit 1
@@ -137,6 +147,9 @@ distro_clean_package_cache() {
             ;;
         opensuse-*)
             zypper -q clean --all
+            ;;
+        arch-*)
+            pacman -Sccq --noconfirm
             ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
@@ -154,6 +167,8 @@ distro_auto_remove_packages() {
             quiet dnf -y autoremove
             ;;
         opensuse-*)
+            ;;
+        arch-*)
             ;;
         *)
             echo "ERROR: Unsupported distribution '$SPREAD_SYSTEM'"
@@ -181,6 +196,12 @@ pkg_dependencies_opensuse(){
         "
 }
 
+pkg_dependencies_arch(){
+    echo "
+        jq
+        "
+}
+
 pkg_dependencies(){
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
@@ -191,6 +212,9 @@ pkg_dependencies(){
             ;;
         opensuse-*)
             pkg_dependencies_opensuse
+            ;;
+        arch-*)
+            pkg_dependencies_arch
             ;;
         *)
             ;;

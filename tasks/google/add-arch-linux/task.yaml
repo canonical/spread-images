@@ -1,0 +1,27 @@
+summary: Add new arch linux image to google account
+
+systems: [ ubuntu-* ]
+
+environment:
+    IMAGE: arch-linux-64-v20180110
+    FAMILY: arch-linux-64
+    DESCRIPTION: Arch Linux 64 bits
+    IMAGE_FILE: arch-v4.14.12
+
+execute: |
+    . "$TESTSLIB/google.sh"
+
+    if ! [[ "$SPREAD_SYSTEM" == ubuntu-* ]]; then
+        echo "System used to create latest arch linux has to be ubuntu"
+        exit 1
+    fi
+
+    # Download arch linux image from arch_linux bucket
+    gsutil cp "gs://arch_linux/${IMAGE_FILE}.tar.gz" "${IMAGE_FILE}.tar.gz"
+    
+    # Upload arch linux image to spread-images bucket
+    gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
+
+    # Create the image in computeengine project
+    delete_image "$IMAGE"
+    create_image_from_bucket "$IMAGE" "$FAMILY" "$DESCRIPTION" "${IMAGE_FILE}.tar.gz"

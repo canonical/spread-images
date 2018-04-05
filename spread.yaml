@@ -3,6 +3,7 @@ project: spread-images
 environment:
     PROJECT_PATH: /root/spread
     TESTSLIB: $PROJECT_PATH/lib
+    TESTSFILES: $PROJECT_PATH/files
 
 backends:
 
@@ -30,8 +31,8 @@ backends:
 
             - fedora-27-64:
                 workers: 4
-            - fedora-27-64-selinux-disabled:
-                image: fedora-27-64-selinux-disabled
+            - fedora-27-64-selinux-permissive:
+                image: fedora-27-64-selinux-permissive
                 workers: 4
 
             - opensuse-42.2-64:
@@ -42,7 +43,7 @@ backends:
                 image: opensuse-cloud/opensuse-leap-42-3-v20180116
                 workers: 1
 
-            - arch-linux:
+            - arch-linux-64:
                 workers: 1
 
     linode:
