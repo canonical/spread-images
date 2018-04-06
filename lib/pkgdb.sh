@@ -29,7 +29,17 @@ EOF
             echo "so far not needed"
             ;;
         arch-*)
-            echo "so far not needed"
+            if ! [ -d /usr/share/google/google-cloud-sdk ]; then
+                mkdir -p /usr/share/google
+                wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip
+                unzip google-cloud-sdk.zip -d /usr/share/google
+                rm -f google-cloud-sdk.zip
+                echo "export CLOUDSDK_PYTHON=/usr/bin/python2" >> /etc/bash.bashrc
+                /usr/share/google/google-cloud-sdk/install.sh --usage-reporting false --bash-completion true --disable-installation-options --rc-path /etc/bash.bashrc --path-update true
+                ln -s /usr/share/google/google-cloud-sdk/bin/gcloud /usr/bin/gcloud
+                ln -s /usr/share/google/google-cloud-sdk/bin/gcutil /usr/bin/gcutil
+                ln -s /usr/share/google/google-cloud-sdk/bin/gsutil /usr/bin/gsutil
+            fi
             ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
@@ -74,7 +84,7 @@ distro_install_package() {
             ;;
         arch-*)
             # shellcheck disable=SC2086
-            pacman -Suq --needed --noconfirm "${pkg_names[@]}"
+            pacman -Suq --needed --noconfirm "$@"
             ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
@@ -132,6 +142,27 @@ distro_update_package_db() {
             ;;
         arch-*)
             pacman -Syq
+            ;;
+        *)
+            echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
+            exit 1
+            ;;
+    esac
+}
+
+distro_upgrade_packages() {
+    case "$SPREAD_SYSTEM" in
+        ubuntu-*|debian-*)
+            echo "so far not needed"
+            ;;
+        fedora-*)
+            echo "so far not needed"
+            ;;
+        opensuse-*)
+            echo "so far not needed"
+            ;;
+        arch-*)
+            pacman --needed --noconfirm -Syu
             ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
@@ -199,6 +230,9 @@ pkg_dependencies_opensuse(){
 pkg_dependencies_arch(){
     echo "
         jq
+        python2
+        unzip
+        wget
         "
 }
 

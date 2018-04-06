@@ -1,0 +1,29 @@
+summary: Update arch linux image in google account
+
+environment:
+    IMAGE: arch-linux-v$(date +'%Y%m%d')
+    FAMILY: arch-linux-64
+    DESCRIPTION: Arch Linux 64 bits
+    DISK: $(dhcpcd -T | sed -n 's/new_host_name=\(.*\).c.computeengine.internal/\1/gp')
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/pkgdb.sh"
+
+    if ! [[ "$SPREAD_SYSTEM" == arch-* ]]; then
+        echo "System used to create latest arch linux has to be arch linux"
+        exit 1
+    fi
+
+    distro_update_package_db
+    distro_upgrade_packages
+
+    create_snapshot_from_disk "$DISK"
+    delete_image "$IMAGE"
+    create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+    deprecate_old_images "$FAMILY"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+
+    delete_snapshot "$DISK"
