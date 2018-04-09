@@ -1,0 +1,100 @@
+summary: Add new fedora 27 64 bits image to google account
+
+environment:
+    BUCKET_NAME: spread-images
+    IMAGE_FILE: fedora-27-64
+    IMAGE_URL: https://download.fedoraproject.org/pub/fedora/linux/releases/27/CloudImages/x86_64/images/Fedora-Cloud-Base-27-1.6.x86_64.raw.xz
+    IMAGE: fedora-27-64-v$(date +'%Y%m%d')
+    FAMILY: fedora-27-64
+    DESCRIPTION: Fedora 27 64 bits
+    DISK: $(hostname)    
+
+execute: |
+    . "$TESTSLIB/google.sh"
+
+    if ! [[ "$SPREAD_SYSTEM" == fedora-* ]]; then
+        echo "System used to create fedora has to be fedora"
+        exit 1
+    fi
+
+    # Get the image
+    wget -O - "$IMAGE_URL" | xz -cd - > disk.raw
+
+    # Get /dev/sda1 parition offset:
+    OFFSET=$( sfdisk -J disk.raw | python -c 'import sys, json; a=json.load(sys.stdin); print(a["partitiontable"]["partitions"][0]["start"]*512)' )
+
+    # Either become root and paste these line-by-line or the whole block at once
+    OFFSET="$OFFSET" sh -c '\
+    # Make mounting directory
+    sudo mkdir -p /mnt/disk
+    # Mount the image and prepare the chroot
+    sudo mount -o offset=$OFFSET disk.raw /mnt/disk
+    sudo mount -t proc /proc /mnt/disk/proc
+    sudo mount --rbind /sys /mnt/disk/sys
+    sudo mount --make-rslave /mnt/disk/sys
+    sudo mount --rbind /dev /mnt/disk/dev
+    sudo mount --make-rslave /mnt/disk/dev'
+
+    tee /mnt/disk/etc/cloud/cloud.cfg.d/GCE.cfg << EOF
+    datasource_list: [ 'GCE' ]
+    datasource: { GCE: {} }
+    EOF
+
+    dnf -c /mnt/disk/etc/dnf/dnf.conf install -y --installroot=/mnt/disk/ --enablerepo=updates-testing cloud-init
+
+    tee /mnt/disk/etc/yum.repos.d/google-cloud.repo << EOF
+    [google-cloud-compute]
+    name=Google Cloud Compute
+    baseurl=https://packages.cloud.google.com/yum/repos/google-cloud-compute-el7-x86_64
+    enabled=1
+    gpgcheck=1
+    repo_gpgcheck=1
+    gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+           https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    EOF
+
+    # Install dependencies
+
+    dnf -c /mnt/disk/etc/dnf/dnf.conf install -y --installroot=/mnt/disk/ google-compute-engine google-compute-engine-init google-config
+    dnf -c /mnt/disk/etc/dnf/dnf.conf install -y --installroot=/mnt/disk/ nc kernel-modules cloud-utils-growpart
+    dnf -c /mnt/disk/etc/dnf/dnf.conf upgrade -y --installroot=/mnt/disk/
+    dnf -c /mnt/disk/etc/dnf/dnf.conf clean all -y --installroot=/mnt/disk/
+
+    # Create service for resizing the root partition on boot
+
+    tee /mnt/disk/lib/systemd/system/expand-part.service << EOF
+    [Unit]
+    Description=Expand partition on fedora
+    After=local-fs.target
+    Wants=local-fs.target
+
+    [Service]
+    ExecStart=/usr/bin/growpart /dev/sda 1
+    ExecStop=/usr/sbin/resize2fs /dev/sda1
+    Type=oneshot
+    SuccessExitStatus=1
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+
+    chroot /mnt/disk /bin/bash -c "systemctl enable expand-part.service"
+
+    # Clean the image
+    find /mnt/disk/var/log /mnt/disk/var/cache/dnf /mnt/disk/var/lib/dnf/{history,yumdb} -type f -exec rm -f {} \;
+
+    # Create the disk image
+    sudo umount -AR /mnt/disk
+    tar caf "${IMAGE_FILE}.tar.gz" disk.raw || tar caf "${IMAGE_FILE}.tar.gz" disk.raw
+
+    # Copy fedora linux image to spread-images bucket
+    gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
+    
+    # Create the image in computeengine project
+    delete_image "$IMAGE"
+    create_image_from_bucket "$IMAGE" "$FAMILY" "$DESCRIPTION" "${IMAGE_FILE}.tar.gz"
+
+restore: |
+    sudo umount -AR /mnt/disk || true
+    rm -f disk.raw
+    rm -f "${IMAGE_FILE}.tar.gz"

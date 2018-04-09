@@ -23,7 +23,6 @@ repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
-            exit 1
             fi
             dnf makecache
             dnf install -y google-cloud-sdk
@@ -222,6 +221,7 @@ pkg_dependencies_ubuntu(){
 pkg_dependencies_fedora(){
     echo "
         jq
+        wget
         "
 }
 
