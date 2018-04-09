@@ -15,6 +15,9 @@ backends:
                 workers: 1
             - ubuntu-16.04-32:
                 workers: 1
+            - ubuntu-16.04-32-update:
+                image: xenial-32-test-update
+                workers: 1
             - ubuntu-16.04-64:
                 workers: 1
             - ubuntu-18.04-64:
@@ -29,7 +32,8 @@ backends:
                 image: debian-9-stretch
                 workers: 1
 
-            - fedora-27-64:
+            - fedora-27-64-selinux-enforcing:
+                image: fedora-27-64-selinux-enforcing
                 workers: 4
             - fedora-27-64-selinux-permissive:
                 image: fedora-27-64-selinux-permissive
@@ -44,6 +48,9 @@ backends:
                 workers: 1
 
             - arch-linux-64:
+                workers: 1
+
+            - amazon-linux-2-64:
                 workers: 1
 
     linode:

@@ -1,7 +1,7 @@
 summary: Update arch linux image in google account
 
 environment:
-    IMAGE: arch-linux-v$(date +'%Y%m%d')
+    IMAGE: arch-linux-64-v$(date +'%Y%m%d')
     FAMILY: arch-linux-64
     DESCRIPTION: Arch Linux 64 bits
     DISK: $(dhcpcd -T | sed -n 's/new_host_name=\(.*\).c.computeengine.internal/\1/gp')
