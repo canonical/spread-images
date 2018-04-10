@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# shellcheck source=tests/lib/quiet.sh
-. "$TESTSLIB/quiet.sh"
-
 distro_install_google_sdk() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
@@ -28,7 +25,7 @@ EOF
             dnf install -y google-cloud-sdk
             ;;
         opensuse-*)
-            echo "so far not needed"
+            zypper install -y google-cloud-sdk
             ;;
         arch-*)
             if ! [ -d /usr/share/google/google-cloud-sdk ]; then
@@ -74,15 +71,15 @@ distro_install_package() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
             # shellcheck disable=SC2086
-            quiet apt-get install $APT_FLAGS -y "$@"
+            apt-get install $APT_FLAGS -y "$@"
             ;;
         fedora-*)
             # shellcheck disable=SC2086
-            quiet dnf -y --refresh install $DNF_FLAGS "$@"
+            dnf -y --refresh install $DNF_FLAGS "$@"
                 ;;
         opensuse-*)
             # shellcheck disable=SC2086
-            quiet zypper install -y $ZYPPER_FLAGS "$@"
+            zypper --gpg-auto-import-keys install -y $ZYPPER_FLAGS "$@"
             ;;
         arch-*)
             # shellcheck disable=SC2086
@@ -111,14 +108,14 @@ distro_purge_package() {
 
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            quiet apt-get remove -y --purge -y "$@"
+            apt-get remove -y --purge -y "$@"
             ;;
         fedora-*)
-            quiet dnf -y remove "$@"
-            quiet dnf clean all
+            dnf -y remove "$@"
+            dnf clean all
             ;;
         opensuse-*)
-            quiet zypper remove -y "$@"
+            zypper remove -y "$@"
             ;;
         arch-*)
             pacman -Rnsc --noconfirm "$@"
@@ -133,14 +130,14 @@ distro_purge_package() {
 distro_update_package_db() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            quiet apt-get update
+            apt-get update
             ;;
         fedora-*)
-            quiet dnf clean all
-            quiet dnf makecache
+            dnf clean all
+            dnf makecache
             ;;
         opensuse-*)
-            quiet zypper --gpg-auto-import-keys refresh
+            zypper --gpg-auto-import-keys refresh
             ;;
         arch-*)
             pacman -Syq
@@ -176,7 +173,7 @@ distro_upgrade_packages() {
 distro_clean_package_cache() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            quiet apt-get clean
+            apt-get clean
             ;;
         opensuse-*)
             zypper -q clean --all
@@ -194,10 +191,10 @@ distro_clean_package_cache() {
 distro_auto_remove_packages() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            quiet apt-get -y autoremove
+            apt-get -y autoremove
             ;;
         fedora-*)
-            quiet dnf -y autoremove
+            dnf -y autoremove
             ;;
         opensuse-*)
             ;;
