@@ -27,7 +27,7 @@ EOF
         opensuse-*)
             zypper install -y google-cloud-sdk
             ;;
-        arch-*)
+        arch-*|amazon-*)
             if ! [ -d /usr/share/google/google-cloud-sdk ]; then
                 mkdir -p /usr/share/google
                 wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip
@@ -76,7 +76,7 @@ distro_install_package() {
         fedora-*)
             # shellcheck disable=SC2086
             dnf -y --refresh install $DNF_FLAGS "$@"
-                ;;
+            ;;
         opensuse-*)
             # shellcheck disable=SC2086
             zypper --gpg-auto-import-keys install -y $ZYPPER_FLAGS "$@"
@@ -84,6 +84,10 @@ distro_install_package() {
         arch-*)
             # shellcheck disable=SC2086
             pacman -Suq --needed --noconfirm "$@"
+            ;;
+        amazon-*)
+            # shellcheck disable=SC2086
+            yum -y --nogpgcheck install $DNF_FLAGS "$@"
             ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
@@ -120,6 +124,10 @@ distro_purge_package() {
         arch-*)
             pacman -Rnsc --noconfirm "$@"
             ;;
+        amazon-*)
+            yum -y remove "$@"
+            yum clean all
+            ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
             exit 1
@@ -142,6 +150,10 @@ distro_update_package_db() {
         arch-*)
             pacman -Syq
             ;;
+        amazon-*)
+            yum clean all
+            yum --nogpgcheck makecache
+            ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
             exit 1
@@ -163,6 +175,9 @@ distro_upgrade_packages() {
         arch-*)
             pacman --needed --noconfirm -Syu
             ;;
+        amazon-*)
+            yum -y update
+            ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
             exit 1
@@ -175,11 +190,17 @@ distro_clean_package_cache() {
         ubuntu-*|debian-*)
             apt-get clean
             ;;
+        fedora-*)
+            dnf clean all
+            ;;
         opensuse-*)
             zypper -q clean --all
             ;;
         arch-*)
             pacman -Sccq --noconfirm
+            ;;
+        amazon-*)
+            yum clean all
             ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
@@ -199,6 +220,9 @@ distro_auto_remove_packages() {
         opensuse-*)
             ;;
         arch-*)
+            ;;
+        amazon-*)
+            yum -y autoremove
             ;;
         *)
             echo "ERROR: Unsupported distribution '$SPREAD_SYSTEM'"
@@ -237,6 +261,13 @@ pkg_dependencies_arch(){
         "
 }
 
+pkg_dependencies_amazon(){
+    echo "
+        jq
+        wget
+        "
+}
+
 pkg_dependencies(){
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
@@ -250,6 +281,9 @@ pkg_dependencies(){
             ;;
         arch-*)
             pkg_dependencies_arch
+            ;;
+        amazon-*)
+            pkg_dependencies_amazon
             ;;
         *)
             ;;
