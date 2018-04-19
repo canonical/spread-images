@@ -1,5 +1,7 @@
 summary: Update fedora image with the latest updates with selinux permissive
 
+systems: [fedora-*]
+
 environment:
     IMAGE: fedora-27-64-selinux-permissive-v$(date +'%Y%m%d')
     FAMILY: fedora-27-64-selinux-permissive
@@ -9,11 +11,6 @@ environment:
 execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/utils.sh"
-
-    if [[ "$SPREAD_SYSTEM" != fedora-* ]]; then
-        echo "System used to create fedora has to be fedora"
-        exit 1
-    fi
 
     # Make the upgrade
     dnf makecache

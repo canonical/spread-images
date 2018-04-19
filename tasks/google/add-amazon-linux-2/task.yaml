@@ -1,5 +1,7 @@
 summary: Add new debian sid image to google account
 
+systems: [ubuntu-*]
+
 environment:
     BUCKET_NAME: spread-images
     IMAGE_FILE: amazon-linux-2-64
@@ -11,11 +13,6 @@ environment:
 
 execute: |
     . "$TESTSLIB/google.sh"
-
-    if ! [[ "$SPREAD_SYSTEM" == ubuntu-* ]]; then
-        echo "System used to create amazon linux has to be ubuntu"
-        exit 1
-    fi
 
     # Get the raw image
     wget -O "${IMAGE_FILE}.qcow2" "$IMAGE_URL"

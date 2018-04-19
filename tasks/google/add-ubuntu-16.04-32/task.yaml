@@ -1,5 +1,7 @@
 summary: Add new ubuntu xenial 32 bits image to google account
 
+systems: [ubuntu-*]
+
 environment:
     BUCKET_NAME: spread-images
     IMAGE_FILE: ubuntu-16-04-xenial-32bit
@@ -11,11 +13,6 @@ environment:
 
 execute: |
     . "$TESTSLIB/google.sh"
-
-    if ! [[ "$SPREAD_SYSTEM" == ubuntu-* ]]; then
-        echo "System used to create ubuntu xenial 32 bits has to be ubuntu"
-        exit 1
-    fi
 
     # Get the image
     wget $IMAGE_URL

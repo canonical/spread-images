@@ -1,5 +1,7 @@
 summary: Add new debian sid image to google account
 
+systems: [debian-*]
+
 environment:
     IMAGE: debian-sid-64-v$(date +'%Y%m%d')
     FAMILY: debian-sid-64
@@ -9,11 +11,6 @@ environment:
 execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/utils.sh"
-
-    if ! [[ "$SPREAD_SYSTEM" == debian-* ]]; then
-        echo "System used to create debian sid has to be debian"
-        exit 1
-    fi
 
     cp -a /etc/ntp.conf /var/tmp/ntp.conf.google
     apt-get update

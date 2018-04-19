@@ -1,5 +1,7 @@
 summary: Add new fedora 26 64 bits image to google account
 
+systems: [fedora-*]
+
 environment:
     BUCKET_NAME: spread-images
     IMAGE_FILE: fedora-26-64
@@ -11,11 +13,6 @@ environment:
 
 execute: |
     . "$TESTSLIB/google.sh"
-
-    if ! [[ "$SPREAD_SYSTEM" == fedora-* ]]; then
-        echo "System used to create fedora has to be fedora"
-        exit 1
-    fi
 
     # Get the image
     wget -O - "$IMAGE_URL" | xz -cd - > disk.raw

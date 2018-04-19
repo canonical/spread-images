@@ -1,5 +1,7 @@
 summary: Update Ubuntu xenial 32 bits image with the latest updates
 
+systems: [ubuntu-16.04-32]
+
 environment:
     IMAGE: ubuntu-16-04-xenial-32bit-v$(date +'%Y%m%d')
     FAMILY: ubuntu-16-04-xenial-32bit
@@ -9,11 +11,6 @@ environment:
 execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/utils.sh"
-
-    if [[ "$SPREAD_SYSTEM" != ubuntu-16.04-32 ]]; then
-        echo "System used to update xenial 32 bits has to be xenial 32 bits"
-        exit 1
-    fi
 
     # Make the upgrade
     apt update 
