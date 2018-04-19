@@ -3,7 +3,8 @@
 distro_install_google_sdk() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+            CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+            export CLOUD_SDK_REPO
             echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
             curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
             sudo apt-get update && sudo apt-get install -y google-cloud-sdk
@@ -292,6 +293,6 @@ pkg_dependencies(){
 
 install_pkg_dependencies(){
     pkgs=$(pkg_dependencies)
-    distro_install_package $pkgs
+    distro_install_package "$pkgs"
     distro_install_google_sdk
 }
