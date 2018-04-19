@@ -221,6 +221,7 @@ distro_auto_remove_packages() {
         opensuse-*)
             ;;
         arch-*)
+            pacman -Rnsc --noconfirm "$(pacman -Qdtq)"
             ;;
         amazon-*)
             yum -y autoremove

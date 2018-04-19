@@ -10,7 +10,7 @@ execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/utils.sh"
 
-    if ! [[ "$SPREAD_SYSTEM" == fedora-* ]]; then
+    if [[ "$SPREAD_SYSTEM" != fedora-* ]]; then
         echo "System used to create fedora has to be fedora"
         exit 1
     fi

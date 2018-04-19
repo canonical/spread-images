@@ -10,7 +10,7 @@ execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/pkgdb.sh"
 
-    if ! [[ "$SPREAD_SYSTEM" == arch-* ]]; then
+    if [[ "$SPREAD_SYSTEM" != arch-* ]]; then
         echo "System used to create latest arch linux has to be arch linux"
         exit 1
     fi

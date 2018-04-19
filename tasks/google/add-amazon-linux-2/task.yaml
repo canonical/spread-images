@@ -19,10 +19,10 @@ execute: |
 
     # Get the raw image
     wget -O "${IMAGE_FILE}.qcow2" "$IMAGE_URL"
-    qemu-img convert "${IMAGE_FILE}.qcow2" "$DISK_NAME"
+    qemu-img convert -O raw "${IMAGE_FILE}.qcow2" "$DISK_NAME"
 
     # Get /dev/sda1 parition offset:
-    OFFSET=$( sfdisk -J $DISK_NAME | python -c 'import sys, json; a=json.load(sys.stdin); print(a["partitiontable"]["partitions"][0]["start"]*512)' )
+    OFFSET=$( sfdisk -J "$DISK_NAME" | python -c 'import sys, json; a=json.load(sys.stdin); print(a["partitiontable"]["partitions"][0]["start"]*512)' )
 
     # Either become root and paste these line-by-line or the whole block at once
     OFFSET="$OFFSET" sh -c '\
@@ -89,7 +89,7 @@ execute: |
     ClientAliveInterval 420
     EOF
 
-    # Ypdate grub Config
+    # Update grub Config
     chroot /mnt/disk /bin/bash -c "sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"console=ttyS0,115200n8\"/g' /etc/default/grub"
     chroot /mnt/disk /bin/bash -c "grub2-mkconfig -o /boot/grub2/grub.cfg"
 
@@ -97,7 +97,7 @@ execute: |
     umount -AR /mnt/disk
     tar caf "${IMAGE_FILE}.tar.gz" "$DISK_NAME"
 
-    # Upload arch linux image to spread-images bucket
+    # Upload amazon linux 2 image to spread-images bucket
     gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
 
     # Create the image in computeengine project

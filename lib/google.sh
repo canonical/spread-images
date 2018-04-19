@@ -68,15 +68,15 @@ copy_image_to_bucket(){
 
 create_snapshot_from_disk(){
     DISK=$1
-    TEMPORAL_PATH=/tmp/spread
-    if [ -d $TEMPORAL_PATH ]; then
-        rm -rf $TEMPORAL_PATH
+    TEMPORARY_PATH=$(mktemp -t spread.XXXXX)
+    if [ -d $TEMPORARY_PATH ]; then
+        rm -rf $TEMPORARY_PATH
     fi
 
-    mv "$PROJECT_PATH" "$TEMPORAL_PATH"
+    mv "$PROJECT_PATH" "$TEMPORARY_PATH"
     sync
     gcloud compute disks snapshot "$DISK" --zone "$ZONE" --snapshot-names "$DISK"
-    mv "$TEMPORAL_PATH" "$PROJECT_PATH"
+    mv "$TEMPORARY_PATH" "$PROJECT_PATH"
 }
 
 delete_snapshot(){

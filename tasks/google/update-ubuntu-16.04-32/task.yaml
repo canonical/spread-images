@@ -10,7 +10,7 @@ execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/utils.sh"
 
-    if ! [[ "$SPREAD_SYSTEM" == ubuntu-16.04-32 ]]; then
+    if [[ "$SPREAD_SYSTEM" != ubuntu-16.04-32 ]]; then
         echo "System used to update xenial 32 bits has to be xenial 32 bits"
         exit 1
     fi
