@@ -69,26 +69,32 @@ distro_install_package() {
         esac
     done
 
+    pkg_names=($(
+        for pkg in "$@" ; do
+            echo "$pkg"
+        done
+    ))
+
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
             # shellcheck disable=SC2086
-            apt-get install $APT_FLAGS -y "$@"
+            apt-get install $APT_FLAGS -y "${pkg_names[@]}"
             ;;
         fedora-*)
             # shellcheck disable=SC2086
-            dnf -y --refresh install $DNF_FLAGS "$@"
+            dnf -y --refresh install $DNF_FLAGS "${pkg_names[@]}"
             ;;
         opensuse-*)
             # shellcheck disable=SC2086
-            zypper --gpg-auto-import-keys install -y $ZYPPER_FLAGS "$@"
+            zypper --gpg-auto-import-keys install -y $ZYPPER_FLAGS "${pkg_names[@]}"
             ;;
         arch-*)
             # shellcheck disable=SC2086
-            pacman -Suq --needed --noconfirm "$@"
+            pacman -Suq --needed --noconfirm "${pkg_names[@]}"
             ;;
         amazon-*)
             # shellcheck disable=SC2086
-            yum -y --nogpgcheck install $DNF_FLAGS "$@"
+            yum -y --nogpgcheck install $DNF_FLAGS "${pkg_names[@]}"
             ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
