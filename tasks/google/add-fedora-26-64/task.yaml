@@ -23,7 +23,7 @@ execute: |
     # Get /dev/sda1 parition offset:
     OFFSET=$( sfdisk -J disk.raw | python -c 'import sys, json; a=json.load(sys.stdin); print(a["partitiontable"]["partitions"][0]["start"]*512)' )
 
-    # Either become root and paste these line-by-line or the whole block at once
+    # Mount the disk locally
     OFFSET="$OFFSET" sh -c '\
     # Make mounting directory
     sudo mkdir -p /mnt/disk
