@@ -17,8 +17,13 @@ execute: |
     # Get the image
     wget -O - "$IMAGE_URL" | xz -cd - > disk.raw
 
-    # Get /dev/sda1 parition offset:
-    OFFSET=$( sfdisk -J disk.raw | python -c 'import sys, json; a=json.load(sys.stdin); print(a["partitiontable"]["partitions"][0]["start"]*512)' )
+    # Get /dev/sda1 parition offset
+    OFFSET=$( sfdisk -J disk.raw | jq '.partitiontable.partitions[0].start * 512' )
+
+    if [ -z $OFFSET ]; then
+        echo "failed to calculate offset"
+        exit 1
+    fi
 
     # Mount the disk locally
     OFFSET="$OFFSET" sh -c '\
