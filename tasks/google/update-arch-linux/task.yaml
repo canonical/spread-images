@@ -12,9 +12,14 @@ execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/pkgdb.sh"
 
+    # Upgrade the current image with the latest changes
     distro_update_package_db
     distro_upgrade_packages
 
+    # Disable google-shutdown-scripts service because it hungs during reboot
+    systemctl disable google-shutdown-scripts.service
+
+    # Create the image from the disk, upload it and deprecate the old ones
     create_snapshot_from_disk "$DISK"
     delete_image "$IMAGE"
     create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"

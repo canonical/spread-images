@@ -68,7 +68,7 @@ copy_image_to_bucket(){
 
 create_snapshot_from_disk(){
     local DISK=$1
-    local TEMPORARY_PATH=$(mktemp -t spread.XXXXX)
+    local TEMPORARY_PATH=$(mktemp -t -d spread.XXXXX)
     if [ -d $TEMPORARY_PATH ]; then
         rm -rf $TEMPORARY_PATH
     fi
