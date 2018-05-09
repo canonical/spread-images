@@ -28,6 +28,9 @@ backends:
             - debian-9-64:
                 image: debian-9-stretch
                 workers: 1
+            - debian-sid-64:
+                image: debian-sid-64
+                workers: 1
 
             - fedora-27-64:
                 image: fedora-27-64

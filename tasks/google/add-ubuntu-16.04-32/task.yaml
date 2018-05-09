@@ -1,6 +1,6 @@
 summary: Add new ubuntu xenial 32 bits image to google account
 
-systems: [ubuntu-*]
+systems: [ubuntu-16.04-64]
 
 environment:
     BUCKET_NAME: spread-images

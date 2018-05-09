@@ -22,11 +22,8 @@ execute: |
     # Clean disk before create the shapshot
     clean_machine
 
-    # Project path is moved away to avoid path conflicts when this image is used with spread-images project again
-    create_snapshot_from_disk "$DISK"
-    delete_image "$IMAGE"
-    create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
-    deprecate_old_images "$FAMILY"
+    # Create a new image based on the current disk
+    create_image_from_disk $IMAGE $FAMILY $DESCRIPTION $DISK
 
 restore: |
     . "$TESTSLIB/google.sh"

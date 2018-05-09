@@ -25,45 +25,56 @@ delete_image(){
     fi
 }
 
+get_latest_image_name(){
+    local FAMILY=$1
+    echo $(gcloud compute images describe-from-family "$FAMILY" --project "$GCE_PROJECT" --format json | jq -r '.name')
+}
+
 deprecate_old_images(){
-  local FAMILY=$1
-  local latest_image_name=$(gcloud compute images describe-from-family "$FAMILY" --project "$GCE_PROJECT" --format json | jq -r '.name')
-  echo "Latest Image: ${latest_image_name}"
+    local FAMILY=$1
+    local SKIP_IMAGE=$2
+    local latest_image_name=$(gcloud compute images describe-from-family "$FAMILY" --project "$GCE_PROJECT" --format json | jq -r '.name')
+    echo "Skip Image: ${SKIP_IMAGE}"
+    echo "Latest Image: ${latest_image_name}"
 
-  local old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND -name = ${latest_image_name}" --format json | jq -r '.[]|.name')
+    if [ -z "$SKIP_IMAGE" ]; then
+        local old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND -name = ${latest_image_name}" --format json | jq -r '.[]|.name')
+    else
+        local old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND NOT (name = ${latest_image_name} OR name = ${SKIP_IMAGE})" --format json | jq -r '.[]|.name')
+    fi
 
-  if [ -z "${old_images}" ]; then
-    echo "No old images."
-  else
-    for i in ${old_images}; do
-      echo "Deprecate old image ${i} ..."
-      gcloud compute images deprecate --project "$GCE_PROJECT" "${i}" --state DEPRECATED --replacement "${latest_image_name}"
-      echo ""
-    done
-  fi
+    if [ -z "${old_images}" ]; then
+        echo "No old images."
+    else
+        for i in ${old_images}; do
+            echo "Deprecate old image ${i} ..."
+            gcloud compute images deprecate --project "$GCE_PROJECT" "${i}" --state DEPRECATED --replacement "${latest_image_name}"
+            echo ""
+        done
+    fi
 }
 
 delete_deprecated_images(){
-  local FAMILY=$1
-  local latest_image_name=$(gcloud compute images describe-from-family "$FAMILY" --project "$GCE_PROJECT" --format json | jq -r '.name')
-  echo "Latest Image: ${latest_image_name}"
+    local FAMILY=$1
+    local latest_image_name=$(gcloud compute images describe-from-family "$FAMILY" --project "$GCE_PROJECT" --format json | jq -r '.name')
+    echo "Latest Image: ${latest_image_name}"
 
-  local old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND -name = ${latest_image_name}" --format json | jq -r '.[]|.name')
+    local old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND -name = ${latest_image_name}" --format json | jq -r '.[]|.name')
 
-  if [ -z "${old_images}" ]; then
-    echo "No old images."
-  else
-    for i in ${old_images}; do
-      echo "Deprecate old image ${i} ..."
-      gcloud compute images deprecate --project "$GCE_PROJECT" "${i}" --state DEPRECATED --replacement "${latest_image_name}"
-      echo ""
-    done
-  fi
+    if [ -z "${old_images}" ]; then
+        echo "No old images."
+    else
+        for i in ${old_images}; do
+            echo "Deprecate old image ${i} ..."
+            gcloud compute images deprecate --project "$GCE_PROJECT" "${i}" --state DEPRECATED --replacement "${latest_image_name}"
+            echo ""
+        done
+    fi
 }
 
 copy_image_to_bucket(){
-  local IMAGE_FILE=$1
-  gsutil cp "$IMAGE_FILE" "gs://$BUCKET_NAME/"
+    local IMAGE_FILE=$1
+    gsutil cp "$IMAGE_FILE" "gs://$BUCKET_NAME/"
 }
 
 create_snapshot_from_disk(){
@@ -86,4 +97,17 @@ delete_snapshot(){
     if ! [ -z "$snapshot_name" ]; then
         gcloud compute snapshots delete "$SNAPSHOT" --quiet
     fi
+}
+
+create_image_from_disk(){
+    local IMAGE=$1
+    local FAMILY=$2
+    local DESCRIPTION=$3
+    local DISK=$4
+
+    local latest_image_name=$(get_latest_image_name "$FAMILY")
+    create_snapshot_from_disk "$DISK"
+    delete_image "$IMAGE"
+    create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+    deprecate_old_images "$FAMILY" "$latest_image_name"
 }

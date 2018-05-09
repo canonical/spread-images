@@ -1,5 +1,7 @@
 summary: Add new debian sid image to google account
 
+description: This task is used to create/update new debian sid images. Update script is not needed. 
+
 systems: [debian-*]
 
 environment:

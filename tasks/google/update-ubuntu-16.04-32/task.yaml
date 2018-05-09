@@ -3,7 +3,7 @@ summary: Update Ubuntu xenial 32 bits image with the latest updates
 systems: [ubuntu-16.04-32]
 
 environment:
-    IMAGE: ubuntu-16-04-xenial-32bit-v$(date +'%Y%m%d')
+    IMAGE: ubuntu-16-04-xenial-32bit-v20180513
     FAMILY: ubuntu-16-04-xenial-32bit
     DESCRIPTION: Ubuntu 16.04 Xenial 32 bits
     DISK: $(hostname)
@@ -20,11 +20,8 @@ execute: |
     # Clean disk before create the shapshot
     clean_machine
 
-    # Project path is moved away to avoid path conflicts when this image is used with spread-images project again
-    create_snapshot_from_disk "$DISK"
-    delete_image "$IMAGE"
-    create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
-    deprecate_old_images "$FAMILY"
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
 
 restore: |
     . "$TESTSLIB/google.sh"

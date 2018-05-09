@@ -1,6 +1,6 @@
 summary: Add new Amazon linux 2 image to google account
 
-systems: [ubuntu-*]
+systems: [ubuntu-16.04-64]
 
 environment:
     BUCKET_NAME: spread-images

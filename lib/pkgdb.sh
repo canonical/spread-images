@@ -242,9 +242,13 @@ distro_auto_remove_packages() {
 pkg_dependencies_ubuntu(){
     echo "
         jq
-        qemu-utils
         unzip
         "
+    if [[ "$SPREAD_SYSTEM" == ubuntu-16.04-64 ]]; then
+        echo "
+            qemu-utils
+            "
+    fi
 }
 
 pkg_dependencies_fedora(){
