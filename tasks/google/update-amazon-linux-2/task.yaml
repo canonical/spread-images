@@ -1,0 +1,30 @@
+summary: Update amazon linux 2 image in google account
+
+systems: [amazon-*]
+
+environment:
+    IMAGE: amazon-linux-2-64-v$(date +'%Y%m%d')
+    FAMILY: amazon-linux-2-64
+    DESCRIPTION: Amazon Linux 2 64 bits
+    DISK: $(hostname)
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/pkgdb.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade
+        distro_update_package_db
+        distro_upgrade_packages
+        REBOOT
+    fi
+
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+
+    delete_snapshot "$DISK"

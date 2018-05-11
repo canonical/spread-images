@@ -3,7 +3,7 @@ summary: Update Ubuntu xenial 32 bits image with the latest updates
 systems: [ubuntu-16.04-32]
 
 environment:
-    IMAGE: ubuntu-16-04-xenial-32bit-v20180513
+    IMAGE: ubuntu-16-04-xenial-32bit-v$(date +'%Y%m%d')
     FAMILY: ubuntu-16-04-xenial-32bit
     DESCRIPTION: Ubuntu 16.04 Xenial 32 bits
     DISK: $(hostname)
@@ -12,10 +12,13 @@ execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/utils.sh"
 
-    # Make the upgrade
-    apt update 
-    apt upgrade -y
-    apt dist-upgrade -y
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade
+        apt update
+        apt upgrade -y
+        apt dist-upgrade -y
+        REBOOT
+    fi
 
     # Clean disk before create the shapshot
     clean_machine

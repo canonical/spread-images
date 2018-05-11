@@ -12,10 +12,13 @@ execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/utils.sh"
 
-    # Make the upgrade
-    dnf makecache
-    dnf upgrade -y
-    dnf clean all -y
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Upgrade and clean the system
+        dnf makecache
+        dnf upgrade -y
+        dnf clean all -y
+        REBOOT
+    fi
 
     sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
 
@@ -23,7 +26,7 @@ execute: |
     clean_machine
 
     # Create a new image based on the current disk
-    create_image_from_disk $IMAGE $FAMILY $DESCRIPTION $DISK
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
 
 restore: |
     . "$TESTSLIB/google.sh"

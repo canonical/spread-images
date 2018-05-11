@@ -7,14 +7,14 @@ distro_install_google_sdk() {
             export CLOUD_SDK_REPO
             echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
             curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-            sudo apt-get update && sudo apt-get install -y google-cloud-sdk
+            apt-get update && apt-get install -y google-cloud-sdk
             ;;
         fedora-*)
-            if ! [ -f /etc/yum.repos.d/google-cloud.repo ]; then
-                cat >> /etc/yum.repos.d/google-cloud.repo <<-EOF
-[google-cloud-compute]
-name=Google Cloud Compute
-baseurl=https://packages.cloud.google.com/yum/repos/google-cloud-compute-el7-x86_64
+            if ! [ -f /etc/yum.repos.d/google-cloud-sdk.repo ]; then
+                cat >> /etc/yum.repos.d/google-cloud-sdk.repo <<-EOF
+[google-cloud-sdk]
+name=Google Cloud SDK
+baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el7-x86_64
 enabled=1
 gpgcheck=1
 repo_gpgcheck=1

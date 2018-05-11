@@ -12,15 +12,18 @@ execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/pkgdb.sh"
 
-    # Upgrade the current image with the latest changes
-    #distro_update_package_db
-    #distro_upgrade_packages
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade
+        distro_update_package_db
+        distro_upgrade_packages
+        REBOOT
+    fi
 
     # Disable google-shutdown-scripts service because it hungs during reboot
     systemctl disable google-shutdown-scripts.service
 
     # Create a new image based on the current disk
-    create_image_from_disk $IMAGE $FAMILY $DESCRIPTION $DISK
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
 
 restore: |
     . "$TESTSLIB/google.sh"
