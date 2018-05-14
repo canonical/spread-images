@@ -40,8 +40,11 @@ execute: |
     chroot /mnt/disk /bin/bash -c "apt install -y python ssh netcat gce-compute-image-packages"
     chroot /mnt/disk /bin/bash -c "apt autoremove -y"
 
+    # Avoid checking for new release, it could cause lock on apt
+    sed -i 's/^Prompt=.*$/Prompt=never/' /mnt/disk/etc/update-manager/release-upgrades
+
     # Clean the image
-    find /var/log /var/cache/apt /var/lib/apt/{lists,mirrors} -type f -exec rm -f {} \;
+    find /mnt/disk/var/log /mnt/disk/var/cache/apt /mnt/disk/var/lib/apt/{lists,mirrors} -type f -exec rm -f {} \;
 
     # Create the disk image
     sudo umount -AR /mnt/disk
