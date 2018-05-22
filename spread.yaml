@@ -88,7 +88,8 @@ suites:
             if ! [ -f "$PROJECT_PATH/sa.json" ]; then
                 echo "Service account file not found in root path"
                 exit 1
-            fi            
+            fi
+            distro_update_package_db
             install_pkg_dependencies
             gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
 
