@@ -1,0 +1,4 @@
+summary: Start an instance of the specified system
+
+execute: |
+    echo "Starting instance"

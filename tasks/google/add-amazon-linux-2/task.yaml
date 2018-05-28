@@ -1,0 +1,113 @@
+summary: Add new Amazon linux 2 image to google account
+
+systems: [ubuntu-16.04-64]
+
+environment:
+    BUCKET_NAME: spread-images
+    IMAGE_FILE: amazon-linux-2-64
+    IMAGE_URL: https://cdn.amazonlinux.com/os-images/2017.12.0.20180222/kvm/amzn2-kvm-2017.12.0.20180222-x86_64.xfs.gpt.qcow2
+    IMAGE: amazon-linux-2-64-v20180406
+    FAMILY: amazon-linux-2-64
+    DESCRIPTION: Amazon Linux 2 64 bits
+    DISK_NAME: disk.raw     
+
+execute: |
+    . "$TESTSLIB/google.sh"
+
+    # Get the raw image
+    wget -O "${IMAGE_FILE}.qcow2" "$IMAGE_URL"
+    qemu-img convert -O raw "${IMAGE_FILE}.qcow2" "$DISK_NAME"
+
+    # Get /dev/sda1 parition offset
+    OFFSET=$( sfdisk -J "$DISK_NAME" | jq '.partitiontable.partitions[0].start * 512' )
+
+    if [ -z $OFFSET ]; then
+        echo "failed to calculate offset"
+        exit 1
+    fi
+
+    # Either become root and paste these line-by-line or the whole block at once
+    OFFSET="$OFFSET" sh -c '\
+    # Make mounting directory
+    mkdir -p /mnt/disk
+    # Mount the image and prepare the chroot
+    mount -o offset=$OFFSET $DISK_NAME /mnt/disk
+    mount -t proc /proc /mnt/disk/proc
+    mount --rbind /sys /mnt/disk/sys
+    mount --make-rslave /mnt/disk/sys
+    mount --rbind /dev /mnt/disk/dev
+    mount --make-rslave /mnt/disk/dev'
+
+    # Copy nameservers
+    cp /etc/resolv.conf /mnt/disk/etc/
+
+    # Install dependencies
+    wget https://github.com/GoogleCloudPlatform/compute-image-packages/archive/master.zip
+    mv master.zip /mnt/disk/tmp/master.zip
+    ( cd /mnt/disk/tmp && unzip master.zip )
+
+    chroot /mnt/disk /bin/bash -c "yum --nogpgcheck makecache"
+    chroot /mnt/disk /bin/bash -c "yum install -y python python-dev python-pip"
+    chroot /mnt/disk /bin/bash -c "yum clean all"
+    chroot /mnt/disk /bin/bash -c "pip install boto"
+    chroot /mnt/disk /bin/bash -c "cd /tmp/compute-image-packages-master && python setup.py install"
+    chroot /mnt/disk /bin/bash -c "cp /tmp/compute-image-packages-master/google_compute_engine_init/systemd/*.service /usr/lib/systemd/system/"
+    services="google-accounts-daemon.service
+        google-ip-forwarding-daemon.service
+        google-clock-skew-daemon.service
+        google-instance-setup.service
+        google-shutdown-scripts.service
+        google-startup-scripts.service
+        google-network-setup.service"
+
+    echo "$services" | while read s ; do
+        chroot /mnt/disk /bin/bash -c "/usr/bin/systemctl enable $s"
+    done
+
+    # Configure time
+    chroot /mnt/disk /bin/bash -c "ln -sf /usr/share/zoneinfo/UTC /etc/localtime"
+
+    # Configure ssh
+    rm -f /mnt/disk/etc/ssh/*
+
+    tee /mnt/disk/etc/ssh/ssh_config << EOF
+    Host *
+    Protocol 2
+    ForwardAgent no
+    ForwardX11 no
+    HostbasedAuthentication no
+    StrictHostKeyChecking no
+    Ciphers aes128-ctr,aes192-ctr,aes256-ctr,arcfour256,arcfour128,aes128-cbc,3des-cbc
+    Tunnel no
+    ServerAliveInterval 420
+    EOF
+
+    tee /mnt/disk/etc/ssh/sshd_config << EOF
+    PasswordAuthentication yes
+    PermitRootLogin yes
+    PermitTunnel no
+    AllowTcpForwarding yes
+    X11Forwarding no
+    ClientAliveInterval 420
+    EOF
+
+    # Update grub Config
+    chroot /mnt/disk /bin/bash -c "sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"console=ttyS0,115200n8\"/g' /etc/default/grub"
+    chroot /mnt/disk /bin/bash -c "grub2-mkconfig -o /boot/grub2/grub.cfg"
+
+    # Create the disk image
+    umount -AR /mnt/disk
+    tar caf "${IMAGE_FILE}.tar.gz" "$DISK_NAME"
+
+    # Upload amazon linux 2 image to spread-images bucket
+    gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
+
+    # Create the image in computeengine project
+    delete_image "$IMAGE"
+    create_image_from_bucket "$IMAGE" "$FAMILY" "$DESCRIPTION" "${IMAGE_FILE}.tar.gz"
+
+restore: |
+    rm -f "$DISK_NAME"
+    rm -f "${IMAGE_FILE}.qcow2"
+    rm -f "${IMAGE_FILE}.tar.gz"
+    umount -AR /mnt/disk || true

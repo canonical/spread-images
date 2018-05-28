@@ -1,6 +1,70 @@
 project: spread-images
 
+environment:
+    PROJECT_PATH: /root/spread
+    TESTSLIB: $PROJECT_PATH/lib
+    TESTSFILES: $PROJECT_PATH/files
+
 backends:
+
+    google:
+        key: "$(HOST: echo $SPREAD_GOOGLE_KEY)"
+        location: computeengine/us-east1-b
+        systems:
+            - ubuntu-14.04-64:
+                workers: 1
+            - ubuntu-16.04-32:
+                workers: 1
+            - ubuntu-16.04-64:
+                workers: 1
+            - ubuntu-18.04-64:
+                image: ubuntu-os-cloud-devel/daily-ubuntu-1804-bionic-v20180315
+                workers: 1
+
+            - ubuntu-core-16-64:
+                image: ubuntu-16.04-64
+                workers: 1
+
+            - debian-9-64:
+                image: debian-9-stretch
+                workers: 1
+            - debian-sid-64:
+                image: debian-sid-64
+                workers: 1
+
+            - fedora-28-64:
+                image: fedora-28-64
+                workers: 1
+            - fedora-28-64-selinux-permissive:
+                image: fedora-28-64-selinux-permissive
+                workers: 1
+            - fedora-27-64:
+                image: fedora-27-64
+                workers: 1
+            - fedora-27-64-selinux-enforcing:
+                image: fedora-27-64-selinux-enforcing
+                workers: 1
+            - fedora-27-64-selinux-permissive:
+                image: fedora-27-64-selinux-permissive
+                workers: 1
+
+            - opensuse-42.2-64:
+                image: opensuse-leap-42-2-64
+                workers: 1
+            - opensuse-42.3-64:
+                image: opensuse-cloud/opensuse-leap-42-3-v20180116
+                workers: 1
+            - opensuse-tumbleweed-64:
+                image: opensuse-tumbleweed-64-v20180528
+                workers: 1
+
+            - arch-linux-64:
+                workers: 1
+
+            - amazon-linux-2-64:
+                workers: 1
+                preserve: true
+
     linode:
         key: "$(HOST: echo $SPREAD_LINODE_KEY)"
         systems:
@@ -19,22 +83,23 @@ backends:
 
 path: /root/spread
 
-restore: |
-    apt autoremove -y
-
-    find \
-        /var/log \
-        /var/cache/apt \
-        /var/lib/apt/{lists,mirrors} \
-        -type f -exec rm -f {} \;
-
-    rm -rf \
-        /root/.bash_history \
-        /root/.viminfo \
-        /root/.bashrc \
-        /root/.cache \
-        /root/spread
-
 suites:
-    tasks/:
-        summary: Image maintenace tasks
+    tasks/google/:
+        summary: Create and update images for google backend
+        environment:
+            GCE_PROJECT: computeengine
+            ZONE: us-east1-b
+            BUCKET_NAME: spread-images
+        prepare: |
+            . "$TESTSLIB/pkgdb.sh"
+
+            if ! [ -f "$PROJECT_PATH/sa.json" ]; then
+                echo "Service account file not found in root path"
+                exit 1
+            fi
+            distro_update_package_db
+            install_pkg_dependencies
+            gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
+
+    tasks/linode/:
+        summary: Update images for Linode backend

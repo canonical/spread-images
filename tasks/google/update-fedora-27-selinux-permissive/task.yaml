@@ -1,0 +1,35 @@
+summary: Update fedora image with the latest updates with selinux permissive
+
+systems: [fedora-*]
+
+environment:
+    IMAGE: fedora-27-64-selinux-permissive-v$(date +'%Y%m%d')
+    FAMILY: fedora-27-64-selinux-permissive
+    DESCRIPTION: Fedora 27 64 bits with SELinux permissive
+    DISK: $(hostname)
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade
+        distro_update_package_db
+        distro_upgrade_packages
+        distro_clean_package_cache
+        REBOOT
+    fi
+
+    sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+
+    delete_snapshot "$DISK"

@@ -1,0 +1,63 @@
+summary: Add new ubuntu xenial 32 bits image to google account
+
+systems: [ubuntu-16.04-64]
+
+environment:
+    BUCKET_NAME: spread-images
+    IMAGE_FILE: ubuntu-16-04-xenial-32bit
+    IMAGE_URL: https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-i386-disk1.img
+    IMAGE: ubuntu-16-04-xenial-32bit-v$(date +'%Y%m%d')
+    FAMILY: ubuntu-16-04-xenial-32bit
+    DESCRIPTION: Ubuntu 16.04 Xenial 32bit
+    DISK: $(hostname)    
+
+execute: |
+    . "$TESTSLIB/google.sh"
+
+    # Get the image
+    wget $IMAGE_URL
+    qemu-img convert -O raw "${IMAGE_URL##*/}" disk.raw
+
+    # Get /dev/sda1 parition offset
+    OFFSET=$( sfdisk -J disk.raw | jq '.partitiontable.partitions[0].start * 512' )
+
+    if [ -z $OFFSET ]; then
+        echo "failed to calculate offset"
+        exit 1
+    fi
+
+    # Make mounting directory and mount
+    mkdir -p /mnt/disk
+    mount -o loop,offset=$OFFSET disk.raw /mnt/disk
+    mount -o bind,offset=$OFFSET /run /mnt/disk/run
+
+    tee /mnt/disk/etc/cloud/cloud.cfg.d/GCE.cfg << EOF
+    datasource_list: [ 'GCE' ]
+    datasource: { GCE: {} }
+    EOF
+
+    chroot /mnt/disk /bin/bash -c "apt update"
+    chroot /mnt/disk /bin/bash -c "apt install -y python ssh netcat gce-compute-image-packages"
+    chroot /mnt/disk /bin/bash -c "apt autoremove -y"
+
+    # Avoid checking for new release, it could cause lock on apt
+    sed -i 's/^Prompt=.*$/Prompt=never/' /mnt/disk/etc/update-manager/release-upgrades
+
+    # Clean the image
+    find /mnt/disk/var/log /mnt/disk/var/cache/apt /mnt/disk/var/lib/apt/{lists,mirrors} -type f -exec rm -f {} \;
+
+    # Create the disk image
+    sudo umount -AR /mnt/disk
+    tar caf "${IMAGE_FILE}.tar.gz" disk.raw
+
+    # Copy ubuntu xenial 32 bits image to spread-images bucket
+    gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
+    
+    # Create the image in computeengine project
+    delete_image "$IMAGE"
+    create_image_from_bucket "$IMAGE" "$FAMILY" "$DESCRIPTION" "${IMAGE_FILE}.tar.gz"
+
+restore: |
+    sudo umount -AR /mnt/disk || true
+    rm -f disk.raw
+    rm -f "${IMAGE_FILE}.tar.gz"
