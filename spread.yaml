@@ -32,6 +32,12 @@ backends:
                 image: debian-sid-64
                 workers: 1
 
+            - fedora-28-64:
+                image: fedora-28-64
+                workers: 1
+            - fedora-28-64-selinux-permissive:
+                image: fedora-28-64-selinux-permissive
+                workers: 1
             - fedora-27-64:
                 image: fedora-27-64
                 workers: 1

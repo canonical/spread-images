@@ -1,22 +1,23 @@
 summary: Update fedora image with the latest updates with selinux permissive
 
-systems: [fedora-*]
+systems: [fedora-28-*]
 
 environment:
-    IMAGE: fedora-27-64-selinux-permissive-v$(date +'%Y%m%d')
-    FAMILY: fedora-27-64-selinux-permissive
-    DESCRIPTION: Fedora 27 64 bits with SELinux permissive
+    IMAGE: fedora-28-64-selinux-permissive-v$(date +'%Y%m%d')
+    FAMILY: fedora-28-64-selinux-permissive
+    DESCRIPTION: Fedora 28 64 bits with SELinux permissive
     DISK: $(hostname)
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Upgrade and clean the system
-        dnf makecache
-        dnf upgrade -y
-        dnf clean all -y
+        # Make the upgrade
+        distro_update_package_db
+        distro_upgrade_packages
+        distro_clean_package_cache
         REBOOT
     fi
 

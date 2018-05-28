@@ -148,6 +148,9 @@ distro_update_package_db() {
             apt-get update
             ;;
         fedora-*)
+            # Delete google repository because it is not needed any more
+            rm -f /etc/yum.repos.d/google-cloud.repo
+            # Clean and update repo
             dnf clean all
             dnf makecache
             ;;
@@ -171,10 +174,10 @@ distro_update_package_db() {
 distro_upgrade_packages() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            echo "so far not needed"
+            apt-get upgrade -y
             ;;
         fedora-*)
-            echo "so far not needed"
+            dnf upgrade -y
             ;;
         opensuse-*)
             echo "so far not needed"

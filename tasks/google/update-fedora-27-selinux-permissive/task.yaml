@@ -1,26 +1,27 @@
-summary: Update fedora image with the latest updates
+summary: Update fedora image with the latest updates with selinux permissive
 
 systems: [fedora-*]
 
 environment:
-    IMAGE: fedora-27-64-selinux-enforcing-v$(date +'%Y%m%d')
-    FAMILY: fedora-27-64-selinux-enforcing
-    DESCRIPTION: Fedora 27 64 bits with SELinux enforcing
+    IMAGE: fedora-27-64-selinux-permissive-v$(date +'%Y%m%d')
+    FAMILY: fedora-27-64-selinux-permissive
+    DESCRIPTION: Fedora 27 64 bits with SELinux permissive
     DISK: $(hostname)
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade
-        dnf makecache
-        dnf upgrade -y
-        dnf clean all -y
+        distro_update_package_db
+        distro_upgrade_packages
+        distro_clean_package_cache
         REBOOT
     fi
 
-    sed -i 's/SELINUX=.*/SELINUX=enforcing/g' /etc/selinux/config
+    sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
 
     # Clean disk before create the shapshot
     clean_machine

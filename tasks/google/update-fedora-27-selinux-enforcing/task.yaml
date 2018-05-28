@@ -1,0 +1,35 @@
+summary: Update fedora image with the latest updates
+
+systems: [fedora-27-*]
+
+environment:
+    IMAGE: fedora-27-64-selinux-enforcing-v$(date +'%Y%m%d')
+    FAMILY: fedora-27-64-selinux-enforcing
+    DESCRIPTION: Fedora 27 64 bits with SELinux enforcing
+    DISK: $(hostname)
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade
+        distro_update_package_db
+        distro_upgrade_packages
+        distro_clean_package_cache
+        REBOOT
+    fi
+
+    sed -i 's/SELINUX=.*/SELINUX=enforcing/g' /etc/selinux/config
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+
+    delete_snapshot "$DISK"

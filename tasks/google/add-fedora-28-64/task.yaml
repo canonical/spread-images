@@ -42,22 +42,12 @@ execute: |
     datasource: { GCE: {} }
     EOF
 
-    dnf -c /mnt/disk/etc/dnf/dnf.conf install -y --installroot=/mnt/disk/ --enablerepo=updates-testing cloud-init
-
-    tee /mnt/disk/etc/yum.repos.d/google-cloud.repo << EOF
-    [google-cloud-compute]
-    name=Google Cloud Compute
-    baseurl=https://packages.cloud.google.com/yum/repos/google-cloud-compute-el7-x86_64
-    enabled=1
-    gpgcheck=1
-    repo_gpgcheck=1
-    gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
-           https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-    EOF
+    # Enable repository
+    dnf -c /mnt/disk/etc/dnf/dnf.conf makecache --installroot=/mnt/disk/
+    dnf -c /mnt/disk/etc/dnf/dnf.conf copr -y enable ngompa/gce-oslogin --installroot=/mnt/disk/
 
     # Install dependencies
-
-    dnf -c /mnt/disk/etc/dnf/dnf.conf install -y --installroot=/mnt/disk/ google-compute-engine google-compute-engine-init google-config
+    dnf -c /mnt/disk/etc/dnf/dnf.conf install -y --installroot=/mnt/disk/ google-compute-engine google-compute-engine-oslogin
     dnf -c /mnt/disk/etc/dnf/dnf.conf install -y --installroot=/mnt/disk/ nc kernel-modules cloud-utils-growpart
     dnf -c /mnt/disk/etc/dnf/dnf.conf upgrade -y --installroot=/mnt/disk/
     dnf -c /mnt/disk/etc/dnf/dnf.conf clean all -y --installroot=/mnt/disk/
@@ -81,6 +71,9 @@ execute: |
     EOF
 
     chroot /mnt/disk /bin/bash -c "systemctl enable expand-part.service"
+
+    # Disable the auditd service due to it often hungs when the system starts
+    chroot /mnt/disk /bin/bash -c "systemctl disable auditd.service"
 
     # Clean the image
     find /mnt/disk/var/log /mnt/disk/var/cache/dnf /mnt/disk/var/lib/dnf/{history,yumdb} -type f -exec rm -f {} \;
