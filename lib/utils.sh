@@ -39,6 +39,5 @@ clean_machine() {
     rm -rf \
         /root/.bash_history \
         /root/.viminfo \
-        /root/.bashrc \
         /root/.cache
 }
