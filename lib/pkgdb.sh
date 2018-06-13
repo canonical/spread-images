@@ -175,6 +175,7 @@ distro_upgrade_packages() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
             apt-get upgrade -y
+            apt-get dist-upgrade -y
             ;;
         fedora-*)
             dnf upgrade -y
