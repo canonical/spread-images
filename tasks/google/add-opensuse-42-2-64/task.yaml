@@ -3,7 +3,7 @@ summary: Add new opensuse 42.2 64 bits image to google account
 environment:
     BUCKET_NAME: spread-images
     IMAGE_FILE: opensuse-leap-42-2-64
-    IMAGE_URL: http://download.opensuse.org/repositories/Cloud:/Images:/Leap_42.2/images/leap42.1-guest-gce-0.0.13-Build1.19.tar.gz
+    IMAGE_URL: http://download.opensuse.org/repositories/Cloud:/Images:/Leap_42.2/images/leap42.1-guest-gce-0.0.13-Build1.23.tar.gz
     IMAGE: opensuse-leap-42-2-64-v$(date +'%Y%m%d')
     FAMILY: opensuse-leap-42-2-64
     DESCRIPTION: Opensuse leap 42.2 64 bits
