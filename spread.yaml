@@ -10,6 +10,7 @@ backends:
     google:
         key: "$(HOST: echo $SPREAD_GOOGLE_KEY)"
         location: computeengine/us-east1-b
+        halt-timeout: 2h
         systems:
             - ubuntu-14.04-64:
                 workers: 1
@@ -65,22 +66,6 @@ backends:
                 workers: 1
                 preserve: true
 
-    linode:
-        key: "$(HOST: echo $SPREAD_LINODE_KEY)"
-        systems:
-            - ubuntu-16.04-64:
-                kernel: GRUB 2
-            - ubuntu-16.04-32:
-                kernel: GRUB 2
-            - ubuntu-16.10-64:
-                kernel: GRUB 2
-            - ubuntu-17.04-64:
-                kernel: GRUB 2
-            - ubuntu-17.10-64:
-                kernel: GRUB 2
-            - debian-unstable-64:
-                kernel: GRUB 2
-
 path: /root/spread
 
 suites:
@@ -101,5 +86,3 @@ suites:
             install_pkg_dependencies
             gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
 
-    tasks/linode/:
-        summary: Update images for Linode backend

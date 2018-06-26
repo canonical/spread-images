@@ -1,11 +1,11 @@
-summary: Update Ubuntu xenial 32 bits image with the latest updates
+summary: Update Debian sid 64 bits image with the latest updates
 
-systems: [ubuntu-16.04-32]
+systems: [debian-sid-64]
 
 environment:
-    IMAGE: ubuntu-16-04-xenial-32bit-v$(date +'%Y%m%d')
-    FAMILY: ubuntu-16-04-xenial-32bit
-    DESCRIPTION: Ubuntu 16.04 Xenial 32 bits
+    IMAGE: debian-sid-64-v$(date +'%Y%m%d')
+    FAMILY: debian-sid-64
+    DESCRIPTION: Debian Sid 64 bits
     DISK: $(hostname)
 
 execute: |
@@ -13,19 +13,15 @@ execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
+    # We are not making dist-upgrade because it is creating a dependencies issue
+    # which is making fail the preparation of the snapd test suite 
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade
         distro_update_package_db
-        distro_upgrade_packages
+        apt-get upgrade -y
         distro_clean_package_cache
         REBOOT
     fi
-
-    # Avoid checking for new release, it could cause lock on apt
-    sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
-
-    # Disable daily checks for updates to avoid apt locks
-    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
 
     # Clean disk before create the shapshot
     clean_machine
