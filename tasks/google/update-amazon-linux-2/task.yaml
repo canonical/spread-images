@@ -1,24 +1,26 @@
-summary: Update amazon linux 2 image in google account
+summary: Update amazon linux 2 image in google account and install test dependencies
 
-systems: [amazon-*]
+systems: [amazon-linux-2-64-base]
 
 environment:
-    IMAGE: amazon-linux-2-64-v$(date +'%Y%m%d')
-    FAMILY: amazon-linux-2-64
-    DESCRIPTION: Amazon Linux 2 64 bits
-    DISK: $(hostname)
+    TARGET_SYSTEM: amazon-linux-2-64
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
     . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
+        install_test_dependencies
+        distro_clean_package_cache
         REBOOT
     fi
 
+    # Clean disk before create the shapshot
     clean_machine
 
     # Create a new image based on the current disk
@@ -26,5 +28,6 @@ execute: |
 
 restore: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"

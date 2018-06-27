@@ -1,26 +1,27 @@
-summary: Update Debian sid 64 bits image with the latest updates and test dependencies
+summary: Update fedora image with the latest updates and test dependencies with selinux permissive
 
-systems: [debian-sid-64-base]
+systems: [fedora-27-64-base]
 
 environment:
-    TARGET_SYSTEM: debian-sid-64
+    TARGET_SYSTEM: fedora-27-64
 
 execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/names.sh"
     . "$TESTSLIB/pkgdb.sh"
-    . "$TESTSLIB/utils.sh"
+    . "$TESTSLIB/utils.sh"    
 
-    # We are not making dist-upgrade because it is creating a dependencies issue
-    # which is making fail the preparation of the snapd test suite 
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
-        apt-get upgrade -y
+        distro_upgrade_packages
         install_test_dependencies
         distro_clean_package_cache
         REBOOT
     fi
+
+    # Set selinux as permissive
+    sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
 
     # Clean disk before create the shapshot
     clean_machine

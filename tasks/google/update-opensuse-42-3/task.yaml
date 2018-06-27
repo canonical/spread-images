@@ -1,28 +1,24 @@
-summary: Update fedora image with the latest updates with selinux permissive
+summary: Update opensuse 42.3 64 bits image with the latest updates and test dependencies
 
-systems: [fedora-*]
+systems: [opensuse-42.3-64-base]
 
 environment:
-    IMAGE: fedora-27-64-selinux-permissive-v$(date +'%Y%m%d')
-    FAMILY: fedora-27-64-selinux-permissive
-    DESCRIPTION: Fedora 27 64 bits with SELinux permissive
-    DISK: $(hostname)
+    TARGET_SYSTEM: opensuse-42.3-64
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Make the upgrade
+        # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
+        install_test_dependencies
         distro_clean_package_cache
         REBOOT
     fi
-
-    # Set selinux as permissive
-    sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
 
     # Clean disk before create the shapshot
     clean_machine
@@ -32,5 +28,6 @@ execute: |
 
 restore: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"

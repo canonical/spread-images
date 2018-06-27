@@ -1,18 +1,15 @@
 summary: Add new fedora 28 64 bits image to google account
 
-systems: [fedora-*]
+systems: [fedora-27-64]
 
 environment:
-    BUCKET_NAME: spread-images
+    TARGET_SYSTEM: fedora-28-64-base
     IMAGE_FILE: fedora-28-64
     IMAGE_URL: http://fedora.c3sl.ufpr.br/linux/releases/28/Cloud/x86_64/images/Fedora-Cloud-Base-28-1.1.x86_64.raw.xz
-    IMAGE: fedora-28-64-v$(date +'%Y%m%d')
-    FAMILY: fedora-28-64
-    DESCRIPTION: Fedora 28 64 bits
-    DISK: $(hostname)    
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
 
     # Get the image
     wget -O - "$IMAGE_URL" | xz -cd - > disk.raw

@@ -1,9 +1,9 @@
-summary: Update Debian sid 64 bits image with the latest updates and test dependencies
+summary: Update Ubuntu bionic 64 bits image with the latest updates and test dependencies
 
-systems: [debian-sid-64-base]
+systems: [ubuntu-18.04-64-base]
 
 environment:
-    TARGET_SYSTEM: debian-sid-64
+    TARGET_SYSTEM: ubuntu-18.04-64
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -11,16 +11,20 @@ execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
-    # We are not making dist-upgrade because it is creating a dependencies issue
-    # which is making fail the preparation of the snapd test suite 
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
-        apt-get upgrade -y
+        distro_upgrade_packages
         install_test_dependencies
         distro_clean_package_cache
         REBOOT
     fi
+
+    # Avoid checking for new release, it could cause lock on apt
+    sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
+
+    # Disable daily checks for updates to avoid apt locks
+    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
 
     # Clean disk before create the shapshot
     clean_machine

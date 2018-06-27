@@ -12,58 +12,64 @@ backends:
         location: computeengine/us-east1-b
         halt-timeout: 2h
         systems:
+            - ubuntu-14.04-64-base:
+                image: ubuntu-os-cloud/ubuntu-1404-lts
             - ubuntu-14.04-64:
-                workers: 1
+                image: ubuntu-1404-64
+            - ubuntu-16.04-32-base:
+                image: ubuntu-1604-32-base
             - ubuntu-16.04-32:
-                workers: 1
+                image: ubuntu-1604-32
+            - ubuntu-16.04-64-base:
+                image: ubuntu-os-cloud/ubuntu-1604-lts
             - ubuntu-16.04-64:
-                workers: 1
+                image: ubuntu-1604-64
+            - ubuntu-18.04-64-base:
+                image: ubuntu-os-cloud/ubuntu-1804-lts
             - ubuntu-18.04-64:
-                image: ubuntu-os-cloud-devel/daily-ubuntu-1804-bionic-v20180315
-                workers: 1
+                image: ubuntu-1804-64
 
-            - ubuntu-core-16-64:
-                image: ubuntu-16.04-64
-                workers: 1
-
-            - debian-9-64:
+            - debian-9-64-base:
                 image: debian-9-stretch
-                workers: 1
+            - debian-9-64:
+                image: debian-9-64
+            - debian-sid-64-base:
+                image: debian-sid-64-base
             - debian-sid-64:
                 image: debian-sid-64
-                workers: 1
 
-            - fedora-28-64:
-                image: fedora-28-64
-                workers: 1
-            - fedora-28-64-selinux-permissive:
-                image: fedora-28-64-selinux-permissive
-                workers: 1
+            - fedora-26-64:
+                image: fedora-26-64
+            - fedora-27-64-base:
+                image: fedora-27-64-base
             - fedora-27-64:
                 image: fedora-27-64
-                workers: 1
-            - fedora-27-64-selinux-enforcing:
-                image: fedora-27-64-selinux-enforcing
-                workers: 1
-            - fedora-27-64-selinux-permissive:
-                image: fedora-27-64-selinux-permissive
-                workers: 1
+            - fedora-28-64-base:
+                image: fedora-28-64-base
+            - fedora-28-64:
+                image: fedora-28-64
 
+            - opensuse-42.2-64-base:
+                image: opensuse-leap-42-2-64-base
             - opensuse-42.2-64:
                 image: opensuse-leap-42-2-64
-                workers: 1
+            - opensuse-42.3-64-base:
+                image: opensuse-cloud/opensuse-leap
             - opensuse-42.3-64:
-                image: opensuse-cloud/opensuse-leap-42-3-v20180116
-                workers: 1
+                image: opensuse-42.3-64
             - opensuse-tumbleweed-64:
-                image: opensuse-tumbleweed-64-v20180528
-                workers: 1
+                image: opensuse-tumbleweed-64
 
+            - arch-linux-64-base:
+                image: arch-linux-64-base
             - arch-linux-64:
-                workers: 1
+                image: arch-linux-64
 
+            - amazon-linux-2-64-base:
+                image: amazon-linux-2-64-base
+                preserve: true
             - amazon-linux-2-64:
-                workers: 1
+                image: amazon-linux-2-64
                 preserve: true
 
 path: /root/spread

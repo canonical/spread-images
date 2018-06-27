@@ -1,9 +1,9 @@
-summary: Update Debian sid 64 bits image with the latest updates and test dependencies
+summary: Update Debian 9 64 bits image with the latest updates and test dependencies
 
-systems: [debian-sid-64-base]
+systems: [debian-9-64-base]
 
 environment:
-    TARGET_SYSTEM: debian-sid-64
+    TARGET_SYSTEM: debian-9-64
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -16,11 +16,15 @@ execute: |
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
-        apt-get upgrade -y
+        distro_upgrade_packages
+        distro_install_package google-compute-engine
         install_test_dependencies
         distro_clean_package_cache
         REBOOT
     fi
+
+    # Disable daily checks for updates to avoid apt locks
+    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
 
     # Clean disk before create the shapshot
     clean_machine

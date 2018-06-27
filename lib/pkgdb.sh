@@ -3,11 +3,13 @@
 distro_install_google_sdk() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-            export CLOUD_SDK_REPO
-            echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-            apt-get update && apt-get install -y google-cloud-sdk
+            if [ $(find /etc/apt/sources.list.d/google-cloud*.list | wc -l) -eq 0 ]; then
+                CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+                export CLOUD_SDK_REPO
+                echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+                curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+                apt-get update && apt-get install -y google-cloud-sdk
+            fi
             ;;
         fedora-*)
             if ! [ -f /etc/yum.repos.d/google-cloud-sdk.repo ]; then
@@ -26,7 +28,16 @@ EOF
             dnf install -y google-cloud-sdk
             ;;
         opensuse-*)
-            zypper install -y google-cloud-sdk
+            zypper remove -y google-cloud-sdk
+            mkdir -p /usr/share/google
+            wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip
+            unzip google-cloud-sdk.zip -d /usr/share/google
+            rm -f google-cloud-sdk.zip
+            echo "export CLOUDSDK_PYTHON=/usr/bin/python2" >> /etc/bash.bashrc
+            /usr/share/google/google-cloud-sdk/install.sh --usage-reporting false --bash-completion true --disable-installation-options --rc-path /etc/bash.bashrc --path-update true
+            ln -s /usr/share/google/google-cloud-sdk/bin/gcloud /usr/bin/gcloud
+            ln -s /usr/share/google/google-cloud-sdk/bin/gcutil /usr/bin/gcutil
+            ln -s /usr/share/google/google-cloud-sdk/bin/gsutil /usr/bin/gsutil
             ;;
         arch-*|amazon-*)
             if ! [ -d /usr/share/google/google-cloud-sdk ]; then
@@ -245,6 +256,7 @@ distro_auto_remove_packages() {
 
 pkg_dependencies_ubuntu(){
     echo "
+        git
         jq
         unzip
         "
@@ -257,6 +269,7 @@ pkg_dependencies_ubuntu(){
 
 pkg_dependencies_fedora(){
     echo "
+        git
         jq
         wget
         "
@@ -264,12 +277,14 @@ pkg_dependencies_fedora(){
 
 pkg_dependencies_opensuse(){
     echo "
+        git
         jq
         "
 }
 
 pkg_dependencies_arch(){
     echo "
+        git
         jq
         python2
         unzip
@@ -279,6 +294,7 @@ pkg_dependencies_arch(){
 
 pkg_dependencies_amazon(){
     echo "
+        git
         jq
         wget
         "
@@ -310,4 +326,11 @@ install_pkg_dependencies(){
     pkgs=$(pkg_dependencies)
     distro_install_package "$pkgs"
     distro_install_google_sdk
+}
+
+install_test_dependencies(){
+    git clone https://github.com/snapcore/snapd.git snapd-master
+    TESTSLIB=./snapd-master/tests/lib . snapd-master/tests/lib/pkgdb.sh
+    TESTSLIB=./snapd-master/tests/lib install_pkg_dependencies
+    rm -rf snapd-master
 }

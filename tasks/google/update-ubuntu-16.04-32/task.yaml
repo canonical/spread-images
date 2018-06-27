@@ -1,22 +1,21 @@
-summary: Update Ubuntu xenial 32 bits image with the latest updates
+summary: Update Ubuntu xenial 32 bits image with the latest updates and test dependencies
 
-systems: [ubuntu-16.04-32]
+systems: [ubuntu-16.04-32-base]
 
 environment:
-    IMAGE: ubuntu-16-04-xenial-32bit-v$(date +'%Y%m%d')
-    FAMILY: ubuntu-16-04-xenial-32bit
-    DESCRIPTION: Ubuntu 16.04 Xenial 32 bits
-    DISK: $(hostname)
+    TARGET_SYSTEM: ubuntu-16.04-32
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Make the upgrade
+        # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
+        install_test_dependencies
         distro_clean_package_cache
         REBOOT
     fi
@@ -35,5 +34,6 @@ execute: |
 
 restore: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"

@@ -1,31 +1,36 @@
 summary: Update arch linux image in google account
 
-systems: [arch-*]
+systems: [arch-linux-64-base]
 
 environment:
-    IMAGE: arch-linux-64-v$(date +'%Y%m%d')
-    FAMILY: arch-linux-64
-    DESCRIPTION: Arch Linux 64 bits
-    DISK: $(dhcpcd -T | sed -n 's/new_host_name=\(.*\).c.computeengine.internal/\1/gp')
+    TARGET_SYSTEM: arch-linux-64
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
     . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
+        install_test_dependencies
+        distro_clean_package_cache
         REBOOT
     fi
 
     # Disable google-shutdown-scripts service because it hungs during reboot
     systemctl disable google-shutdown-scripts.service
 
+    # Clean disk before create the shapshot
+    clean_machine
+
     # Create a new image based on the current disk
     create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
 
 restore: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"

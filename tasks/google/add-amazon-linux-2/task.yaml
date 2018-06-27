@@ -1,25 +1,22 @@
 summary: Add new Amazon linux 2 image to google account
 
-systems: [ubuntu-16.04-64]
+systems: [ubuntu-*]
 
 environment:
-    BUCKET_NAME: spread-images
+    TARGET_SYSTEM: amazon-linux-2-64
     IMAGE_FILE: amazon-linux-2-64
     IMAGE_URL: https://cdn.amazonlinux.com/os-images/2017.12.0.20180222/kvm/amzn2-kvm-2017.12.0.20180222-x86_64.xfs.gpt.qcow2
-    IMAGE: amazon-linux-2-64-v20180406
-    FAMILY: amazon-linux-2-64
-    DESCRIPTION: Amazon Linux 2 64 bits
-    DISK_NAME: disk.raw     
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
 
     # Get the raw image
     wget -O "${IMAGE_FILE}.qcow2" "$IMAGE_URL"
-    qemu-img convert -O raw "${IMAGE_FILE}.qcow2" "$DISK_NAME"
+    qemu-img convert -O raw "${IMAGE_FILE}.qcow2" disk.raw
 
     # Get /dev/sda1 parition offset
-    OFFSET=$( sfdisk -J "$DISK_NAME" | jq '.partitiontable.partitions[0].start * 512' )
+    OFFSET=$( sfdisk -J disk.raw | jq '.partitiontable.partitions[0].start * 512' )
 
     if [ -z $OFFSET ]; then
         echo "failed to calculate offset"
@@ -31,7 +28,7 @@ execute: |
     # Make mounting directory
     mkdir -p /mnt/disk
     # Mount the image and prepare the chroot
-    mount -o offset=$OFFSET $DISK_NAME /mnt/disk
+    mount -o offset=$OFFSET disk.raw /mnt/disk
     mount -t proc /proc /mnt/disk/proc
     mount --rbind /sys /mnt/disk/sys
     mount --make-rslave /mnt/disk/sys
@@ -97,7 +94,7 @@ execute: |
 
     # Create the disk image
     umount -AR /mnt/disk
-    tar caf "${IMAGE_FILE}.tar.gz" "$DISK_NAME"
+    tar caf "${IMAGE_FILE}.tar.gz" disk.raw
 
     # Upload amazon linux 2 image to spread-images bucket
     gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
@@ -107,7 +104,7 @@ execute: |
     create_image_from_bucket "$IMAGE" "$FAMILY" "$DESCRIPTION" "${IMAGE_FILE}.tar.gz"
 
 restore: |
-    rm -f "$DISK_NAME"
+    rm -f disk.raw
     rm -f "${IMAGE_FILE}.qcow2"
     rm -f "${IMAGE_FILE}.tar.gz"
     umount -AR /mnt/disk || true
