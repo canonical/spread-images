@@ -17,8 +17,8 @@ execute: |
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
-        distro_install_package google-compute-engine
         install_test_dependencies
+        distro_install_package google-compute-engine
         distro_clean_package_cache
         REBOOT
     fi
