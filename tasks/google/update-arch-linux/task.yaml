@@ -15,7 +15,7 @@ execute: |
         # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
-        install_test_dependencies
+        install_test_dependencies "$TARGET_SYSTEM"
         distro_clean_package_cache
         REBOOT
     fi

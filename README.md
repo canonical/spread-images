@@ -309,3 +309,19 @@ Image metadata generated:
 
 The generated image has the snapd test dependencies installed and configuration needed to run the snapd test suite.
 The base image used for this is the one provided by ubuntu-os-cloud/ubuntu-1804-lts
+
+### Fedora
+
+#### Fedora 28
+
+Command to update the image:
+
+    spread google:fedora-28-64-base:tasks/google/update-fedora-28-64
+
+Image metadata generated:
+
+    IMAGE="fedora-28-64-v$(date +'%Y%m%d')"
+    FAMILY="fedora-28-64"
+    DESCRIPTION="Fedora 28 64 bits with test dependencies"
+
+The generated image has SElinux configured as permissive and the test dependencies installed.
