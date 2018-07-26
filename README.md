@@ -325,3 +325,15 @@ Image metadata generated:
     DESCRIPTION="Fedora 28 64 bits with test dependencies"
 
 The generated image has SElinux configured as permissive and the test dependencies installed.
+
+## Run google tasks
+
+The bash script run_google_task.sh is used to run tasks for google backend and then restore the images based on the snapd tests results. 
+
+To run a specific task it is just needed to pass the task name, such as:
+
+    .../spread-images/run_google_task.sh update-ubuntu-16.04-32
+
+In case the task finishes successfully, then the snapd tests are executed (just when the image is available on snapd spread.yaml). If snapd tests finish with errors, then the new image is deleted. In case the image which is gonna be deleted is the only one for its family, it is not deleted. 
+
+The script is downloading spread and snapd inside the current directory to run the validation, so the avoid uploading them as part of the spread project the script has to be executed from a different path.
