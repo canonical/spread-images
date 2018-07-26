@@ -9,18 +9,22 @@ GCE_PROJECT=computeengine
 ZONE=us-east1-b
 BUCKET_NAME=spread-images
 
+TASK=$1
+
 run_task_google() {
     local task=$1
-    get_systems_for_task_google "$task"
+    
+    get_spread
+    get_env_for_task_google "$task"
 
-    cd "$PROJECT_DIR"
-    if ! spread "google:$SOURCE_SYSTEM:tasks/google/$task"; then
+    if ! run_spread_images_task google "$SOURCE_SYSTEM" "$task"; then
         echo "image task failed"
         return
     fi
-    
+
     if [ "$RUN_SNAPD" = "true" ]; then
         echo "running snapd test suite on target system: $TARGET_SYSTEM"
+        
         if ! run_snapd_tests google "$TARGET_SYSTEM"; then
             echo "snapd tests failed, reverting image"
             . "$PROJECT_DIR/lib/names.sh"
@@ -38,26 +42,54 @@ run_task_google() {
     fi
 }
 
+run_spread_images_task() {
+    local backend=$1
+    local system=$2
+    local task=$3
+
+    if [ ! -d "${PROJECT_DIR}/tasks/${backend}/${task}" ]; then
+        echo "task $task does not exist on spread-images project for backend $backend"
+        return 1
+    fi
+    ( cd "$PROJECT_DIR" && spread "${backend}:${system}:tasks/${backend}/${task}" )
+    return $?
+    
+}
+
 run_snapd_tests() {
     local backend=$1
     local system=$2
 
-    cd "$CURRENT_DIR"
     echo "running on dir: $CURRENT_DIR"
 
     if [ ! -d "$CURRENT_DIR/snapd" ]; then
         echo "Downloading snapd..."
-        git clone https://github.com/snapcore/snapd.git snapd
-        cd "$CURRENT_DIR/snapd"
+        ( cd "$CURRENT_DIR" && git clone https://github.com/snapcore/snapd.git snapd )
     else
-        cd "$CURRENT_DIR/snapd" && git fetch origin && git pull
+        ( cd "$CURRENT_DIR/snapd" && git fetch origin && git pull )
     fi
 
-    spread "${backend}:${system}"
-    cd "$CURRENT_DIR"
+    ( cd "$CURRENT_DIR/snapd" && spread "${backend}:${system}" )
+    return $?
 }
 
-get_systems_for_task_google() {
+get_spread() {
+    echo "Getting spread"
+
+    export SPREAD_DIR=$CURRENT_DIR/spread
+    export PATH=$SPREAD_DIR:$PATH
+
+    if [ -f "$SPREAD_DIR/spread" ]; then
+        echo "Spread already downloaded and ready to use"
+    else
+        mkdir -p "$SPREAD_DIR"
+        ( cd "$SPREAD_DIR" && curl -s -O https://niemeyer.s3.amazonaws.com/spread-amd64.tar.gz && tar xzvf spread-amd64.tar.gz ) 
+        echo "Spread downloaded and ready to use"
+    fi
+
+}
+
+get_env_for_task_google() {
     local task=$1    
     case "$task" in
         add-amazon-linux-2)
@@ -167,3 +199,5 @@ get_systems_for_task_google() {
     export TARGET_SYSTEM
     export RUN_SNAPD
 }
+
+run_task_google "$TASK"
