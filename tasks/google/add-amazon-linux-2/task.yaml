@@ -3,7 +3,7 @@ summary: Add new Amazon linux 2 image to google account
 systems: [ubuntu-*]
 
 environment:
-    TARGET_SYSTEM: amazon-linux-2-64
+    TARGET_SYSTEM: amazon-linux-2-64-base
     IMAGE_FILE: amazon-linux-2-64
     IMAGE_URL: https://cdn.amazonlinux.com/os-images/2017.12.0.20180222/kvm/amzn2-kvm-2017.12.0.20180222-x86_64.xfs.gpt.qcow2
 
