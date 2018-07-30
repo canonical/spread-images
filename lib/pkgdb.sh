@@ -322,6 +322,26 @@ pkg_dependencies(){
     esac
 }
 
+pkg_blacklist(){
+    case "$SPREAD_SYSTEM" in
+        ubuntu-*|debian-*)
+            echo "
+                lxd
+            "
+            ;;
+        fedora-*)
+            ;;
+        opensuse-*)
+            ;;
+        arch-*)
+            ;;
+        amazon-*)
+            ;;
+        *)
+            ;;
+    esac
+}
+
 install_pkg_dependencies(){
     pkgs=$(pkg_dependencies)
     distro_install_package "$pkgs"
@@ -334,4 +354,9 @@ install_test_dependencies(){
     TESTSLIB=./snapd-master/tests/lib . snapd-master/tests/lib/pkgdb.sh
     TESTSLIB=./snapd-master/tests/lib SPREAD_SYSTEM="$TARGET" install_pkg_dependencies
     rm -rf snapd-master
+}
+
+remove_pkg_blacklist(){
+    pkgs=$(pkg_blacklist)
+    distro_purge_package "$pkgs"
 }

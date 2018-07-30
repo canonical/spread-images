@@ -19,6 +19,7 @@ execute: |
         distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
         distro_install_package google-compute-engine
+        remove_pkg_blacklist
         distro_clean_package_cache
         REBOOT
     fi
