@@ -344,7 +344,9 @@ pkg_blacklist(){
 
 install_pkg_dependencies(){
     pkgs=$(pkg_dependencies)
-    distro_install_package "$pkgs"
+    if [ ! -z "$pkgs" ]; then
+        distro_install_package "$pkgs"
+    fi
     distro_install_google_sdk
 }
 
@@ -358,5 +360,7 @@ install_test_dependencies(){
 
 remove_pkg_blacklist(){
     pkgs=$(pkg_blacklist)
-    distro_purge_package "$pkgs"
+    if [ ! -z "$pkgs" ]; then
+        distro_purge_package "$pkgs"
+    fi
 }
