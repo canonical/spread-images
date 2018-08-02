@@ -93,12 +93,12 @@ get_env_for_task_google() {
     local task=$1    
     case "$task" in
         add-amazon-linux-2)
-            SOURCE_SYSTEM=ubuntu-16.04-64-base
+            SOURCE_SYSTEM=ubuntu-16.04-64
             TARGET_SYSTEM=amazon-linux-2-64
             RUN_SNAPD=false
             ;;
         add-arch-linux)
-            SOURCE_SYSTEM=ubuntu-16.04-64-base
+            SOURCE_SYSTEM=ubuntu-16.04-64
             TARGET_SYSTEM=arch-linux-64-base
             RUN_SNAPD=false
             ;;
@@ -125,12 +125,12 @@ get_env_for_task_google() {
             RUN_SNAPD=false
             ;;
         add-opensuse-42-2-64)
-            SOURCE_SYSTEM=ubuntu-16.04-64-base
+            SOURCE_SYSTEM=ubuntu-16.04-64
             TARGET_SYSTEM=opensuse-42.2-64-base
             RUN_SNAPD=false
             ;;
         add-ubuntu-16.04-32)
-            SOURCE_SYSTEM=ubuntu-16.04-64-base
+            SOURCE_SYSTEM=ubuntu-16.04-64
             TARGET_SYSTEM=ubuntu-16.04-32-base
             RUN_SNAPD=false
             ;;
