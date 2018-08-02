@@ -4,6 +4,7 @@ environment:
     PROJECT_PATH: /root/spread
     TESTSLIB: $PROJECT_PATH/lib
     TESTSFILES: $PROJECT_PATH/files
+    TMP_IMAGE_ID: "$(HOST: echo ${SPREAD_TMP_IMAGE_ID})"
 
 backends:
 
@@ -11,6 +12,7 @@ backends:
         key: "$(HOST: echo $SPREAD_GOOGLE_KEY)"
         location: computeengine/us-east1-b
         halt-timeout: 2h
+        storage: preserve-size
         systems:
             - ubuntu-14.04-64-base:
                 image: ubuntu-os-cloud/ubuntu-1404-lts

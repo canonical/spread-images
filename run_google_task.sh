@@ -4,6 +4,7 @@ set -x
 
 PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 CURRENT_DIR="$(pwd)"
+TMP_IMAGE_ID="$RANDOM"
 
 GCE_PROJECT=computeengine
 ZONE=us-east1-b
@@ -17,28 +18,30 @@ run_task_google() {
     get_spread
     get_env_for_task_google "$task"
 
-    if ! run_spread_images_task google "$SOURCE_SYSTEM" "$task"; then
+    if ! run_spread_images_task google "$SOURCE_SYSTEM" "$task" "$RUN_SNAPD"; then
         echo "image task failed"
         return
     fi
 
     if [ "$RUN_SNAPD" = "true" ]; then
         echo "running snapd test suite on target system: $TARGET_SYSTEM"
-        
-        if ! run_snapd_tests google "$TARGET_SYSTEM"; then
-            echo "snapd tests failed, reverting image"
-            . "$PROJECT_DIR/lib/names.sh"
-            . "$PROJECT_DIR/lib/google.sh"
-            images_available="$(number_of_images_from_family "$FAMILY")"
-            if [ "$images_available" -gt 1 ]; then
-                echo "deleting latest image for family $FAMILY"
-                delete_latest_image_from_family "$FAMILY"
-            else
-                echo "skiping image deletion due to there is just 1 image available"
-            fi
-        else
-            echo "snapd test suite passed, image is ready"
+
+        . "$PROJECT_DIR/lib/google.sh"
+        . "$PROJECT_DIR/lib/names.sh"
+        local tmp_image="$IMAGE"
+        local tmp_family="$FAMILY"
+        if run_snapd_tests google "$TARGET_SYSTEM" "$tmp_image"; then
+            echo "snapd test suite passed, clonning tmp image"
+            TMP_IMAGE_ID= . "$PROJECT_DIR/lib/names.sh"
+            local final_image="$IMAGE"
+            local final_family="$FAMILY"
+            local final_description="$DESCRIPTION"
+            create_image_from_image "$final_image" "$final_family" "$final_description" "$tmp_image"
         fi
+        echo "deleting tmp image"
+        delete_image "$tmp_image" "$tmp_family"
+    else
+        echo "snapd tests not executed on this image, image is ready"
     fi
 }
 
@@ -46,19 +49,26 @@ run_spread_images_task() {
     local backend=$1
     local system=$2
     local task=$3
+    local run_snapd=$4
 
     if [ ! -d "${PROJECT_DIR}/tasks/${backend}/${task}" ]; then
         echo "task $task does not exist on spread-images project for backend $backend"
         return 1
     fi
-    ( cd "$PROJECT_DIR" && spread "${backend}:${system}:tasks/${backend}/${task}" )
+    if [ "$run_snapd" = "true" ]; then
+        echo "Running spread-imags task and creating tmp image"
+        ( cd "$PROJECT_DIR" && SPREAD_TMP_IMAGE_ID="$TMP_IMAGE_ID" spread "${backend}:${system}:tasks/${backend}/${task}" )
+    else
+        echo "Running spread-imags task and creating final image"
+        ( cd "$PROJECT_DIR" && spread "${backend}:${system}:tasks/${backend}/${task}" )
+    fi
     return $?
-    
 }
 
 run_snapd_tests() {
     local backend=$1
     local system=$2
+    local image=$3
 
     echo "running on dir: $CURRENT_DIR"
 
@@ -66,8 +76,12 @@ run_snapd_tests() {
         echo "Downloading snapd..."
         ( cd "$CURRENT_DIR" && git clone https://github.com/snapcore/snapd.git snapd )
     else
-        ( cd "$CURRENT_DIR/snapd" && git fetch origin && git pull )
+        echo "Updating snapd..."
+        ( cd "$CURRENT_DIR/snapd" && git checkout -- spread.yaml && git fetch origin && git pull )
     fi
+
+    echo "Configuring target image"
+    python3 "$PROJECT_DIR/update_image.py" "$CURRENT_DIR/snapd/spread.yaml" "$backend" "$system" "$image"    
 
     ( cd "$CURRENT_DIR/snapd" && spread "${backend}:${system}" )
     return $?
@@ -86,7 +100,6 @@ get_spread() {
         ( cd "$SPREAD_DIR" && curl -s -O https://niemeyer.s3.amazonaws.com/spread-amd64.tar.gz && tar xzvf spread-amd64.tar.gz ) 
         echo "Spread downloaded and ready to use"
     fi
-
 }
 
 get_env_for_task_google() {
@@ -137,7 +150,7 @@ get_env_for_task_google() {
         update-amazon-linux-2)
             SOURCE_SYSTEM=amazon-linux-2-64-base
             TARGET_SYSTEM=amazon-linux-2-64
-            RUN_SNAPD=false
+            RUN_SNAPD=true
             ;;
         update-arch-linux)
             SOURCE_SYSTEM=arch-linux-64-base

@@ -113,6 +113,18 @@ create_image_from_disk(){
     deprecate_old_images "$FAMILY" "$latest_image_name"
 }
 
+create_image_from_image(){
+    local IMAGE=$1
+    local FAMILY=$2
+    local DESCRIPTION=$3
+    local SOURCE_IMAGE=$4
+
+    local latest_image_name=$(get_latest_image_name "$FAMILY")
+    delete_image "$IMAGE" "$FAMILY"
+    gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-image "$SOURCE_IMAGE"
+    deprecate_old_images "$FAMILY" "$latest_image_name"
+}
+
 delete_latest_image_from_family(){
     local FAMILY=$1
     local latest_image_name=$(get_latest_image_name "$FAMILY")
