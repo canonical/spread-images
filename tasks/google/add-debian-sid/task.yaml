@@ -31,7 +31,7 @@ execute: |
 
     # Project path is moved away to avoid path conflicts when this image is used with spread-images project again
     create_snapshot_from_disk "$DISK"
-    delete_image "$IMAGE"
+    delete_image "$IMAGE" "$FAMILY"
     create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
     deprecate_old_images "$FAMILY"
 

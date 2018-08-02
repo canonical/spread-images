@@ -58,7 +58,7 @@ execute: |
         google-network-setup.service"
 
     echo "$services" | while read s ; do
-        chroot /mnt/disk /bin/bash -c "/usr/bin/systemctl enable $s"
+        chroot /mnt/disk /bin/bash -c "/usr/bin/systemctl enable $s" || true
     done
 
     # Configure time
@@ -94,13 +94,13 @@ execute: |
 
     # Create the disk image
     umount -AR /mnt/disk
-    tar caf "${IMAGE_FILE}.tar.gz" disk.raw
+    tar caf "${IMAGE_FILE}.tar.gz" disk.raw || tar caf "${IMAGE_FILE}.tar.gz" disk.raw
 
     # Upload amazon linux 2 image to spread-images bucket
     gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
 
     # Create the image in computeengine project
-    delete_image "$IMAGE"
+    delete_image "$IMAGE" "$FAMILY"
     create_image_from_bucket "$IMAGE" "$FAMILY" "$DESCRIPTION" "${IMAGE_FILE}.tar.gz"
 
 restore: |
