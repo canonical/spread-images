@@ -59,6 +59,48 @@ EOF
     esac
 }
 
+clean_google_services() {
+    echo "Cleaning google services already running in the system"
+    services="$(ls /usr/lib/systemd/system/google-*.service)" || return
+    for service in $services; do
+        systemctl stop "$service" || true
+        systemctl disable "$service" || true
+        rm -f "/etc/systemd/system/$service"
+        systemctl daemon-reload
+    done
+}
+
+distro_install_google_compute_engine() {
+    case "$SPREAD_SYSTEM" in
+        ubuntu-*|debian-*)
+            distro_install_package google-compute-engine
+            ;;
+        fedora-*)
+            echo "Not required yet"
+            ;;
+        opensuse-*)
+            echo "Not required yet"
+            ;;
+        arch-*)
+            clean_google_services
+            git clone https://github.com/GoogleCloudPlatform/compute-image-packages.git
+            ( cd compute-image-packages && python3 setup.py install )
+            services="$(cd compute-image-packages/google_compute_engine_init/systemd && ls *.service)"
+            cp compute-image-packages/google_compute_engine_init/systemd/*.service /usr/lib/systemd/system/
+            for service in $services; do
+                systemctl enable "$service"
+            done
+            ;;
+        amazon-*)
+            echo "Not required yet"
+            ;;    
+        *)
+            echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
+            exit 1
+            ;;
+    esac
+}
+
 distro_install_package() {
     # Parse additional arguments; once we find the first unknown
     # part we break argument parsing and process all further
