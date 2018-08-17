@@ -3,13 +3,15 @@
 clean_machine() {
 	case "$SPREAD_SYSTEM" in
 		ubuntu-*|debian-*)
-			apt autoremove -y
+			apt-get clean
+			apt-get autoremove -y
 			find \
 				/var/cache/apt \
 				/var/lib/apt/{lists,mirrors} \
 				-type f -exec rm -f {} \;
 			;;
 		fedora-*)
+			dnf clean all
 			dnf -q -y autoremove
 			find \
 				/var/cache/dnf \
@@ -18,9 +20,11 @@ clean_machine() {
 			;;
 		opensuse-*)
 			zypper -q clean --all
-			find \
-				/var/cache/zypper \
-				-type f -exec rm -f {} \;
+			if [ -d /var/cache/zypper ]; then
+				find \
+					/var/cache/zypper \
+					-type f -exec rm -f {} \;
+			fi
 			;;
 		arch-*)
     		pacman -Scc --noconfirm

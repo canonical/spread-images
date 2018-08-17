@@ -2,16 +2,14 @@ summary: Add new debian sid image to google account
 
 description: This task is used to create/update new debian sid images. Update script is not needed. 
 
-systems: [debian-*]
+systems: [debian-9-64-base]
 
 environment:
-    IMAGE: debian-sid-64-v$(date +'%Y%m%d')
-    FAMILY: debian-sid-64
-    DESCRIPTION: Debian sid 64 bits
-    DISK: $(hostname)
+    TARGET_SYSTEM: debian-sid-base
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
     . "$TESTSLIB/utils.sh"
 
     cp -a /etc/ntp.conf /var/tmp/ntp.conf.google
@@ -25,19 +23,20 @@ execute: |
     apt-get update
     apt-get dist-upgrade -y --no-install-recommends --auto-remove --purge
     apt-get install -y ntp google-compute-engine
-    cp -a /var/tmp/ntp.conf.google /etc/ntp.conf    
+    cp -a /var/tmp/ntp.conf.google /etc/ntp.conf
     
-    # Clean disk before create the shapshot 
+    # Clean disk before create the shapshot
     apt autoremove -y
     clean_machine
 
     # Project path is moved away to avoid path conflicts when this image is used with spread-images project again
     create_snapshot_from_disk "$DISK"
-    delete_image "$IMAGE"
+    delete_image "$IMAGE" "$FAMILY"
     create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
     deprecate_old_images "$FAMILY"
 
 restore: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"

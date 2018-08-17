@@ -1,24 +1,24 @@
-summary: Update Debian sid 64 bits image with the latest updates
+summary: Update Debian sid 64 bits image with the latest updates and test dependencies
 
-systems: [debian-sid-64]
+systems: [debian-sid-64-base]
 
 environment:
-    IMAGE: debian-sid-64-v$(date +'%Y%m%d')
-    FAMILY: debian-sid-64
-    DESCRIPTION: Debian Sid 64 bits
-    DISK: $(hostname)
+    TARGET_SYSTEM: debian-sid-64
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
     # We are not making dist-upgrade because it is creating a dependencies issue
     # which is making fail the preparation of the snapd test suite 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Make the upgrade
+        # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         apt-get upgrade -y
+        install_test_dependencies "$TARGET_SYSTEM"
+        remove_pkg_blacklist
         distro_clean_package_cache
         REBOOT
     fi
@@ -31,5 +31,6 @@ execute: |
 
 restore: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"

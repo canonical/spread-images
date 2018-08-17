@@ -3,16 +3,13 @@ summary: Add new fedora 27 64 bits image to google account
 systems: [fedora-*]
 
 environment:
-    BUCKET_NAME: spread-images
+    TARGET_SYSTEM: fedora-27-64-base
     IMAGE_FILE: fedora-27-64
     IMAGE_URL: https://download.fedoraproject.org/pub/fedora/linux/releases/27/CloudImages/x86_64/images/Fedora-Cloud-Base-27-1.6.x86_64.raw.xz
-    IMAGE: fedora-27-64-v$(date +'%Y%m%d')
-    FAMILY: fedora-27-64
-    DESCRIPTION: Fedora 27 64 bits
-    DISK: $(hostname)    
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
 
     # Get the image
     wget -O - "$IMAGE_URL" | xz -cd - > disk.raw
@@ -93,7 +90,7 @@ execute: |
     gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
     
     # Create the image in computeengine project
-    delete_image "$IMAGE"
+    delete_image "$IMAGE" "$FAMILY"
     create_image_from_bucket "$IMAGE" "$FAMILY" "$DESCRIPTION" "${IMAGE_FILE}.tar.gz"
 
 restore: |

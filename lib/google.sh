@@ -18,6 +18,7 @@ create_image_from_bucket(){
 
 delete_image(){
     local IMAGE=$1
+    local FAMILY=$2
     local image_name=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND name = $IMAGE" --format json | jq -r '.[]|.name')
 
     if ! [ -z "$image_name" ]; then
@@ -107,7 +108,29 @@ create_image_from_disk(){
 
     local latest_image_name=$(get_latest_image_name "$FAMILY")
     create_snapshot_from_disk "$DISK"
-    delete_image "$IMAGE"
+    delete_image "$IMAGE" "$FAMILY"
     create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
     deprecate_old_images "$FAMILY" "$latest_image_name"
+}
+
+create_image_from_image(){
+    local IMAGE=$1
+    local FAMILY=$2
+    local DESCRIPTION=$3
+    local SOURCE_IMAGE=$4
+
+    local latest_image_name=$(get_latest_image_name "$FAMILY")
+    delete_image "$IMAGE" "$FAMILY"
+    gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-image "$SOURCE_IMAGE"
+    deprecate_old_images "$FAMILY" "$latest_image_name"
+}
+
+delete_latest_image_from_family(){
+    local FAMILY=$1
+    local latest_image_name=$(get_latest_image_name "$FAMILY")
+    delete_image "$latest_image_name" "$FAMILY"
+}
+
+number_of_images_from_family(){
+    gcloud compute images list --filter "family = $FAMILY" --project "$GCE_PROJECT" --format json | jq '. | length'
 }

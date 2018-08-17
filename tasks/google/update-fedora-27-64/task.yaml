@@ -1,22 +1,22 @@
-summary: Update fedora image with the latest updates with selinux permissive
+summary: Update fedora image with the latest updates and test dependencies with selinux permissive
 
-systems: [fedora-*]
+systems: [fedora-27-64-base]
 
 environment:
-    IMAGE: fedora-27-64-selinux-permissive-v$(date +'%Y%m%d')
-    FAMILY: fedora-27-64-selinux-permissive
-    DESCRIPTION: Fedora 27 64 bits with SELinux permissive
-    DISK: $(hostname)
+    TARGET_SYSTEM: fedora-27-64
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
     . "$TESTSLIB/pkgdb.sh"
-    . "$TESTSLIB/utils.sh"
+    . "$TESTSLIB/utils.sh"    
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Make the upgrade
+        # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
+        install_test_dependencies "$TARGET_SYSTEM"
+        remove_pkg_blacklist
         distro_clean_package_cache
         REBOOT
     fi
@@ -32,5 +32,6 @@ execute: |
 
 restore: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"

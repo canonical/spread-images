@@ -1,9 +1,9 @@
-summary: Update Ubuntu xenial 32 bits image with the latest updates and test dependencies
+summary: Update Ubuntu bionic 64 bits image with the latest updates and test dependencies
 
-systems: [ubuntu-16.04-32-base]
+systems: [ubuntu-18.04-64-base]
 
 environment:
-    TARGET_SYSTEM: ubuntu-16.04-32
+    TARGET_SYSTEM: ubuntu-18.04-64
 
 execute: |
     . "$TESTSLIB/google.sh"

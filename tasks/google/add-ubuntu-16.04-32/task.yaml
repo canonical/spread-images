@@ -1,18 +1,15 @@
 summary: Add new ubuntu xenial 32 bits image to google account
 
-systems: [ubuntu-16.04-64]
+systems: [ubuntu-*]
 
 environment:
-    BUCKET_NAME: spread-images
+    TARGET_SYSTEM: ubuntu-16.04-32-base
     IMAGE_FILE: ubuntu-16-04-xenial-32bit
     IMAGE_URL: https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-i386-disk1.img
-    IMAGE: ubuntu-16-04-xenial-32bit-v$(date +'%Y%m%d')
-    FAMILY: ubuntu-16-04-xenial-32bit
-    DESCRIPTION: Ubuntu 16.04 Xenial 32bit
-    DISK: $(hostname)    
 
 execute: |
     . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
 
     # Get the image
     wget $IMAGE_URL
@@ -54,7 +51,7 @@ execute: |
     gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
     
     # Create the image in computeengine project
-    delete_image "$IMAGE"
+    delete_image "$IMAGE" "$FAMILY"
     create_image_from_bucket "$IMAGE" "$FAMILY" "$DESCRIPTION" "${IMAGE_FILE}.tar.gz"
 
 restore: |
