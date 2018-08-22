@@ -5,7 +5,7 @@ set -x
 PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 CURRENT_DIR="$(pwd)"
 TMP_IMAGE_ID="$RANDOM"
-SNAPD_DIR=${SNAPD_DIR:-snapd}
+SNAPD_DIR=${SNAPD_DIR:-$CURRENT_DIR/snapd}
 
 GCE_PROJECT=computeengine
 ZONE=us-east1-b
@@ -70,25 +70,27 @@ run_spread_images_task() {
     return $?
 }
 
+get_snapd() {
+    if [ ! -d "$SNAPD_DIR" ]; then
+        echo "Downloading snapd..."
+        git clone https://github.com/snapcore/snapd.git "$SNAPD_DIR"
+    else
+        echo "Updating snapd..."
+        ( cd "$SNAPD_DIR" && git checkout -- spread.yaml && git fetch origin && git pull )
+    fi
+}
+
 run_snapd_tests() {
     local backend=$1
     local system=$2
     local image=$3
 
-    echo "running on dir: $CURRENT_DIR"
-
-    if [ ! -d "$CURRENT_DIR/$SNAPD_DIR" ]; then
-        echo "Downloading snapd..."
-        ( cd "$CURRENT_DIR" && git clone https://github.com/snapcore/snapd.git "$SNAPD_DIR" )
-    else
-        echo "Updating snapd..."
-        ( cd "$CURRENT_DIR/$SNAPD_DIR" && git checkout -- spread.yaml && git fetch origin && git pull )
-    fi
+    get_snapd
 
     echo "Configuring target image"
     python3 "$PROJECT_DIR/update_image.py" "$CURRENT_DIR/$SNAPD_DIR/spread.yaml" "$backend" "$system" "$image"    
 
-    ( cd "$CURRENT_DIR/$SNAPD_DIR" && spread "${backend}:${system}" )
+    ( cd "$SNAPD_DIR" && spread "${backend}:${system}" )
     return $?
 }
 
