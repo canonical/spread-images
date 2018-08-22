@@ -88,7 +88,7 @@ run_snapd_tests() {
     get_snapd
 
     echo "Configuring target image"
-    python3 "$PROJECT_DIR/update_image.py" "$CURRENT_DIR/$SNAPD_DIR/spread.yaml" "$backend" "$system" "$image"    
+    python3 "$PROJECT_DIR/update_image.py" "$SNAPD_DIR/spread.yaml" "$backend" "$system" "$image"
 
     ( cd "$SNAPD_DIR" && spread "${backend}:${system}" )
     return $?
