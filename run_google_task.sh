@@ -20,7 +20,7 @@ run_task_google() {
 
     if ! run_spread_images_task google "$SOURCE_SYSTEM" "$task" "$RUN_SNAPD"; then
         echo "image task failed"
-        return
+        exit 1
     fi
 
     if [ "$RUN_SNAPD" = "true" ]; then
@@ -37,9 +37,13 @@ run_task_google() {
             local final_family="$FAMILY"
             local final_description="$DESCRIPTION"
             create_image_from_image "$final_image" "$final_family" "$final_description" "$tmp_image"
+            echo "deleting tmp image"
+            delete_image "$tmp_image" "$tmp_family"
+        else
+            echo "Snapd tests failed, deleting tmp image and exiting..."
+            delete_image "$tmp_image" "$tmp_family"
+            exit 1
         fi
-        echo "deleting tmp image"
-        delete_image "$tmp_image" "$tmp_family"
     else
         echo "snapd tests not executed on this image, image is ready"
     fi
