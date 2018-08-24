@@ -2,38 +2,49 @@
 
 set -x
 
-PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+SPREAD_IMAGES_DIR=${SPREAD_IMAGES_DIR:-"$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"}
 CURRENT_DIR="$(pwd)"
+SNAPD_DIR=${SNAPD_DIR:-"$CURRENT_DIR/snapd"}
+SPREAD_DIR=${SPREAD_DIR:-"$CURRENT_DIR/spread"}
 TMP_IMAGE_ID="$RANDOM"
-SNAPD_DIR=${SNAPD_DIR:-$CURRENT_DIR/snapd}
 
 GCE_PROJECT=computeengine
 ZONE=us-east1-b
 BUCKET_NAME=spread-images
-
-TASK=$1
 
 run_task_google() {
     local task=$1
     
     get_spread
     get_env_for_task_google "$task"
+    run_spread_images "$task"
+    run_snapd "$task"
+}
+
+run_spread_images() {
+    local task=$1
+    get_env_for_task_google "$task"
 
     if ! run_spread_images_task google "$SOURCE_SYSTEM" "$task" "$RUN_SNAPD"; then
         echo "image task failed"
         exit 1
     fi
+}
+
+run_snapd() {
+    local task=$1
+    get_env_for_task_google "$task"
 
     if [ "$RUN_SNAPD" = "true" ]; then
         echo "running snapd test suite on target system: $TARGET_SYSTEM"
 
-        . "$PROJECT_DIR/lib/google.sh"
-        . "$PROJECT_DIR/lib/names.sh"
+        . "$SPREAD_IMAGES_DIR/lib/google.sh"
+        . "$SPREAD_IMAGES_DIR/lib/names.sh"
         local tmp_image="$IMAGE"
         local tmp_family="$FAMILY"
         if run_snapd_tests google "$TARGET_SYSTEM" "$tmp_image"; then
             echo "snapd test suite passed, clonning tmp image"
-            TMP_IMAGE_ID= . "$PROJECT_DIR/lib/names.sh"
+            TMP_IMAGE_ID= . "$SPREAD_IMAGES_DIR/lib/names.sh"
             local final_image="$IMAGE"
             local final_family="$FAMILY"
             local final_description="$DESCRIPTION"
@@ -56,16 +67,16 @@ run_spread_images_task() {
     local task=$3
     local run_snapd=$4
 
-    if [ ! -d "${PROJECT_DIR}/tasks/${backend}/${task}" ]; then
+    if [ ! -d "${SPREAD_IMAGES_DIR}/tasks/${backend}/${task}" ]; then
         echo "task $task does not exist on spread-images project for backend $backend"
         return 1
     fi
     if [ "$run_snapd" = "true" ]; then
         echo "Running spread-imags task and creating tmp image"
-        ( cd "$PROJECT_DIR" && SPREAD_TMP_IMAGE_ID="$TMP_IMAGE_ID" spread "${backend}:${system}:tasks/${backend}/${task}" )
+        ( cd "$SPREAD_IMAGES_DIR" && SPREAD_TMP_IMAGE_ID="$TMP_IMAGE_ID" "$SPREAD_DIR/spread" "${backend}:${system}:tasks/${backend}/${task}" )
     else
         echo "Running spread-imags task and creating final image"
-        ( cd "$PROJECT_DIR" && spread "${backend}:${system}:tasks/${backend}/${task}" )
+        ( cd "$SPREAD_IMAGES_DIR" && "$SPREAD_DIR/spread" "${backend}:${system}:tasks/${backend}/${task}" )
     fi
     return $?
 }
@@ -88,19 +99,16 @@ run_snapd_tests() {
     get_snapd
 
     echo "Configuring target image"
-    python3 "$PROJECT_DIR/update_image.py" "$SNAPD_DIR/spread.yaml" "$backend" "$system" "$image"
+    python3 "$SPREAD_IMAGES_DIR/update_image.py" "$SNAPD_DIR/spread.yaml" "$backend" "$system" "$image"
 
-    ( cd "$SNAPD_DIR" && spread "${backend}:${system}" )
+    ( cd "$SNAPD_DIR" && "$SPREAD_DIR/spread" "${backend}:${system}" )
     return $?
 }
 
 get_spread() {
     echo "Getting spread"
 
-    export SPREAD_DIR=$CURRENT_DIR/spread
-    export PATH=$SPREAD_DIR:$PATH
-
-    if [ -f "$SPREAD_DIR/spread" ]; then
+    if [ -x "$SPREAD_DIR/spread" ]; then
         echo "Spread already downloaded and ready to use"
     else
         mkdir -p "$SPREAD_DIR"
@@ -220,4 +228,6 @@ get_env_for_task_google() {
     export RUN_SNAPD
 }
 
-run_task_google "$TASK"
+if [ ! -z "$1" ]; then
+    run_task_google "$1"
+fi
