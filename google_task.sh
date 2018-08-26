@@ -2,11 +2,11 @@
 
 set -x
 
-SPREAD_IMAGES_DIR=${SPREAD_IMAGES_DIR:-"$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"}
 CURRENT_DIR="$(pwd)"
+SPREAD_IMAGES_DIR=${SPREAD_IMAGES_DIR:-"$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"}
 SNAPD_DIR=${SNAPD_DIR:-"$CURRENT_DIR/snapd"}
 SPREAD_DIR=${SPREAD_DIR:-"$CURRENT_DIR/spread"}
-TMP_IMAGE_ID="$RANDOM"
+TMP_IMAGE_ID=${TMP_IMAGE_ID:-"$RANDOM"}
 
 GCE_PROJECT=computeengine
 ZONE=us-east1-b
