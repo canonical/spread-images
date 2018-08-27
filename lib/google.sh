@@ -3,7 +3,7 @@
 create_image_from_snapshot(){
     local IMAGE=$1
     local FAMILY=$2
-    local DESCRIPTION=$3
+    local DESCRIPTION="$3"
     local SNAPSHOT=$4
     gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT"
 }
@@ -11,7 +11,7 @@ create_image_from_snapshot(){
 create_image_from_bucket(){
     local IMAGE=$1
     local FAMILY=$2
-    local DESCRIPTION=$3
+    local DESCRIPTION="$3"
     local IMAGE_FILE=$4
     gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-uri "gs://$BUCKET_NAME/$IMAGE_FILE"
 }
@@ -103,7 +103,7 @@ delete_snapshot(){
 create_image_from_disk(){
     local IMAGE=$1
     local FAMILY=$2
-    local DESCRIPTION=$3
+    local DESCRIPTION="$3"
     local DISK=$4
 
     local latest_image_name=$(get_latest_image_name "$FAMILY")
@@ -116,7 +116,7 @@ create_image_from_disk(){
 create_image_from_image(){
     local IMAGE=$1
     local FAMILY=$2
-    local DESCRIPTION=$3
+    local DESCRIPTION="$3"
     local SOURCE_IMAGE=$4
 
     local latest_image_name=$(get_latest_image_name "$FAMILY")
