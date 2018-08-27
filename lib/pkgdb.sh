@@ -172,20 +172,20 @@ distro_purge_package() {
 
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            apt-get remove -y --purge -y "$@"
+            apt-get remove -y --purge "$@" || true
             ;;
         fedora-*)
-            dnf -y remove "$@"
+            dnf -y remove "$@" || true
             dnf clean all
             ;;
         opensuse-*)
-            zypper remove -y "$@"
+            zypper remove -y "$@" || true
             ;;
         arch-*)
-            pacman -Rnsc --noconfirm "$@"
+            pacman -Rnsc --noconfirm "$@" || true
             ;;
         amazon-*)
-            yum -y remove "$@"
+            yum -y remove "$@" || true
             yum clean all
             ;;
         *)
