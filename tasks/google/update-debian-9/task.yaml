@@ -17,9 +17,9 @@ execute: |
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
+        remove_pkg_blacklist
         install_test_dependencies "$TARGET_SYSTEM"
         distro_install_google_compute_engine
-        remove_pkg_blacklist
         distro_clean_package_cache
         REBOOT
     fi
