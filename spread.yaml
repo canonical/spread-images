@@ -12,7 +12,6 @@ backends:
         key: "$(HOST: echo $SPREAD_GOOGLE_KEY)"
         location: computeengine/us-east1-b
         halt-timeout: 2h
-        storage: preserve-size
         systems:
             - ubuntu-14.04-64-base:
                 image: ubuntu-os-cloud/ubuntu-1404-lts
@@ -69,10 +68,10 @@ backends:
 
             - amazon-linux-2-64-base:
                 image: amazon-linux-2-64-base
-                preserve: true
+                storage: preserve-size
             - amazon-linux-2-64:
                 image: amazon-linux-2-64
-                preserve: true
+                storage: preserve-size
 
 path: /root/spread
 
