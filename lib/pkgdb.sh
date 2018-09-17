@@ -336,6 +336,7 @@ pkg_dependencies_arch(){
 
 pkg_dependencies_amazon(){
     echo "
+        dbus
         git
         jq
         wget
