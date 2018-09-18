@@ -49,7 +49,7 @@ deprecate_old_images(){
     else
         for i in ${old_images}; do
             echo "Deprecate old image ${i} ..."
-            gcloud compute images deprecate --project "$GCE_PROJECT" "${i}" --state DEPRECATED --replacement "${latest_image_name}"
+            gcloud compute images deprecate --project "$GCE_PROJECT" "${i}" --state DEPRECATED --replacement "${latest_image_name}" --delete-in 5d
             echo ""
         done
     fi
@@ -67,7 +67,7 @@ delete_deprecated_images(){
     else
         for i in ${old_images}; do
             echo "Deprecate old image ${i} ..."
-            gcloud compute images deprecate --project "$GCE_PROJECT" "${i}" --state DEPRECATED --replacement "${latest_image_name}"
+            gcloud compute images deprecate --project "$GCE_PROJECT" "${i}" --state DEPRECATED --replacement "${latest_image_name}" --delete-in 5d
             echo ""
         done
     fi
