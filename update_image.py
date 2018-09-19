@@ -5,7 +5,7 @@ import yaml
 import yamlordereddictloader
 
 
-def update_image(filepath, backend, system, image):
+def update_image(filepath, backend, system, image, workers):
     
     with open(filepath, "r") as f:
         filemap = yaml.load(f, Loader=yamlordereddictloader.Loader)
@@ -18,7 +18,10 @@ def update_image(filepath, backend, system, image):
 
     for sys in systems:
         if system in sys.keys():
-            sys[system]['image'] = image
+            if image:
+                sys[system]['image'] = image
+            if workers:
+                sys[system]['workers'] = workers
             break
 
     with open(filepath, "w") as f:
@@ -31,6 +34,7 @@ if __name__ == '__main__':
     args_parser.add_argument('backend', type=str, choices=['google', 'linode'])
     args_parser.add_argument('system', type=str)
     args_parser.add_argument('image', type=str)
+    args_parser.add_argument('workers', type=int, default=0)
                              
     args = args_parser.parse_args()
-    update_image(args.filepath, args.backend, args.system, args.image)
+    update_image(args.filepath, args.backend, args.system, args.image, args.workers)

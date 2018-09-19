@@ -41,7 +41,7 @@ run_snapd() {
         . "$SPREAD_IMAGES_DIR/lib/names.sh"
         local tmp_image="$IMAGE"
         local tmp_family="$FAMILY"
-        if run_snapd_tests google "$TARGET_SYSTEM" "$tmp_image"; then
+        if run_snapd_tests google "$TARGET_SYSTEM" "$tmp_image" "$TEST_WORKERS"; then
             echo "snapd test suite passed, clonning tmp image"
             TMP_IMAGE_ID= . "$SPREAD_IMAGES_DIR/lib/names.sh"
             local final_image="$IMAGE"
@@ -94,11 +94,12 @@ run_snapd_tests() {
     local backend=$1
     local system=$2
     local image=$3
+    local workers=$4
 
     get_snapd
 
     echo "Configuring target image"
-    python3 "$SPREAD_IMAGES_DIR/update_image.py" "$SNAPD_DIR/spread.yaml" "$backend" "$system" "$image"
+    python3 "$SPREAD_IMAGES_DIR/update_image.py" "$SNAPD_DIR/spread.yaml" "$backend" "$system" "$image" "$workers"
 
     ( cd "$SNAPD_DIR" && "$SPREAD_DIR/spread" "${backend}:${system}" )
     return $?
@@ -165,6 +166,7 @@ get_env_for_task_google() {
             SOURCE_SYSTEM=amazon-linux-2-64-base
             TARGET_SYSTEM=amazon-linux-2-64
             RUN_SNAPD=true
+            TEST_WORKERS=8
             ;;
         update-arch-linux)
             SOURCE_SYSTEM=arch-linux-64-base
@@ -190,6 +192,7 @@ get_env_for_task_google() {
             SOURCE_SYSTEM=fedora-28-64-base
             TARGET_SYSTEM=fedora-28-64
             RUN_SNAPD=true
+            TEST_WORKERS=8
             ;;
         update-opensuse-42-3)
             SOURCE_SYSTEM=opensuse-42.3-64-base
