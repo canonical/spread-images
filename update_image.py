@@ -34,7 +34,8 @@ if __name__ == '__main__':
     args_parser.add_argument('backend', type=str, choices=['google', 'linode'])
     args_parser.add_argument('system', type=str)
     args_parser.add_argument('image', type=str)
-    args_parser.add_argument('workers', type=int, default=0)
-                             
+    args_parser.add_argument('workers', type=str, nargs='?')
+
     args = args_parser.parse_args()
-    update_image(args.filepath, args.backend, args.system, args.image, args.workers)
+    update_image(args.filepath, args.backend, args.system, args.image,
+        int(args.workers) if args.workers and args.workers.isdigit() else None)
