@@ -29,7 +29,7 @@ clean_machine() {
 		arch-*)
     		pacman -Scc --noconfirm
 	    	;;
-		amazon-*)
+		amazon-*|centos-*)
 			yum clean all
 			;;
 		*)

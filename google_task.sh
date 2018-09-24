@@ -173,6 +173,11 @@ get_env_for_task_google() {
             TARGET_SYSTEM=arch-linux-64
             RUN_SNAPD=true
             ;;
+        update-centos-7)
+            SOURCE_SYSTEM=centos-7-64-base
+            TARGET_SYSTEM=centos-7-64
+            RUN_SNAPD=true
+            ;;
         update-debian-9)
             SOURCE_SYSTEM=debian-9-64-base
             TARGET_SYSTEM=debian-9-64
@@ -218,7 +223,7 @@ get_env_for_task_google() {
             SOURCE_SYSTEM=ubuntu-18.04-64-base
             TARGET_SYSTEM=ubuntu-18.04-64
             RUN_SNAPD=true
-            ;;            
+            ;;
         *)
             echo "ERROR: Unsupported distribution '$SPREAD_SYSTEM'"
             exit 1

@@ -73,6 +73,11 @@ backends:
                 image: amazon-linux-2-64
                 storage: preserve-size
 
+            - centos-7-64-base:
+                image: centos-cloud/centos-7
+            - centos-7-64:
+                image: centos-7-64
+
 path: /root/spread
 
 suites:

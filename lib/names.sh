@@ -112,6 +112,17 @@ else
             FAMILY="amazon-linux-2-64"
             DESCRIPTION="Amazon Linux 2 64 bits"
             ;;
+        # Centos 7
+        centos-7-64-base)
+            IMAGE="centos-7-64-base-v$(date +'%Y%m%d')"
+            FAMILY="centos-7-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        centos-7-64)
+            IMAGE="centos-7-64-v$(date +'%Y%m%d')"
+            FAMILY="centos-7-64"
+            DESCRIPTION="Centos 7 64 bits"
+            ;;
         *)
             echo "ERROR: Unsupported distribution '$SPREAD_SYSTEM'"
             exit 1
