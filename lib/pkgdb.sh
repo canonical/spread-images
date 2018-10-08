@@ -74,15 +74,21 @@ EOM
     esac
 }
 
-clean_google_services() {
-    echo "Cleaning google services already running in the system"
-    services="$(ls /usr/lib/systemd/system/google-*.service)" || return
-    for service in $services; do
-        systemctl stop "$service" || true
-        systemctl disable "$service" || true
-        rm -f "/etc/systemd/system/$service"
-        systemctl daemon-reload
+clean_google_service_units() {
+    echo "Cleaning google service units already running in the system"
+    units="$(cd /usr/lib/systemd/system && ls google-*.service)" || return
+    for unit in $units; do
+        clean_service_unit "$unit"
     done
+}
+
+clean_service_unit(){
+    local unit=$1
+    systemctl stop "$unit" || true
+    systemctl disable "$unit" || true
+    rm -f "/etc/systemd/system/$unit"
+    rm -f "/usr/lib/systemd/system/$unit"
+    systemctl daemon-reload
 }
 
 distro_install_google_compute_engine() {
@@ -97,13 +103,16 @@ distro_install_google_compute_engine() {
             echo "Not required yet"
             ;;
         arch-*)
-            clean_google_services
+            clean_google_service_units
             git clone https://github.com/GoogleCloudPlatform/compute-image-packages.git
-            ( cd compute-image-packages && python3 setup.py install )
-            services="$(cd compute-image-packages/google_compute_engine_init/systemd && ls *.service)"
-            cp compute-image-packages/google_compute_engine_init/systemd/*.service /usr/lib/systemd/system/
-            for service in $services; do
-                systemctl enable "$service"
+            ( cd compute-image-packages && python setup.py install )
+            mkdir -p /usr/lib/systemd/system
+            for unit in compute-image-packages/google_compute_engine_init/systemd/*.service; do
+                install -m644 "$unit" /usr/lib/systemd/system/
+            done
+            units="$(cd /usr/lib/systemd/system && ls google-*.service)" || return
+            for unit in $units; do
+                systemctl enable "$unit"
             done
             ;;
         amazon-*|centos-*)

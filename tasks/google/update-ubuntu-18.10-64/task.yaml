@@ -1,0 +1,34 @@
+summary: Update Ubuntu 18.10 64 bits image with the latest updates and test dependencies
+
+systems: [ubuntu-18.10-64-base]
+
+environment:
+    TARGET_SYSTEM: ubuntu-18.10-64
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        distro_upgrade_packages
+        # install_test_dependencies "$TARGET_SYSTEM"
+        remove_pkg_blacklist
+        distro_clean_package_cache
+        REBOOT
+    fi
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"

@@ -29,6 +29,10 @@ backends:
                 image: ubuntu-os-cloud/ubuntu-1804-lts
             - ubuntu-18.04-64:
                 image: ubuntu-1804-64
+            - ubuntu-18.10-64-base:
+                image: ubuntu-os-cloud-devel/daily-ubuntu-1810-cosmic-v20181002
+            - ubuntu-18.10-64:
+                image: ubuntu-1810-64
 
             - debian-9-64-base:
                 image: debian-9-stretch
@@ -97,4 +101,3 @@ suites:
             distro_update_package_db
             install_pkg_dependencies
             gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
-
