@@ -83,17 +83,25 @@ distro_install_google_compute_engine() {
             ;;
         arch-*)
             clean_google_services
-            git clone https://github.com/GoogleCloudPlatform/compute-image-packages.git
-            ( cd compute-image-packages && python3 setup.py install )
-            services="$(cd compute-image-packages/google_compute_engine_init/systemd && ls *.service)"
-            cp compute-image-packages/google_compute_engine_init/systemd/*.service /usr/lib/systemd/system/
+            distro_purge_package gce-compute-image-packages
+
+            su -c 'cd /tmp && curl https://aur.archlinux.org/cgit/aur.git/snapshot/gce-compute-image-packages.tar.gz | tar zxvf - && cd gce-compute-image-packages && makepkg --syncdeps --noconfirm' - user
+            pkgfile=$(find /tmp/gce-compute-image-packages -name '*.pkg.tar.xz')
+            if [[ "$(echo $pkgfile | wc -l)" -gt 1 ]]; then
+                echo "expected only one file, got $pkgfile"
+                exit 1
+            fi
+            pacman -U --noconfirm "$pkgfile"
+            rm -rf /tmp/gce-compute-image-packages
+
+            services="$(ls /usr/lib/systemd/system/google-*.service)"
             for service in $services; do
                 systemctl enable "$service"
             done
             ;;
         amazon-*)
             echo "Not required yet"
-            ;;    
+            ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
             exit 1
