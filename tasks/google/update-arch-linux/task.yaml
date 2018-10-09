@@ -44,6 +44,13 @@ execute: |
         REBOOT
     fi
 
+    # Enable apparmor
+    if ! MATCH "apparmor=1" < /etc/default/grub; then
+        distro_install_package apparmor
+        systemctl enable apparmor
+        sed -e 's/GRUB_CMDLINE_LINUX="/GRUB_CMDLINE_LINUX="apparmor=1 security=apparmor /g' -i /etc/default/grub
+        grub-mkconfig -o /boot/grub/grub.cfg
+    fi
 
     # Clean disk before create the shapshot
     clean_machine
