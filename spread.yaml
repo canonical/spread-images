@@ -25,10 +25,14 @@ backends:
                 image: ubuntu-os-cloud/ubuntu-1604-lts
             - ubuntu-16.04-64:
                 image: ubuntu-1604-64
+            - ubuntu-16.04-64-nested-vm:
+                image: ubuntu-1604-64-nested-vm
             - ubuntu-18.04-64-base:
                 image: ubuntu-os-cloud/ubuntu-1804-lts
             - ubuntu-18.04-64:
                 image: ubuntu-1804-64
+            - ubuntu-18.04-64-nested-vm:
+                image: ubuntu-1804-64-nested-vm
 
             - debian-9-64-base:
                 image: debian-9-stretch

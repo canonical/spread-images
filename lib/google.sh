@@ -8,6 +8,15 @@ create_image_from_snapshot(){
     gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT"
 }
 
+create_image_from_snapshot_with_licenses(){
+    local IMAGE=$1
+    local FAMILY=$2
+    local DESCRIPTION="$3"
+    local SNAPSHOT=$4
+    local LICENSES=$5
+    gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT" --licenses "$LICENSES"
+}
+
 create_image_from_bucket(){
     local IMAGE=$1
     local FAMILY=$2
@@ -110,6 +119,20 @@ create_image_from_disk(){
     create_snapshot_from_disk "$DISK"
     delete_image "$IMAGE" "$FAMILY"
     create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+    deprecate_old_images "$FAMILY" "$latest_image_name"
+}
+
+create_image_from_disk_with_licences(){
+    local IMAGE=$1
+    local FAMILY=$2
+    local DESCRIPTION="$3"
+    local DISK=$4
+    local LICENSES=$5
+
+    local latest_image_name=$(get_latest_image_name "$FAMILY")
+    create_snapshot_from_disk "$DISK"
+    delete_image "$IMAGE" "$FAMILY"
+    create_image_from_snapshot_with_licenses "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "$LICENSES"
     deprecate_old_images "$FAMILY" "$latest_image_name"
 }
 
