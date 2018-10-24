@@ -42,6 +42,11 @@ else
             FAMILY="ubuntu-1804-64-nested-vm"
             DESCRIPTION="Nested vm image"
             ;;
+        ubuntu-18.10-64)
+            IMAGE="ubuntu-1810-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-1810-64"
+            DESCRIPTION="Ubuntu 18.10 64 bits"
+            ;;
         # Debian
         debian-9-64)
             IMAGE="debian-9-64-v$(date +'%Y%m%d')"
