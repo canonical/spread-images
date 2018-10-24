@@ -27,10 +27,20 @@ else
             FAMILY="ubuntu-1604-64"
             DESCRIPTION="Ubuntu 16.04 64 bits"
             ;;
+        ubuntu-16.04-64-nested-vm)
+            IMAGE="ubuntu-1604-64-v$(date +'%Y%m%d')-nested-vm"
+            FAMILY="ubuntu-1604-64-nested-vm"
+            DESCRIPTION="Nested vm image"
+            ;;
         ubuntu-18.04-64)
             IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-1804-64"
             DESCRIPTION="Ubuntu 18.04 64 bits"
+            ;;
+        ubuntu-18.04-64-nested-vm)
+            IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-nested-vm"
+            FAMILY="ubuntu-1804-64-nested-vm"
+            DESCRIPTION="Nested vm image"
             ;;
         # Debian
         debian-9-64)

@@ -1,0 +1,65 @@
+summary: Update Ubuntu xenial/bionic 64 bits image with the latest updates and kvm enabled
+
+systems: [ubuntu-16.04-64-base, ubuntu-18.04-64-base]
+
+environment:
+    LICENSES: https://www.googleapis.com/compute/v1/projects/vm-options/global/licenses/enable-vmx
+
+execute: |
+    case "$SPREAD_SYSTEM" in
+        ubuntu-16.04-64*)
+            TARGET_SYSTEM=ubuntu-16.04-64-nested-vm
+        ;;
+        ubuntu-18.04-64*)
+            TARGET_SYSTEM=ubuntu-18.04-64-nested-vm
+        ;;
+        *)
+            echo "System not supported"
+            exit 1
+        ;;
+    esac
+
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        distro_upgrade_packages
+        remove_pkg_blacklist
+        distro_clean_package_cache
+        REBOOT
+    fi
+
+    # Avoid checking for new release, it could cause lock on apt
+    sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
+
+    # Disable daily checks for updates to avoid apt locks
+    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk_with_licences "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "$LICENSES"
+
+restore: |
+    case "$SPREAD_SYSTEM" in
+        ubuntu-16.04-64*)
+            TARGET_SYSTEM=ubuntu-16.04-64-nested-vm
+        ;;
+        ubuntu-18.04-64*)
+            TARGET_SYSTEM=ubuntu-18.04-64-nested-vm
+        ;;
+        *)
+            echo "System not supported"
+            exit 1
+        ;;
+    esac
+
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"
