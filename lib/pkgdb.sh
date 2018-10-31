@@ -76,7 +76,7 @@ distro_install_google_compute_engine() {
             distro_install_package google-compute-engine
             ;;
         fedora-*)
-            echo "Not required yet"
+            distro_install_package google-compute-engine
             ;;
         opensuse-*)
             echo "Not required yet"
