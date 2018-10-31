@@ -40,6 +40,7 @@ get_latest_image_name(){
     echo $(gcloud compute images describe-from-family "$FAMILY" --project "$GCE_PROJECT" --format json | jq -r '.name')
 }
 
+
 deprecate_old_images(){
     local FAMILY=$1
     local SKIP_IMAGE=$2
@@ -66,18 +67,14 @@ deprecate_old_images(){
 
 delete_deprecated_images(){
     local FAMILY=$1
-    local latest_image_name=$(gcloud compute images describe-from-family "$FAMILY" --project "$GCE_PROJECT" --format json | jq -r '.name')
-    echo "Latest Image: ${latest_image_name}"
+    local deprecated_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND state DEPRECATED" --format json | jq -r '.[]|.name')
 
-    local old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND -name = ${latest_image_name}" --format json | jq -r '.[]|.name')
-
-    if [ -z "${old_images}" ]; then
-        echo "No old images."
+    if [ -z "${deprecated_images}" ]; then
+        echo "No deprecated images."
     else
-        for i in ${old_images}; do
-            echo "Deprecate old image ${i} ..."
-            gcloud compute images deprecate --project "$GCE_PROJECT" "${i}" --state DEPRECATED --replacement "${latest_image_name}" --delete-in 5d
-            echo ""
+        for i in ${deprecated_images}; do
+            echo "Deleting deprecated image ${i} ..."
+            gcloud compute images delete --project "$GCE_PROJECT" "${i}"
         done
     fi
 }
