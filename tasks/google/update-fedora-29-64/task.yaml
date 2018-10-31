@@ -1,0 +1,41 @@
+summary: Update fedora image with the latest updates and test dependencies with selinux permissive
+
+systems: [fedora-29-64-base]
+
+environment:
+    TARGET_SYSTEM: fedora-29-64
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        distro_upgrade_packages
+        install_test_dependencies "$TARGET_SYSTEM"
+        remove_pkg_blacklist
+        distro_clean_package_cache
+        REBOOT
+    fi
+
+    # Set selinux as permissive
+    sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
+
+    # Remove cloud-init package which is failing to start
+    distro_purge_package cloud-init
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    
+    delete_snapshot "$DISK"
+    delete_deprecated_images "$FAMILY"

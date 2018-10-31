@@ -27,20 +27,30 @@ else
             FAMILY="ubuntu-1604-64"
             DESCRIPTION="Ubuntu 16.04 64 bits"
             ;;
-        ubuntu-16.04-64-nested-vm)
-            IMAGE="ubuntu-1604-64-v$(date +'%Y%m%d')-nested-vm"
-            FAMILY="ubuntu-1604-64-nested-vm"
-            DESCRIPTION="Nested vm image"
+        ubuntu-16.04-64-virt-enabled)
+            IMAGE="ubuntu-1604-64-v$(date +'%Y%m%d')-virt-enabled"
+            FAMILY="ubuntu-1604-64-virt-enabled"
+            DESCRIPTION="Image with virtualization enabled"
+            ;;
+        ubuntu-16.04-64-nested)
+            IMAGE="ubuntu-1604-64-v$(date +'%Y%m%d')-nested"
+            FAMILY="ubuntu-1604-64-nested"
+            DESCRIPTION="Image with nested vm running"
             ;;
         ubuntu-18.04-64)
             IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-1804-64"
             DESCRIPTION="Ubuntu 18.04 64 bits"
             ;;
-        ubuntu-18.04-64-nested-vm)
-            IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-nested-vm"
-            FAMILY="ubuntu-1804-64-nested-vm"
-            DESCRIPTION="Nested vm image"
+        ubuntu-18.04-64-virt-enabled)
+            IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-virt-enabled"
+            FAMILY="ubuntu-1804-64-virt-enabled"
+            DESCRIPTION="Image with virtualization enabled"
+            ;;
+        ubuntu-18.04-64-nested)
+            IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-nested"
+            FAMILY="ubuntu-1804-64-nested"
+            DESCRIPTION="Image with nested vm running"
             ;;
         ubuntu-18.10-64)
             IMAGE="ubuntu-1810-64-v$(date +'%Y%m%d')"
@@ -64,11 +74,6 @@ else
             DESCRIPTION="Debian sid 64 bits"
             ;;
         # Fedora
-        fedora-26-64)
-            IMAGE="fedora-26-64-v$(date +'%Y%m%d')"
-            FAMILY="fedora-26-64"
-            DESCRIPTION="Base Fedora 26 64 bits"
-            ;;
         fedora-27-64-base)
             IMAGE="fedora-27-64-base-v$(date +'%Y%m%d')"
             FAMILY="fedora-27-64-base"
@@ -88,6 +93,16 @@ else
             IMAGE="fedora-28-64-v$(date +'%Y%m%d')"
             FAMILY="fedora-28-64"
             DESCRIPTION="Fedora 28 64 bits with test dependencies"
+            ;;
+        fedora-29-64-base)
+            IMAGE="fedora-29-64-base-v$(date +'%Y%m%d')"
+            FAMILY="fedora-29-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        fedora-29-64)
+            IMAGE="fedora-29-64-v$(date +'%Y%m%d')"
+            FAMILY="fedora-29-64"
+            DESCRIPTION="Fedora 29 64 bits with test dependencies"
             ;;
         # Arch Linux
         arch-linux-64-base)

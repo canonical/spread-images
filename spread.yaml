@@ -25,14 +25,18 @@ backends:
                 image: ubuntu-os-cloud/ubuntu-1604-lts
             - ubuntu-16.04-64:
                 image: ubuntu-1604-64
-            - ubuntu-16.04-64-nested-vm:
-                image: ubuntu-1604-64-nested-vm
+            - ubuntu-16.04-64-virt-enabled:
+                image: ubuntu-1604-64-virt-enabled
+            - ubuntu-16.04-64-nested:
+                image: ubuntu-1604-64-nested
             - ubuntu-18.04-64-base:
                 image: ubuntu-os-cloud/ubuntu-1804-lts
             - ubuntu-18.04-64:
                 image: ubuntu-1804-64
-            - ubuntu-18.04-64-nested-vm:
-                image: ubuntu-1804-64-nested-vm
+            - ubuntu-18.04-64-virt-enabled:
+                image: ubuntu-1804-64-virt-enabled
+            - ubuntu-18.04-64-nested:
+                image: ubuntu-1804-64-nested
             - ubuntu-18.10-64-base:
                 image: ubuntu-os-cloud/ubuntu-1810
             - ubuntu-18.10-64:
@@ -47,8 +51,6 @@ backends:
             - debian-sid-64:
                 image: debian-sid-64
 
-            - fedora-26-64:
-                image: fedora-26-64
             - fedora-27-64-base:
                 image: fedora-27-64-base
             - fedora-27-64:
@@ -57,6 +59,10 @@ backends:
                 image: fedora-28-64-base
             - fedora-28-64:
                 image: fedora-28-64
+            - fedora-29-64-base:
+                image: fedora-29-64-base
+            - fedora-29-64:
+                image: fedora-29-64
 
             - opensuse-42.2-64-base:
                 image: opensuse-leap-42-2-64-base
@@ -82,6 +88,8 @@ backends:
                 storage: preserve-size
 
 path: /root/spread
+
+kill-timeout: 50m
 
 suites:
     tasks/google/:

@@ -1,0 +1,92 @@
+summary: Add new fedora 29 64 bits image to google account
+
+systems: [fedora-*-64]
+
+environment:
+    TARGET_SYSTEM: fedora-29-64-base
+    IMAGE_FILE: fedora-29-64
+    IMAGE_URL: http://fedora.c3sl.ufpr.br/linux/releases/29/Cloud/x86_64/images/Fedora-Cloud-Base-29-1.2.x86_64.raw.xz
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    # Get the image
+    wget -O - "$IMAGE_URL" | xz -cd - > disk.raw
+
+    # Get /dev/sda1 parition offset
+    OFFSET=$( sfdisk -J disk.raw | jq '.partitiontable.partitions[0].start * 512' )
+
+    if [ -z $OFFSET ]; then
+        echo "failed to calculate offset"
+        exit 1
+    fi
+
+    # Mount the disk locally
+    OFFSET="$OFFSET" sh -c '\
+    # Make mounting directory
+    sudo mkdir -p /mnt/disk
+    # Mount the image and prepare the chroot
+    sudo mount -o offset=$OFFSET disk.raw /mnt/disk
+    sudo mount -t proc /proc /mnt/disk/proc
+    sudo mount --rbind /sys /mnt/disk/sys
+    sudo mount --make-rslave /mnt/disk/sys
+    sudo mount --rbind /dev /mnt/disk/dev
+    sudo mount --make-rslave /mnt/disk/dev'
+
+    tee /mnt/disk/etc/cloud/cloud.cfg.d/GCE.cfg << EOF
+    datasource_list: [ 'GCE' ]
+    datasource: { GCE: {} }
+    EOF
+
+    # Enable repository
+    dnf -c /mnt/disk/etc/dnf/dnf.conf makecache --installroot=/mnt/disk/
+    dnf -c /mnt/disk/etc/dnf/dnf.conf copr -y enable ngompa/gce-oslogin --installroot=/mnt/disk/
+
+    # Install dependencies
+    dnf -c /mnt/disk/etc/dnf/dnf.conf install -y --installroot=/mnt/disk/ google-compute-engine google-compute-engine-oslogin
+    dnf -c /mnt/disk/etc/dnf/dnf.conf install -y --installroot=/mnt/disk/ nc kernel-modules cloud-utils-growpart
+    dnf -c /mnt/disk/etc/dnf/dnf.conf upgrade -y --installroot=/mnt/disk/
+    dnf -c /mnt/disk/etc/dnf/dnf.conf clean all -y --installroot=/mnt/disk/
+
+    # Create service for resizing the root partition on boot
+
+    tee /mnt/disk/lib/systemd/system/expand-part.service << EOF
+    [Unit]
+    Description=Expand partition on fedora
+    After=local-fs.target
+    Wants=local-fs.target
+
+    [Service]
+    ExecStart=/usr/bin/growpart /dev/sda 1
+    ExecStop=/usr/sbin/resize2fs /dev/sda1
+    Type=oneshot
+    SuccessExitStatus=1
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+
+    chroot /mnt/disk /bin/bash -c "systemctl enable expand-part.service"
+
+    # Disable the auditd service due to it often hungs when the system starts
+    chroot /mnt/disk /bin/bash -c "systemctl disable auditd.service"
+
+    # Clean the image
+    find /mnt/disk/var/log /mnt/disk/var/cache/dnf /mnt/disk/var/lib/dnf/{history,yumdb} -type f -exec rm -f {} \;
+
+    # Create the disk image
+    sudo umount -AR /mnt/disk
+    tar caf "${IMAGE_FILE}.tar.gz" disk.raw || tar caf "${IMAGE_FILE}.tar.gz" disk.raw
+
+    # Copy fedora linux image to spread-images bucket
+    gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
+    
+    # Create the image in computeengine project
+    delete_image "$IMAGE" "$FAMILY"
+    create_image_from_bucket "$IMAGE" "$FAMILY" "$DESCRIPTION" "${IMAGE_FILE}.tar.gz"
+
+restore: |
+    sudo umount -AR /mnt/disk || true
+    rm -f disk.raw
+    rm -f "${IMAGE_FILE}.tar.gz"
