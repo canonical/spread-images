@@ -131,6 +131,11 @@ else
             FAMILY="opensuse-leap-42-3-64"
             DESCRIPTION="Opensuse leap 42.3 64 bits"
             ;;
+        opensuse-tumbleweed-64)
+            IMAGE="opensuse-tumbleweed-64-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-tumbleweed-64"
+            DESCRIPTION="Opensuse tumbleweed 64 bits"
+            ;;
         # Amazon linux 2
         amazon-linux-2-64-base)
             IMAGE="amazon-linux-2-64-base-v$(date +'%Y%m%d')"
