@@ -135,12 +135,6 @@ get_env_for_task_google() {
             TARGET_SYSTEM=debian-sid-base
             RUN_SNAPD=false
             ;;
-        add-fedora-26-64)
-            # First added manually using a local fedora vm
-            SOURCE_SYSTEM=fedora-26-64
-            TARGET_SYSTEM=fedora-26-64
-            RUN_SNAPD=false
-            ;;
         add-fedora-27-64)
             # First added manually using a local fedora vm
             SOURCE_SYSTEM=fedora-26-64
@@ -150,6 +144,11 @@ get_env_for_task_google() {
         add-fedora-28-64)
             SOURCE_SYSTEM=fedora-27-64
             TARGET_SYSTEM=fedora-28-64-base
+            RUN_SNAPD=false
+            ;;
+        add-fedora-29-64)
+            SOURCE_SYSTEM=fedora-28-64
+            TARGET_SYSTEM=fedora-29-64-base
             RUN_SNAPD=false
             ;;
         add-opensuse-42-2-64)
@@ -194,6 +193,12 @@ get_env_for_task_google() {
             RUN_SNAPD=true
             TEST_WORKERS=8
             ;;
+        update-fedora-29-64)
+            SOURCE_SYSTEM=fedora-29-64-base
+            TARGET_SYSTEM=fedora-29-64
+            RUN_SNAPD=true
+            TEST_WORKERS=8
+            ;;
         update-opensuse-42-3)
             SOURCE_SYSTEM=opensuse-42.3-64-base
             TARGET_SYSTEM=opensuse-42.3-64
@@ -219,6 +224,11 @@ get_env_for_task_google() {
             TARGET_SYSTEM=ubuntu-18.04-64
             RUN_SNAPD=true
             ;;            
+        update-ubuntu-18.10-64)
+            SOURCE_SYSTEM=ubuntu-18.10-64-base
+            TARGET_SYSTEM=ubuntu-18.10-64
+            RUN_SNAPD=true
+            ;;
         *)
             echo "ERROR: Unsupported distribution '$SPREAD_SYSTEM'"
             exit 1

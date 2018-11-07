@@ -1,17 +1,18 @@
-summary: Update Ubuntu xenial/bionic 64 bits image with the latest updates and kvm enabled
+summary: Update virt enabled Ubuntu xenial/bionic 64 bits image with a nested vm running ready to be used
 
-systems: [ubuntu-16.04-64-base, ubuntu-18.04-64-base]
-
-environment:
-    LICENSES: https://www.googleapis.com/compute/v1/projects/vm-options/global/licenses/enable-vmx
+systems: [ubuntu-16.04-64-virt-enabled, ubuntu-18.04-64-virt-enabled]
 
 execute: |
     case "$SPREAD_SYSTEM" in
         ubuntu-16.04-64*)
-            TARGET_SYSTEM=ubuntu-16.04-64-nested-vm
+            TARGET_SYSTEM=ubuntu-16.04-64-nested
+            NESTED_SYSTEM=xenial
+            NESTED_ARCH=amd64
         ;;
         ubuntu-18.04-64*)
-            TARGET_SYSTEM=ubuntu-18.04-64-nested-vm
+            TARGET_SYSTEM=ubuntu-18.04-64-nested
+            NESTED_SYSTEM=bionic
+            NESTED_ARCH=amd64
         ;;
         *)
             echo "System not supported"
@@ -21,6 +22,7 @@ execute: |
 
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/nested.sh"
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
@@ -28,6 +30,8 @@ execute: |
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
+        distro_install_package qemu qemu-kvm cloud-image-utils ubuntu-image genisoimage snapd sshpass
+        install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
         distro_clean_package_cache
         REBOOT
@@ -39,19 +43,27 @@ execute: |
     # Disable daily checks for updates to avoid apt locks
     sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
 
+    #Create the nested vm
+    create_nested_classic_vm
+    execute_remote 'sudo apt update'
+    execute_remote 'sudo apt upgrade -y'
+    execute_remote 'sudo apt install -y linux-image-extra-$(uname -r) || sudo apt install -y linux-modules-extra-$(uname -r)'
+    execute_remote 'sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}'
+    execute_remote "sudo sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades"
+
     # Clean disk before create the shapshot
     clean_machine
 
     # Create a new image based on the current disk
-    create_image_from_disk_with_licences "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "$LICENSES"
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
 
 restore: |
     case "$SPREAD_SYSTEM" in
         ubuntu-16.04-64*)
-            TARGET_SYSTEM=ubuntu-16.04-64-nested-vm
+            TARGET_SYSTEM=ubuntu-16.04-64-nested
         ;;
         ubuntu-18.04-64*)
-            TARGET_SYSTEM=ubuntu-18.04-64-nested-vm
+            TARGET_SYSTEM=ubuntu-18.04-64-nested
         ;;
         *)
             echo "System not supported"
@@ -63,3 +75,4 @@ restore: |
     . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"
+    delete_deprecated_images "$FAMILY"

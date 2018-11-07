@@ -28,7 +28,7 @@ EOF
             dnf install -y google-cloud-sdk
             ;;
         opensuse-*)
-            zypper remove -y google-cloud-sdk
+            zypper remove -y google-cloud-sdk || true
             mkdir -p /usr/share/google
             wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip
             unzip google-cloud-sdk.zip -d /usr/share/google
@@ -76,13 +76,14 @@ distro_install_google_compute_engine() {
             distro_install_package google-compute-engine
             ;;
         fedora-*)
-            echo "Not required yet"
+            distro_install_package google-compute-engine
             ;;
         opensuse-*)
             echo "Not required yet"
             ;;
         arch-*)
             clean_google_services
+
             distro_purge_package gce-compute-image-packages
 
             su -c 'cd /tmp && curl https://aur.archlinux.org/cgit/aur.git/snapshot/gce-compute-image-packages.tar.gz | tar zxvf - && cd gce-compute-image-packages && makepkg --syncdeps --noconfirm' - user
