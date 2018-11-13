@@ -48,10 +48,11 @@ deprecate_old_images(){
     echo "Skip Image: ${SKIP_IMAGE}"
     echo "Latest Image: ${latest_image_name}"
 
+    local old_images
     if [ -z "$SKIP_IMAGE" ]; then
-        local old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND -name = ${latest_image_name}" --format json | jq -r '.[]|.name')
+        old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND -name = ${latest_image_name}" --format json | jq -r '.[]|.name')
     else
-        local old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND NOT (name = ${latest_image_name} OR name = ${SKIP_IMAGE})" --format json | jq -r '.[]|.name')
+        old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND NOT (name = ${latest_image_name} OR name = ${SKIP_IMAGE})" --format json | jq -r '.[]|.name')
     fi
 
     if [ -z "${old_images}" ]; then
