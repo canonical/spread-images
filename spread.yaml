@@ -69,7 +69,7 @@ backends:
             - opensuse-42.2-64:
                 image: opensuse-leap-42-2-64
             - opensuse-42.3-64-base:
-                image: opensuse-cloud/opensuse-leap
+                image: opensuse-cloud/opensuse-leap-42-3-v20180116
             - opensuse-42.3-64:
                 image: opensuse-42.3-64
             - opensuse-tumbleweed-64:
