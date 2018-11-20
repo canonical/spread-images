@@ -35,3 +35,4 @@ restore: |
     . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"
+    delete_deprecated_images "$FAMILY"

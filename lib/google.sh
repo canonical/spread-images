@@ -8,6 +8,15 @@ create_image_from_snapshot(){
     gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT"
 }
 
+create_image_from_snapshot_with_licenses(){
+    local IMAGE=$1
+    local FAMILY=$2
+    local DESCRIPTION="$3"
+    local SNAPSHOT=$4
+    local LICENSES=$5
+    gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT" --licenses "$LICENSES"
+}
+
 create_image_from_bucket(){
     local IMAGE=$1
     local FAMILY=$2
@@ -31,6 +40,7 @@ get_latest_image_name(){
     echo $(gcloud compute images describe-from-family "$FAMILY" --project "$GCE_PROJECT" --format json | jq -r '.name')
 }
 
+
 deprecate_old_images(){
     local FAMILY=$1
     local SKIP_IMAGE=$2
@@ -38,10 +48,11 @@ deprecate_old_images(){
     echo "Skip Image: ${SKIP_IMAGE}"
     echo "Latest Image: ${latest_image_name}"
 
+    local old_images
     if [ -z "$SKIP_IMAGE" ]; then
-        local old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND -name = ${latest_image_name}" --format json | jq -r '.[]|.name')
+        old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND -name = ${latest_image_name}" --format json | jq -r '.[]|.name')
     else
-        local old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND NOT (name = ${latest_image_name} OR name = ${SKIP_IMAGE})" --format json | jq -r '.[]|.name')
+        old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND NOT (name = ${latest_image_name} OR name = ${SKIP_IMAGE})" --format json | jq -r '.[]|.name')
     fi
 
     if [ -z "${old_images}" ]; then
@@ -57,18 +68,14 @@ deprecate_old_images(){
 
 delete_deprecated_images(){
     local FAMILY=$1
-    local latest_image_name=$(gcloud compute images describe-from-family "$FAMILY" --project "$GCE_PROJECT" --format json | jq -r '.name')
-    echo "Latest Image: ${latest_image_name}"
+    local deprecated_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND deprecated" --show-deprecated --format json | jq -r '.[]|.name')
 
-    local old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND -name = ${latest_image_name}" --format json | jq -r '.[]|.name')
-
-    if [ -z "${old_images}" ]; then
-        echo "No old images."
+    if [ -z "${deprecated_images}" ]; then
+        echo "No deprecated images."
     else
-        for i in ${old_images}; do
-            echo "Deprecate old image ${i} ..."
-            gcloud compute images deprecate --project "$GCE_PROJECT" "${i}" --state DEPRECATED --replacement "${latest_image_name}" --delete-in 5d
-            echo ""
+        for i in ${deprecated_images}; do
+            echo "Deleting deprecated image ${i} ..."
+            gcloud compute images delete --project "$GCE_PROJECT" "${i}" --quiet
         done
     fi
 }
@@ -110,6 +117,20 @@ create_image_from_disk(){
     create_snapshot_from_disk "$DISK"
     delete_image "$IMAGE" "$FAMILY"
     create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+    deprecate_old_images "$FAMILY" "$latest_image_name"
+}
+
+create_image_from_disk_with_licences(){
+    local IMAGE=$1
+    local FAMILY=$2
+    local DESCRIPTION="$3"
+    local DISK=$4
+    local LICENSES=$5
+
+    local latest_image_name=$(get_latest_image_name "$FAMILY")
+    create_snapshot_from_disk "$DISK"
+    delete_image "$IMAGE" "$FAMILY"
+    create_image_from_snapshot_with_licenses "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "$LICENSES"
     deprecate_old_images "$FAMILY" "$latest_image_name"
 }
 

@@ -28,7 +28,7 @@ EOF
             dnf install -y google-cloud-sdk
             ;;
         opensuse-*)
-            zypper remove -y google-cloud-sdk
+            zypper remove -y google-cloud-sdk || true
             mkdir -p /usr/share/google
             wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip
             unzip google-cloud-sdk.zip -d /usr/share/google
@@ -97,27 +97,31 @@ distro_install_google_compute_engine() {
             distro_install_package google-compute-engine
             ;;
         fedora-*)
-            echo "Not required yet"
+            distro_install_package google-compute-engine
             ;;
         opensuse-*)
             echo "Not required yet"
             ;;
         arch-*)
             clean_google_service_units
-            git clone https://github.com/GoogleCloudPlatform/compute-image-packages.git
-            ( cd compute-image-packages && python setup.py install )
-            mkdir -p /usr/lib/systemd/system
-            for unit in compute-image-packages/google_compute_engine_init/systemd/*.service; do
-                install -m644 "$unit" /usr/lib/systemd/system/
-            done
-            units="$(cd /usr/lib/systemd/system && ls google-*.service)" || return
-            for unit in $units; do
-                systemctl enable "$unit"
+
+            distro_purge_package gce-compute-image-packages
+
+            su -c 'cd /tmp && curl https://aur.archlinux.org/cgit/aur.git/snapshot/gce-compute-image-packages.tar.gz | tar zxvf - && cd gce-compute-image-packages && makepkg --syncdeps --noconfirm' - user
+            pkgfile=$(find /tmp/gce-compute-image-packages -name '*.pkg.tar.xz')
+            if [[ "$(echo $pkgfile | wc -l)" -gt 1 ]]; then
+                echo "expected only one file, got $pkgfile"
+                exit 1
+            fi
+            pacman -U --noconfirm "$pkgfile"
+            rm -rf /tmp/gce-compute-image-packages
+
+            services="$(ls /usr/lib/systemd/system/google-*.service)"
             done
             ;;
         amazon-*|centos-*)
             echo "Not required yet"
-            ;;    
+            ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
             exit 1

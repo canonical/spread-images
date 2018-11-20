@@ -135,12 +135,6 @@ get_env_for_task_google() {
             TARGET_SYSTEM=debian-sid-base
             RUN_SNAPD=false
             ;;
-        add-fedora-26-64)
-            # First added manually using a local fedora vm
-            SOURCE_SYSTEM=fedora-26-64
-            TARGET_SYSTEM=fedora-26-64
-            RUN_SNAPD=false
-            ;;
         add-fedora-27-64)
             # First added manually using a local fedora vm
             SOURCE_SYSTEM=fedora-26-64
@@ -150,6 +144,11 @@ get_env_for_task_google() {
         add-fedora-28-64)
             SOURCE_SYSTEM=fedora-27-64
             TARGET_SYSTEM=fedora-28-64-base
+            RUN_SNAPD=false
+            ;;
+        add-fedora-29-64)
+            SOURCE_SYSTEM=fedora-28-64
+            TARGET_SYSTEM=fedora-29-64-base
             RUN_SNAPD=false
             ;;
         add-opensuse-42-2-64)
@@ -166,12 +165,13 @@ get_env_for_task_google() {
             SOURCE_SYSTEM=amazon-linux-2-64-base
             TARGET_SYSTEM=amazon-linux-2-64
             RUN_SNAPD=true
-            TEST_WORKERS=8
+            TEST_WORKERS=12
             ;;
         update-arch-linux)
             SOURCE_SYSTEM=arch-linux-64-base
             TARGET_SYSTEM=arch-linux-64
             RUN_SNAPD=true
+            TEST_WORKERS=12
             ;;
         update-centos-7)
             SOURCE_SYSTEM=centos-7-64-base
@@ -182,47 +182,67 @@ get_env_for_task_google() {
             SOURCE_SYSTEM=debian-9-64-base
             TARGET_SYSTEM=debian-9-64
             RUN_SNAPD=true
+            TEST_WORKERS=12
             ;;
         update-debian-sid)
             SOURCE_SYSTEM=debian-sid-64-base
             TARGET_SYSTEM=debian-sid-64
             RUN_SNAPD=true
+            TEST_WORKERS=12
             ;;
         update-fedora-27-64)
             SOURCE_SYSTEM=fedora-27-64-base
             TARGET_SYSTEM=fedora-27-64
             RUN_SNAPD=true
+            TEST_WORKERS=12
             ;;
         update-fedora-28-64)
             SOURCE_SYSTEM=fedora-28-64-base
             TARGET_SYSTEM=fedora-28-64
             RUN_SNAPD=true
-            TEST_WORKERS=8
+            TEST_WORKERS=12
+            ;;
+        update-fedora-29-64)
+            SOURCE_SYSTEM=fedora-29-64-base
+            TARGET_SYSTEM=fedora-29-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
             ;;
         update-opensuse-42-3)
             SOURCE_SYSTEM=opensuse-42.3-64-base
             TARGET_SYSTEM=opensuse-42.3-64
             RUN_SNAPD=true
+            TEST_WORKERS=12
             ;;
         update-ubuntu-14.04-64)
             SOURCE_SYSTEM=ubuntu-14.04-64-base
             TARGET_SYSTEM=ubuntu-14.04-64
             RUN_SNAPD=true
+            TEST_WORKERS=12
             ;;
         update-ubuntu-16.04-32)
             SOURCE_SYSTEM=ubuntu-16.04-32-base
             TARGET_SYSTEM=ubuntu-16.04-32
             RUN_SNAPD=true
+            TEST_WORKERS=12
             ;;
         update-ubuntu-16.04-64)
             SOURCE_SYSTEM=ubuntu-16.04-64-base
             TARGET_SYSTEM=ubuntu-16.04-64
             RUN_SNAPD=true
+            TEST_WORKERS=12
             ;;
         update-ubuntu-18.04-64)
             SOURCE_SYSTEM=ubuntu-18.04-64-base
             TARGET_SYSTEM=ubuntu-18.04-64
             RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;            
+        update-ubuntu-18.10-64)
+            SOURCE_SYSTEM=ubuntu-18.10-64-base
+            TARGET_SYSTEM=ubuntu-18.10-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
             ;;
         *)
             echo "ERROR: Unsupported distribution '$SPREAD_SYSTEM'"

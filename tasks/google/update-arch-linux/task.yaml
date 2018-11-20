@@ -12,13 +12,35 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
+        # remove the user account that was present in the base image
+        userdel -r -f alrii14344 || true
+
+        # Fix shadow.service by creating missing home dirs for users
+        if [ ! -d /home/user ]; then
+            mkdir -p /home/user
+            chown -R user:user /home/user
+            mkdir -p /home/guest
+            chown -R guest:guest /home/guest
+            systemctl restart shadow.service
+        fi
+
         # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
+
         distro_install_google_compute_engine
+        # Disable google-shutdown-scripts service because it hungs during reboot
+        systemctl disable --now google-shutdown-scripts.service
+
         distro_clean_package_cache
+
+        # since 4.16, kernel crng init can take significant time, thus services
+        # depending on crypto such as sshd will take longer to start
+        distro_install_package haveged
+        systemctl enable --now haveged
+
         REBOOT
     fi
 
@@ -30,15 +52,7 @@ execute: |
         grub-mkconfig -o /boot/grub/grub.cfg
     fi
 
-    # Fix shadow.service by creating missing home dirs for users
-    if [ ! -d /home/user ]; then
-        mkdir -p /home/user
-        mkdir -p /home/guest
-        systemctl restart shadow.service
     fi
-
-    # Disable google-shutdown-scripts service because it hungs during reboot
-    systemctl disable google-shutdown-scripts.service
 
     # Clean disk before create the shapshot
     clean_machine
@@ -51,3 +65,4 @@ restore: |
     . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"
+    delete_deprecated_images "$FAMILY"

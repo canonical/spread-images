@@ -1,4 +1,4 @@
-summary: Update Ubuntu 18.10 64 bits image with the latest updates and test dependencies
+summary: Update Ubuntu cosmic 64 bits image with the latest updates and test dependencies
 
 systems: [ubuntu-18.10-64-base]
 
@@ -15,11 +15,17 @@ execute: |
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
-        # install_test_dependencies "$TARGET_SYSTEM"
+        install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
         distro_clean_package_cache
         REBOOT
     fi
+
+    # Avoid checking for new release, it could cause lock on apt
+    sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
+
+    # Disable daily checks for updates to avoid apt locks
+    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
 
     # Clean disk before create the shapshot
     clean_machine
@@ -32,3 +38,4 @@ restore: |
     . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"
+    delete_deprecated_images "$FAMILY"
