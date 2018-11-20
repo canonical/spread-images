@@ -1,4 +1,4 @@
-summary: Update Centos 64 bits image with the latest updates and test dependencies
+summary: Update centos 7 image in google account and install test dependencies
 
 systems: [centos-7-64-base]
 
@@ -12,7 +12,7 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Make the upgrade and install the dependencies needed to run snapd tests
+        # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
@@ -32,3 +32,4 @@ restore: |
     . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"
+    delete_deprecated_images "$FAMILY"
