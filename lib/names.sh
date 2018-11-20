@@ -126,6 +126,11 @@ else
             FAMILY="opensuse-leap-42-2-64"
             DESCRIPTION="Opensuse leap 42.2 64 bits with test dependencies"
             ;;
+        opensuse-42.3-64-base)
+            IMAGE="opensuse-leap-42-3-64-base-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-leap-42-3-64-base"
+            DESCRIPTION="Base image"
+            ;;
         opensuse-42.3-64)
             IMAGE="opensuse-leap-42-3-64-v$(date +'%Y%m%d')"
             FAMILY="opensuse-leap-42-3-64"
