@@ -52,8 +52,6 @@ execute: |
         grub-mkconfig -o /boot/grub/grub.cfg
     fi
 
-    fi
-
     # Clean disk before create the shapshot
     clean_machine
 
