@@ -173,6 +173,11 @@ get_env_for_task_google() {
             RUN_SNAPD=true
             TEST_WORKERS=12
             ;;
+        update-centos-7)
+            SOURCE_SYSTEM=centos-7-64-base
+            TARGET_SYSTEM=centos-7-64
+            RUN_SNAPD=true
+            ;;
         update-debian-9)
             SOURCE_SYSTEM=debian-9-64-base
             TARGET_SYSTEM=debian-9-64

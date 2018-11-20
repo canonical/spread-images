@@ -12,7 +12,7 @@ distro_install_google_sdk() {
             fi
             ;;
         fedora-*)
-            if ! [ -f /etc/yum.repos.d/google-cloud-sdk.repo ]; then
+            if [ $(find /etc/yum.repos.d/google-cloud*.repo | wc -l) -eq 0 ]; then
                 cat >> /etc/yum.repos.d/google-cloud-sdk.repo <<-EOF
 [google-cloud-sdk]
 name=Google Cloud SDK
@@ -50,6 +50,21 @@ EOF
                 ln -s /usr/share/google/google-cloud-sdk/bin/gcloud /usr/bin/gcloud
                 ln -s /usr/share/google/google-cloud-sdk/bin/gcutil /usr/bin/gcutil
                 ln -s /usr/share/google/google-cloud-sdk/bin/gsutil /usr/bin/gsutil
+            fi
+            ;;
+        centos-*)
+            if [ $(find /etc/yum.repos.d/google-cloud*.repo | wc -l) -eq 0 ]; then
+                sudo tee -a /etc/yum.repos.d/google-cloud-sdk.repo << EOM
+[google-cloud-sdk]
+name=Google Cloud SDK
+baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+       https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOM
+                yum -y install google-cloud-sdk
             fi
             ;;
         *)
@@ -100,7 +115,7 @@ distro_install_google_compute_engine() {
                 systemctl enable "$service"
             done
             ;;
-        amazon-*)
+        amazon-*|centos-*)
             echo "Not required yet"
             ;;
         *)
@@ -154,7 +169,7 @@ distro_install_package() {
             # shellcheck disable=SC2086
             pacman -Suq --needed --noconfirm "${pkg_names[@]}"
             ;;
-        amazon-*)
+        amazon-*|centos-*)
             # shellcheck disable=SC2086
             yum -y --nogpgcheck install $DNF_FLAGS "${pkg_names[@]}"
             ;;
@@ -193,7 +208,7 @@ distro_purge_package() {
         arch-*)
             pacman -Rnsc --noconfirm "$@" || true
             ;;
-        amazon-*)
+        amazon-*|centos-*)
             yum -y remove "$@" || true
             yum clean all
             ;;
@@ -222,7 +237,7 @@ distro_update_package_db() {
         arch-*)
             pacman -Syq
             ;;
-        amazon-*)
+        amazon-*|centos-*)
             yum clean all
             yum --nogpgcheck makecache
             ;;
@@ -248,7 +263,7 @@ distro_upgrade_packages() {
         arch-*)
             pacman --needed --noconfirm -Syu
             ;;
-        amazon-*)
+        amazon-*|centos-*)
             yum -y update
             ;;
         *)
@@ -272,7 +287,7 @@ distro_clean_package_cache() {
         arch-*)
             pacman -Sccq --noconfirm
             ;;
-        amazon-*)
+        amazon-*|centos-*)
             yum clean all
             ;;
         *)
@@ -295,7 +310,7 @@ distro_auto_remove_packages() {
         arch-*)
             pacman -Rnsc --noconfirm "$(pacman -Qdtq)"
             ;;
-        amazon-*)
+        amazon-*|centos-*)
             yum -y autoremove
             ;;
         *)
@@ -352,6 +367,14 @@ pkg_dependencies_amazon(){
         "
 }
 
+pkg_dependencies_centos(){
+    echo "
+        git
+        jq
+        wget
+        "
+}
+
 pkg_dependencies(){
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
@@ -368,6 +391,9 @@ pkg_dependencies(){
             ;;
         amazon-*)
             pkg_dependencies_amazon
+            ;;
+        centos-*)
+            pkg_dependencies_centos
             ;;
         *)
             ;;
@@ -388,6 +414,8 @@ pkg_blacklist(){
         arch-*)
             ;;
         amazon-*)
+            ;;
+        centos-*)
             ;;
         *)
             ;;

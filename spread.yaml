@@ -87,6 +87,11 @@ backends:
                 image: amazon-linux-2-64
                 storage: preserve-size
 
+            - centos-7-64-base:
+                image: centos-cloud/centos-7
+            - centos-7-64:
+                image: centos-7-64
+
 path: /root/spread
 
 kill-timeout: 50m
@@ -108,4 +113,3 @@ suites:
             distro_update_package_db
             install_pkg_dependencies
             gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
-
