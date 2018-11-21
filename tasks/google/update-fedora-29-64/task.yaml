@@ -24,9 +24,6 @@ execute: |
     # Set selinux as permissive
     sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
 
-    # Remove cloud-init package which is failing to start
-    distro_purge_package cloud-init
-
     # Clean disk before create the shapshot
     clean_machine
 

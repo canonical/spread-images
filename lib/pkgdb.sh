@@ -408,6 +408,9 @@ pkg_blacklist(){
             "
             ;;
         fedora-*)
+            echo "
+                cloud-init
+            "
             ;;
         opensuse-*)
             ;;
