@@ -24,8 +24,9 @@ execute: |
     # Set selinux as permissive
     sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
 
-    # Remove cloud-init package which is failing to start
-    distro_purge_package cloud-init
+    # Disable cloud init because reset sshd config affecting spread metadata script
+    # Also in fedora 29 cloud-init fails on start
+    touch /etc/cloud/cloud-init.disabled
 
     # Clean disk before create the shapshot
     clean_machine

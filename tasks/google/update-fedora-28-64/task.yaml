@@ -21,6 +21,9 @@ execute: |
         REBOOT
     fi
 
+    # Disable cloud init because reset sshd config affecting spread metadata script
+    touch /etc/cloud/cloud-init.disabled
+
     # Set selinux as permissive
     sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
 
