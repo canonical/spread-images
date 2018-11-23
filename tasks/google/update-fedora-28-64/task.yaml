@@ -21,11 +21,11 @@ execute: |
         REBOOT
     fi
 
-    # Disable cloud init because reset sshd config affecting spread metadata script
-    touch /etc/cloud/cloud-init.disabled
-
     # Set selinux as permissive
     sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
+
+    # Disable google-network-daemon service because it conflicts with spread ssh configuration during startup
+    systemctl disable --now google-network-daemon.service
 
     # Clean disk before create the shapshot
     clean_machine
