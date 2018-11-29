@@ -104,6 +104,12 @@ else
             FAMILY="fedora-29-64"
             DESCRIPTION="Fedora 29 64 bits with test dependencies"
             ;;
+        fedora-rawhide-64)
+            IMAGE="fedora-rawhide-64-v$(date +'%Y%m%d')"
+            FAMILY="fedora-rawhide-64"
+            DESCRIPTION="Fedora rawhide 64 bits"
+            ;;
+
         # Arch Linux
         arch-linux-64-base)
             IMAGE="arch-linux-64-base-v$(date +'%Y%m%d')"

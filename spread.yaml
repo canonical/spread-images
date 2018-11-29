@@ -63,6 +63,8 @@ backends:
                 image: fedora-29-64-base
             - fedora-29-64:
                 image: fedora-29-64
+            - fedora-rawhide-64:
+                image: fedora-rawhide-64
 
             - opensuse-42.2-64-base:
                 image: opensuse-leap-42-2-64-base
