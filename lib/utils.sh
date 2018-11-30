@@ -12,7 +12,7 @@ clean_machine() {
 			;;
 		fedora-*)
 			dnf clean all
-			dnf -q -y autoremove
+			dnf -q -y autoremove || true
 			find \
 				/var/cache/dnf \
 				/var/lib/dnf/{history,yumdb} \
