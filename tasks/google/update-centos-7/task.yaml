@@ -21,6 +21,9 @@ execute: |
         REBOOT
     fi
 
+    # Set selinux as permissive
+    sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
+
     # Clean disk before create the shapshot
     clean_machine
 
