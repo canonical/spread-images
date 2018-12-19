@@ -63,6 +63,11 @@ else
             FAMILY="debian-9-64"
             DESCRIPTION="Debian 9 64 bits"
             ;;
+        debian-9-64-prepared)
+            IMAGE="debian-9-64-prepared-v$(date +'%Y%m%d')"
+            FAMILY="debian-9-64-prepared"
+            DESCRIPTION="Prepared image"
+            ;;
         debian-sid-64-base)
             IMAGE="debian-sid-64-base-v$(date +'%Y%m%d')"
             FAMILY="debian-sid-64-base"

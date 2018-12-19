@@ -44,6 +44,8 @@ backends:
 
             - debian-9-64-base:
                 image: debian-9-stretch
+            - debian-9-64-prepared:
+                image: debian-9-64-prepared
             - debian-9-64:
                 image: debian-9-64
             - debian-sid-64-base:

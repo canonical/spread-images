@@ -1,6 +1,6 @@
 summary: Update Debian 9 64 bits image with the latest updates and test dependencies
 
-systems: [debian-9-64-base]
+systems: [debian-9-64-prepared]
 
 environment:
     TARGET_SYSTEM: debian-9-64
@@ -11,8 +11,6 @@ execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
-    # We are not making dist-upgrade because it is creating a dependencies issue
-    # which is making fail the preparation of the snapd test suite 
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
@@ -21,11 +19,9 @@ execute: |
         install_test_dependencies "$TARGET_SYSTEM"
         distro_install_google_compute_engine
         distro_clean_package_cache
+
         REBOOT
     fi
-
-    # Disable daily checks for updates to avoid apt locks
-    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
 
     # Clean disk before create the shapshot
     clean_machine

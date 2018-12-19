@@ -1,0 +1,30 @@
+summary: Update Debian 9 64 bits image with the updates need to run with spread
+
+systems: [debian-9-64-base]
+
+environment:
+    TARGET_SYSTEM: debian-9-64-prepared
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    distro_install_package libpam-systemd dbus
+
+    # Disable daily checks for updates to avoid apt locks
+    systemctl disable --now apt-daily{,-upgrade}.{timer,service}
+    
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"
+    delete_deprecated_images "$FAMILY"
