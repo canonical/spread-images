@@ -1,6 +1,6 @@
 summary: Update Debian 9 64 bits image with the latest updates and test dependencies
 
-systems: [debian-9-64-prepared]
+systems: [debian-9-64-base]
 
 environment:
     TARGET_SYSTEM: debian-9-64
