@@ -58,15 +58,15 @@ else
             DESCRIPTION="Ubuntu 18.10 64 bits"
             ;;
         # Debian
+        debian-9-64-base)
+            IMAGE="debian-9-64-base-v$(date +'%Y%m%d')"
+            FAMILY="debian-9-64-base"
+            DESCRIPTION="Base image"
+            ;;
         debian-9-64)
             IMAGE="debian-9-64-v$(date +'%Y%m%d')"
             FAMILY="debian-9-64"
             DESCRIPTION="Debian 9 64 bits"
-            ;;
-        debian-9-64-prepared)
-            IMAGE="debian-9-64-prepared-v$(date +'%Y%m%d')"
-            FAMILY="debian-9-64-prepared"
-            DESCRIPTION="Prepared image"
             ;;
         debian-sid-64-base)
             IMAGE="debian-sid-64-base-v$(date +'%Y%m%d')"

@@ -42,10 +42,10 @@ backends:
             - ubuntu-18.10-64:
                 image: ubuntu-1810-64
 
-            - debian-9-64-base:
+            - debian-9-64-external:
                 image: debian-9-stretch
-            - debian-9-64-prepared:
-                image: debian-9-64-prepared
+            - debian-9-64-base:
+                image: debian-9-64-base
             - debian-9-64:
                 image: debian-9-64
             - debian-sid-64-base:

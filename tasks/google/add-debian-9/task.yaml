@@ -1,9 +1,9 @@
-summary: Update Debian 9 64 bits image with the updates need to run with spread
+summary: Add Debian 9 64 bits image with the updates need to run with spread
 
-systems: [debian-9-64-base]
+systems: [debian-9-64-external]
 
 environment:
-    TARGET_SYSTEM: debian-9-64-prepared
+    TARGET_SYSTEM: debian-9-64-base
 
 execute: |
     . "$TESTSLIB/google.sh"
