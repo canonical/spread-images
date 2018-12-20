@@ -28,7 +28,10 @@ EOF
             dnf install -y google-cloud-sdk
             ;;
         opensuse-*)
+            # clean google cloud sdk
             zypper remove -y google-cloud-sdk || true
+            rm -rf /usr/share/google
+            # install the new google cloud sdk
             mkdir -p /usr/share/google
             wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip
             unzip google-cloud-sdk.zip -d /usr/share/google
