@@ -11,6 +11,9 @@ execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/names.sh"
 
+    # Install test depdencies
+    apt install -y qemu-utils
+
     # Get the raw image
     wget -O "${IMAGE_FILE}.qcow2" "$IMAGE_URL"
     qemu-img convert -O raw "${IMAGE_FILE}.qcow2" disk.raw
@@ -45,6 +48,7 @@ execute: |
 
     chroot /mnt/disk /bin/bash -c "yum --nogpgcheck makecache"
     chroot /mnt/disk /bin/bash -c "yum install -y python python-dev python-pip"
+    chroot /mnt/disk /bin/bash -c "yum install -y python libpam-systemd dbus"
     chroot /mnt/disk /bin/bash -c "yum clean all"
     chroot /mnt/disk /bin/bash -c "pip install boto"
     chroot /mnt/disk /bin/bash -c "cd /tmp/compute-image-packages-master && python setup.py install"
@@ -86,6 +90,7 @@ execute: |
     AllowTcpForwarding yes
     X11Forwarding no
     ClientAliveInterval 420
+    UsePAM yes
     EOF
 
     # Update grub Config
