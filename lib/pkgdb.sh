@@ -28,19 +28,18 @@ EOF
             dnf install -y google-cloud-sdk
             ;;
         opensuse-*)
-            # clean google cloud sdk
-            zypper remove -y google-cloud-sdk || true
-            rm -rf /usr/share/google
-            # install the new google cloud sdk
-            mkdir -p /usr/share/google
-            wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip
-            unzip google-cloud-sdk.zip -d /usr/share/google
-            rm -f google-cloud-sdk.zip
-            echo "export CLOUDSDK_PYTHON=/usr/bin/python2" >> /etc/bash.bashrc
-            /usr/share/google/google-cloud-sdk/install.sh --usage-reporting false --bash-completion true --disable-installation-options --rc-path /etc/bash.bashrc --path-update true
-            ln -s /usr/share/google/google-cloud-sdk/bin/gcloud /usr/bin/gcloud
-            ln -s /usr/share/google/google-cloud-sdk/bin/gcutil /usr/bin/gcutil
-            ln -s /usr/share/google/google-cloud-sdk/bin/gsutil /usr/bin/gsutil
+            if [ ! -d /usr/share/google ]; then
+                zypper remove -y google-cloud-sdk || true
+                mkdir -p /usr/share/google
+                wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip
+                unzip google-cloud-sdk.zip -d /usr/share/google
+                rm -f google-cloud-sdk.zip
+                echo "export CLOUDSDK_PYTHON=/usr/bin/python2" >> /etc/bash.bashrc
+                /usr/share/google/google-cloud-sdk/install.sh --usage-reporting false --bash-completion true --disable-installation-options --rc-path /etc/bash.bashrc --path-update true
+                ln -s /usr/share/google/google-cloud-sdk/bin/gcloud /usr/bin/gcloud
+                ln -s /usr/share/google/google-cloud-sdk/bin/gcutil /usr/bin/gcutil
+                ln -s /usr/share/google/google-cloud-sdk/bin/gsutil /usr/bin/gsutil
+            fi
             ;;
         arch-*|amazon-*)
             if ! [ -d /usr/share/google/google-cloud-sdk ]; then
