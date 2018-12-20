@@ -260,7 +260,8 @@ distro_upgrade_packages() {
             dnf upgrade -y
             ;;
         opensuse-*)
-            echo "so far not needed"
+            zypper update -y
+            zypper dup -y
             ;;
         arch-*)
             pacman --needed --noconfirm -Syu

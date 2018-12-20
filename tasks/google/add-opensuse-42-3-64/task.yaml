@@ -3,7 +3,7 @@ summary: Add new opensuse 42.3 64 bits image to google account
 environment:
     TARGET_SYSTEM: opensuse-42.3-64-base
     IMAGE_FILE: opensuse-leap-42-3-64
-    IMAGE_URL: http://download.opensuse.org/repositories/Cloud:/Images:/Leap_42.3/images/leap42.1-guest-gce-0.1.2-Build1.198.tar.gz
+    IMAGE_URL: http://download.opensuse.org/repositories/Cloud:/Images:/Leap_42.3/images/leap42.1-guest-gce-0.1.2-Build1.214.tar.gz
 
 execute: |
     . "$TESTSLIB/google.sh"
