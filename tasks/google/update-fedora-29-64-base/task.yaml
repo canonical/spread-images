@@ -26,8 +26,12 @@ execute: |
         REBOOT
     fi
 
-    # Purge old kernel package
-    distro_purge_package kernel-core-4.18.16-300.fc29.x86_64
+    # Purge old kernel-core package
+    pkgs=$(rpm -qa kernel-core)
+    if [ $(echo "$pkgs" | wc -w) -gt 1 ]; then
+        pkg=$(echo $pkgs | cut --delimiter " " --fields 2)
+        distro_purge_package "$pkg"
+    fi
 
     # Clean disk before create the shapshot
     clean_machine
