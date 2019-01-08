@@ -425,6 +425,28 @@ pkg_blacklist(){
     esac
 }
 
+distro_initial_repo_setup(){
+    case "$SPREAD_SYSTEM" in
+        ubuntu-*|debian-*)
+            ;;
+        fedora-*)
+            ;;
+        opensuse-*)
+            ;;
+        arch-*)
+            # Delete the key wich is failing checking packages integrity
+            # pacman-key --list-keys levente@leventepolyak.net
+            # pacman-key --delete E240B57E2C4630BA768E2F26FC1B547C8D8172C8
+            ;;
+        amazon-*)
+            ;;
+        centos-*)
+            ;;
+        *)
+            ;;
+    esac
+}
+
 install_pkg_dependencies(){
     pkgs=$(pkg_dependencies)
     if [ ! -z "$pkgs" ]; then
