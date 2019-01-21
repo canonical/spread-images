@@ -175,7 +175,7 @@ else
             DESCRIPTION="Centos 7 64 bits"
             ;;
         *)
-            echo "ERROR: Unsupported distribution '$SPREAD_SYSTEM'"
+            echo "ERROR: Unsupported distribution '$TARGET_SYSTEM'"
             exit 1
             ;;
     esac

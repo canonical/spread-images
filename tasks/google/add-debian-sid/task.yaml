@@ -5,7 +5,7 @@ description: This task is used to create/update new debian sid images. Update sc
 systems: [debian-9-64-base]
 
 environment:
-    TARGET_SYSTEM: debian-sid-base
+    TARGET_SYSTEM: debian-sid-64-base
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -33,10 +33,10 @@ execute: |
     create_snapshot_from_disk "$DISK"
     delete_image "$IMAGE" "$FAMILY"
     create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
-    deprecate_old_images "$FAMILY"
 
 restore: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/names.sh"
 
     delete_snapshot "$DISK"
+    delete_deprecated_images
