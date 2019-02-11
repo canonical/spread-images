@@ -14,7 +14,6 @@ execute: |
 
     cp -a /etc/ntp.conf /var/tmp/ntp.conf.google
     apt-get update
-    apt-get install -y --no-install-recommends etckeeper
     apt-get remove -y --purge ntp unattended-upgrades
 
     cp sources.list /tmp/sources.list
