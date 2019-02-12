@@ -103,14 +103,12 @@ distro_install_google_compute_engine() {
 
             distro_purge_package gce-compute-image-packages
 
-            su -c 'cd /tmp && curl https://aur.archlinux.org/cgit/aur.git/snapshot/gce-compute-image-packages.tar.gz | tar zxvf - && cd gce-compute-image-packages && makepkg --syncdeps --noconfirm' - user
-            pkgfile=$(find /tmp/gce-compute-image-packages -name '*.pkg.tar.xz')
-            if [[ "$(echo $pkgfile | wc -l)" -gt 1 ]]; then
-                echo "expected only one file, got $pkgfile"
-                exit 1
-            fi
-            pacman -U --noconfirm "$pkgfile"
-            rm -rf /tmp/gce-compute-image-packages
+            su -c 'cd /tmp && curl https://aur.archlinux.org/cgit/aur.git/snapshot/google-compute-engine.tar.gz | tar zxvf - && cd google-compute-engine && makepkg --syncdeps --noconfirm' - user
+            pkgfiles=$(find /tmp/google-compute-engine -name '*.pkg.tar.xz')
+            for pkg in $pkgfiles; do
+                pacman -U --noconfirm "$pkg"
+            done
+            rm -rf /tmp/google-compute-engine
 
             services="$(ls /usr/lib/systemd/system/google-*.service)"
             for service in $services; do
