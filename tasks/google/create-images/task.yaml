@@ -1,0 +1,16 @@
+summary: Create images and share them on the instance thought http server
+
+systems: [ubuntu-16.04-64]
+
+environment:
+    IMAGE_CHANNEL: "$(HOST: echo ${SPREAD_IMAGE_CHANNEL:-beta})"
+    IMAGE_VERSION: "$(HOST: echo ${SPREAD_IMAGE_VERSION:-16})"
+    IMAGE_PLATFORM: "$(HOST: echo ${SPREAD_IMAGE_PLATFORM:-})"
+
+prepare: |
+    apt install -y ubuntu-image
+
+execute: |
+    git clone https://github.com/sergiocazzolato/validator.git
+    cd validator && ./create.sh "$IMAGE_CHANNEL" "$IMAGE_VERSION" "$IMAGE_PLATFORM"
+    python -m SimpleHTTPServer 80
