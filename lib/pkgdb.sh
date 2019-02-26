@@ -34,7 +34,7 @@ EOF
                 wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip
                 unzip google-cloud-sdk.zip -d /usr/share/google
                 rm -f google-cloud-sdk.zip
-                echo "export CLOUDSDK_PYTHON=/usr/bin/python2" >> /etc/bash.bashrc
+                echo "export CLOUDSDK_PYTHON=/usr/bin/python3" >> /etc/bash.bashrc
                 /usr/share/google/google-cloud-sdk/install.sh --usage-reporting false --bash-completion true --disable-installation-options --rc-path /etc/bash.bashrc --path-update true
                 ln -s /usr/share/google/google-cloud-sdk/bin/gcloud /usr/bin/gcloud
                 ln -s /usr/share/google/google-cloud-sdk/bin/gcutil /usr/bin/gcutil

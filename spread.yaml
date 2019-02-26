@@ -75,7 +75,15 @@ backends:
             - opensuse-42.3-64-base:
                 image: opensuse-leap-42-3-64-base
             - opensuse-42.3-64:
-                image: opensuse-42.3-64
+                image: opensuse-leap-42-3-64
+            - opensuse-15.0-64-external:
+                image: opensuse-leap-15-v20181106
+            - opensuse-15.0-64-base:
+                image: opensuse-leap-15-0-64-base
+            - opensuse-15.0-64:
+                image: opensuse-leap-15-0-64
+            - opensuse-tumbleweed-64-base:
+                image: opensuse-tumbleweed-64-base
             - opensuse-tumbleweed-64:
                 image: opensuse-tumbleweed-64
 

@@ -1,4 +1,4 @@
-summary: Add new opensuse 42.3 64 bits image to google account
+summary: Add new opensuse leap 42.3 64 bits image to google account
 
 environment:
     TARGET_SYSTEM: opensuse-42.3-64-base

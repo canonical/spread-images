@@ -127,6 +127,16 @@ else
             DESCRIPTION="Arch Linux 64 bits with test dependencies"
             ;;
         # Opensuse
+       opensuse-15.0-64-base)
+            IMAGE="opensuse-leap-15-0-64-base-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-leap-15-0-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        opensuse-15.0-64)
+            IMAGE="opensuse-leap-15-0-64-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-leap-15-0-64"
+            DESCRIPTION="Opensuse leap 15.0 64 bits with test dependencies"
+            ;;
         opensuse-42.2-64-base)
             IMAGE="opensuse-leap-42-2-64-base-v$(date +'%Y%m%d')"
             FAMILY="opensuse-leap-42-2-64-base"
@@ -146,6 +156,11 @@ else
             IMAGE="opensuse-leap-42-3-64-v$(date +'%Y%m%d')"
             FAMILY="opensuse-leap-42-3-64"
             DESCRIPTION="Opensuse leap 42.3 64 bits"
+            ;;
+        opensuse-tumbleweed-64-base)
+            IMAGE="opensuse-leap-tumbleweed-64-base-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-leap-tumbleweed-64-base"
+            DESCRIPTION="Base image"
             ;;
         opensuse-tumbleweed-64)
             IMAGE="opensuse-tumbleweed-64-v$(date +'%Y%m%d')"
