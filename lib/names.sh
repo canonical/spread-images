@@ -1,4 +1,4 @@
-#!/bin/bash
+    #!/bin/bash
 
 if [ ! -z "$TMP_IMAGE_ID" ]; then
     IMAGE="tmp-$TMP_IMAGE_ID"
@@ -158,8 +158,8 @@ else
             DESCRIPTION="Opensuse leap 42.3 64 bits"
             ;;
         opensuse-tumbleweed-64-base)
-            IMAGE="opensuse-leap-tumbleweed-64-base-v$(date +'%Y%m%d')"
-            FAMILY="opensuse-leap-tumbleweed-64-base"
+            IMAGE="opensuse-tumbleweed-64-base-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-tumbleweed-64-base"
             DESCRIPTION="Base image"
             ;;
         opensuse-tumbleweed-64)

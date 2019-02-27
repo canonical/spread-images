@@ -1,6 +1,6 @@
-summary: Update to tumbleweed image with the latest updates and test dependencies
+summary: Update opensuse tumbleweed image with the latest updates and test dependencies
 
-systems: [opensuse-42.3-64-base]
+systems: [opensuse-tumbleweed-64-base]
 
 environment:
     TARGET_SYSTEM: opensuse-tumbleweed-64
@@ -11,25 +11,39 @@ execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
-    # Remove the existing repos
-    mkdir /etc/zypp/repos.d/old
-    mv /etc/zypp/repos.d/*.repo /etc/zypp/repos.d/old
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        distro_upgrade_packages
+        install_test_dependencies "$TARGET_SYSTEM"
+        remove_pkg_blacklist
+        distro_clean_package_cache
+        REBOOT
+    fi
 
-    # Add tumbleweed repos
-    zypper ar -f -c http://download.opensuse.org/tumbleweed/repo/oss repo-oss
-    zypper ar -f -c http://download.opensuse.org/tumbleweed/repo/non-oss repo-non-oss
-    zypper ar -f -c http://download.opensuse.org/tumbleweed/repo/debug repo-debug
-    zypper ar -f -c http://download.opensuse.org/update/tumbleweed/ repo-update
+    # Create systemd unit to restart the failing service
+    tee /usr/lib/systemd/system/systemd-vconsole-setup-rexec.service << EOF
+    [Unit]
+    Description=Setup Virtual Console Reexecution
+    After=local-fs.target network-online.target network.target rsyslog.service
+    After=google-instance-setup.service
+    Wants=local-fs.target network-online.target network.target
+    Requires=network.target
+    PartOf=network.service
+    ConditionPathExists=/dev/tty0
 
-    zypper addrepo https://download.opensuse.org/repositories/Cloud:Tools/openSUSE_Tumbleweed/Cloud:Tools.repo
+    [Service]
+    Type=simple
+    Restart=on-failure
+    RestartSec=5
+    ExecStart=/usr/bin/systemctl restart systemd-vconsole-setup.service
 
-    zypper --gpg-auto-import-keys refresh
-    zypper --gpg-auto-import-keys dist-upgrade -y
+    [Install]
+    WantedBy=multi-user.target
+    EOF
 
-    # Make the upgrade and install the dependencies needed to run snapd tests
-    install_test_dependencies "$TARGET_SYSTEM"
-    remove_pkg_blacklist
-    distro_clean_package_cache
+    systemctl daemon-reload
+    systemctl enable systemd-vconsole-setup-rexec.service
 
     # Clean disk before create the shapshot
     clean_machine
