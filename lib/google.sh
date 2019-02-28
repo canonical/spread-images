@@ -28,7 +28,7 @@ create_image_from_bucket(){
 delete_image(){
     local IMAGE=$1
     local FAMILY=$2
-    local image_name=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND name = $IMAGE" --format json | jq -r '.[]|.name')
+    local image_name=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family ~ ^$FAMILY$ AND name = $IMAGE" --format json | jq -r '.[]|.name')
 
     if ! [ -z "$image_name" ]; then
         gcloud compute images delete "$IMAGE" --quiet
@@ -50,9 +50,9 @@ deprecate_old_images(){
 
     local old_images
     if [ -z "$SKIP_IMAGE" ]; then
-        old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND -name = ${latest_image_name}" --format json | jq -r '.[]|.name')
+        old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family ~ ^$FAMILY$ AND -name = ${latest_image_name}" --format json | jq -r '.[]|.name')
     else
-        old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family = $FAMILY AND NOT (name = ${latest_image_name} OR name = ${SKIP_IMAGE})" --format json | jq -r '.[]|.name')
+        old_images=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family ~ ^$FAMILY$ AND NOT (name = ${latest_image_name} OR name = ${SKIP_IMAGE})" --format json | jq -r '.[]|.name')
     fi
 
     if [ -z "${old_images}" ]; then
