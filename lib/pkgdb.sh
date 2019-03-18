@@ -255,7 +255,7 @@ distro_upgrade_packages() {
             apt-get dist-upgrade -y
             ;;
         fedora-*)
-            dnf upgrade -y
+            dnf upgrade --nogpgcheck -y
             ;;
         opensuse-*)
             zypper update -y
