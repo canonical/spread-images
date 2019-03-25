@@ -258,7 +258,7 @@ distro_upgrade_packages() {
             dnf upgrade --nogpgcheck -y
             ;;
         opensuse-*)
-            zypper update -y
+            zypper update -y --allow-downgrade
             zypper dup -y --allow-downgrade
             ;;
         arch-*)
