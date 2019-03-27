@@ -258,7 +258,6 @@ distro_upgrade_packages() {
             dnf upgrade --nogpgcheck -y
             ;;
         opensuse-*)
-            zypper update -y --allow-downgrade --force-resolution
             zypper dup -y --allow-downgrade --force-resolution
             ;;
         arch-*)
