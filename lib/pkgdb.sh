@@ -163,7 +163,7 @@ distro_install_package() {
             ;;
         opensuse-*)
             # shellcheck disable=SC2086
-            zypper --gpg-auto-import-keys install -y --allow-downgrade $ZYPPER_FLAGS "${pkg_names[@]}"
+            zypper --gpg-auto-import-keys install -y --allow-downgrade --force-resolution $ZYPPER_FLAGS "${pkg_names[@]}"
             ;;
         arch-*)
             # shellcheck disable=SC2086
@@ -258,8 +258,8 @@ distro_upgrade_packages() {
             dnf upgrade --nogpgcheck -y
             ;;
         opensuse-*)
-            zypper update -y --allow-downgrade
-            zypper dup -y --allow-downgrade
+            zypper update -y --allow-downgrade --force-resolution
+            zypper dup -y --allow-downgrade --force-resolution
             ;;
         arch-*)
             pacman --needed --noconfirm -Syu
