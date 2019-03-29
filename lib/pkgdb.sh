@@ -449,7 +449,9 @@ install_pkg_dependencies(){
     if [ ! -z "$pkgs" ]; then
         distro_install_package "$pkgs"
     fi
-    distro_install_google_sdk
+    if ! command -v gcloud >/dev/null; then
+        distro_install_google_sdk
+    fi
 }
 
 install_test_dependencies(){
