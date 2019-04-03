@@ -104,11 +104,42 @@ backends:
             - centos-7-64:
                 image: centos-7-64
 
+    testflinger:
+        key: "$(HOST: echo $SPREAD_LP_KEY:-lp:sergio-j-cazzolato)"
+        systems:
+            - dragonboard-16:
+                image: http://cdimage.ubuntu.com/ubuntu-core/16/stable/current/ubuntu-core-16-dragonboard.img.xz
+                username: ubuntu
+                password: ubuntu
+            - dragonboard-18:
+                image: http://cdimage.ubuntu.com/ubuntu-core/18/stable/current/ubuntu-core-18-arm64+snapdragon.img.xz
+                username: ubuntu
+                password: ubuntu
+            - rpi3-16:
+                image: http://cdimage.ubuntu.com/ubuntu-core/16/stable/current/ubuntu-core-16-pi3.img.xz
+                username: ubuntu
+                password: ubuntu
+            - rpi3-18:
+                image: http://cdimage.ubuntu.com/ubuntu-core/18/stable/current/ubuntu-core-18-armhf+raspi3.img.xz
+                username: ubuntu
+                password: ubuntu
+            - rpi2-16:
+                image: http://cdimage.ubuntu.com/ubuntu-core/16/stable/current/ubuntu-core-16-pi2.img.xz
+                username: ubuntu
+                password: ubuntu
+            - rpi2-18:
+                image: http://cdimage.ubuntu.com/ubuntu-core/18/stable/current/ubuntu-core-18-armhf+raspi2.img.xz
+                username: ubuntu
+                password: ubuntu
+
 path: /root/spread
 
 kill-timeout: 50m
 
 suites:
+    tasks/common/:
+        summary: Create and update images for google backend
+
     tasks/google/:
         summary: Create and update images for google backend
         environment:
