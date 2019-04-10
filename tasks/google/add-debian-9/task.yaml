@@ -11,7 +11,7 @@ execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
-    distro_install_package libpam-systemd dbus
+    distro_install_package libpam-systemd dbus eatmydata
 
     # Disable daily checks for updates to avoid apt locks
     systemctl disable --now apt-daily{,-upgrade}.{timer,service}
