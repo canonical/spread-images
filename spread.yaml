@@ -41,6 +41,10 @@ backends:
                 image: ubuntu-os-cloud/ubuntu-1810
             - ubuntu-18.10-64:
                 image: ubuntu-1810-64
+            - ubuntu-19.04-64-base:
+                image: ubuntu-os-cloud/ubuntu-1904
+            - ubuntu-19.04-64:
+                image: ubuntu-1904-64
 
             - debian-9-64-external:
                 image: debian-9-stretch
