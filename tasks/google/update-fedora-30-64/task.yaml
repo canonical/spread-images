@@ -1,9 +1,9 @@
-summary: Update Ubuntu disco 64 bits image with the latest updates and test dependencies
+summary: Update fedora image with the latest updates and test dependencies with selinux permissive
 
-systems: [ubuntu-19.04-64-base]
+systems: [fedora-30-64-base]
 
 environment:
-    TARGET_SYSTEM: ubuntu-19.04-64
+    TARGET_SYSTEM: fedora-30-64
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -14,28 +14,34 @@ execute: |
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
+        distro_install_package kernel-modules
         distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
         distro_clean_package_cache
+
         REBOOT
     fi
 
-    # Avoid checking for new release, it could cause lock on apt
-    sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
+    # Purge old kernel-core package
+    pkgs=$(rpm -qa kernel-core)
+    if [ $(echo "$pkgs" | wc -w) -gt 1 ]; then
+        pkg=$(echo $pkgs | cut --delimiter " " --fields 2)
+        distro_purge_package "$pkg"
+    fi
 
-    # Disable daily checks for updates to avoid apt locks
-    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
+    # Set selinux as permissive
+    sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
 
     # Clean disk before create the shapshot
     clean_machine
 
     # Create a new image based on the current disk
-    create_image_from_disk test-ubuntu-2 test-ubuntu-2 test-ubuntu-2 "$DISK"
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
 
 restore: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/names.sh"
-
+    
     delete_snapshot "$DISK"
     delete_deprecated_images

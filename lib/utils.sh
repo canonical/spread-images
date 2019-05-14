@@ -15,8 +15,15 @@ clean_machine() {
 			dnf -q -y autoremove || true
 			find \
 				/var/cache/dnf \
+				-type f -exec rm -f {} \;
+
+			if [ -d /mnt/disk/var/lib/dnf/history ]; then
+				find \
 				/var/lib/dnf/{history,yumdb} \
 				-type f -exec rm -f {} \;
+			else
+				rm -f /mnt/disk/var/lib/dnf/history.*
+			fi
 			;;
 		opensuse-*)
 			zypper -q clean --all

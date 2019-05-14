@@ -209,6 +209,12 @@ get_env_for_task_google() {
             RUN_SNAPD=true
             TEST_WORKERS=12
             ;;
+        update-fedora-30-64)
+            SOURCE_SYSTEM=fedora-30-64-base
+            TARGET_SYSTEM=fedora-30-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
         update-opensuse-42-3)
             SOURCE_SYSTEM=opensuse-42.3-64-base
             TARGET_SYSTEM=opensuse-42.3-64
