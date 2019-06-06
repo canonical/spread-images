@@ -5,7 +5,7 @@ systems: [ubuntu-18.04-64*]
 environment:
     IMAGE_CHANNEL: "$(HOST: echo ${SPREAD_IMAGE_CHANNEL:-beta})"
     IMAGE_PLATFORM: "$(HOST: echo ${SPREAD_IMAGE_PLATFORM:-})"
-    IMAGE_VERSION: "$(HOST: echo ${SPREAD_IMAGE_VERSION:-})"
+    IMAGE_VERSION: "$(HOST: echo ${SPREAD_IMAGE_VERSION:-})"    
 
 prepare: |
     apt install -y ubuntu-image
@@ -16,12 +16,12 @@ execute: |
 
     # Create the core images for core 16
     if [ "$IMAGE_VERSION" = 16 ] || [ -z "$IMAGE_VERSION" ]; then
-        ( cd validator && ./create.sh "$IMAGE_CHANNEL" 16 "$IMAGE_PLATFORM" )
+        ( cd validator && ./create.sh "$IMAGE_CHANNEL" 16 "" "$IMAGE_PLATFORM" )
     fi
 
     # Create the core images for core 18
     if [ "$IMAGE_VERSION" = 18 ] || [ -z "$IMAGE_VERSION" ]; then
-        ( cd validator && ./create.sh "$IMAGE_CHANNEL" 18 "$IMAGE_PLATFORM" )
+        ( cd validator && ./create.sh "$IMAGE_CHANNEL" 18 "" "$IMAGE_PLATFORM" )
     fi
 
     # Show the created images and start the server

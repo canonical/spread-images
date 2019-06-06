@@ -1,0 +1,30 @@
+summary: Update opensuse 15.1 64 bits image with the latest updates
+
+systems: [opensuse-15.1-64-base]
+
+environment:
+    TARGET_SYSTEM: opensuse-15.1-64-base
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    # Make the upgrade and install the dependencies needed to run snapd tests
+    distro_update_package_db
+    distro_upgrade_packages
+    distro_clean_package_cache
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"
+    delete_deprecated_images

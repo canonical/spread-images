@@ -90,6 +90,10 @@ backends:
                 image: opensuse-leap-15-0-64-base
             - opensuse-15.0-64:
                 image: opensuse-leap-15-0-64
+            - opensuse-15.1-64-base:
+                image: opensuse-leap-15-1-64-base
+            - opensuse-15.1-64:
+                image: opensuse-leap-15-1-64
             - opensuse-tumbleweed-64-base:
                 image: opensuse-tumbleweed-64-base
             - opensuse-tumbleweed-64:
