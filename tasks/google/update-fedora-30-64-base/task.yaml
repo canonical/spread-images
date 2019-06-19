@@ -14,7 +14,6 @@ execute: |
     if [ "$SPREAD_REBOOT" = 0 ]; then
         distro_update_package_db
         distro_upgrade_packages
-        distro_clean_package_cache
 
         # Disable cloud init because reset sshd config affecting spread metadata script
         # Also in fedora 30 cloud-init fails on start

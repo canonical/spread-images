@@ -14,7 +14,6 @@ execute: |
     # Make the upgrade and install the dependencies needed to run snapd tests
     distro_update_package_db
     distro_upgrade_packages
-    distro_clean_package_cache
 
     # Clean disk before create the shapshot
     clean_machine

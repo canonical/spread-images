@@ -34,8 +34,6 @@ execute: |
         # Disable google-shutdown-scripts service because it hungs during reboot
         systemctl disable --now google-shutdown-scripts.service
 
-        distro_clean_package_cache
-
         # since 4.16, kernel crng init can take significant time, thus services
         # depending on crypto such as sshd will take longer to start
         distro_install_package haveged

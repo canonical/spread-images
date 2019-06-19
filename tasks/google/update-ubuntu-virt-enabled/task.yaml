@@ -29,7 +29,6 @@ execute: |
         distro_update_package_db
         distro_upgrade_packages
         remove_pkg_blacklist
-        distro_clean_package_cache
         REBOOT
     fi
 
