@@ -62,6 +62,11 @@ else
             FAMILY="ubuntu-1904-64"
             DESCRIPTION="Ubuntu 19.04 64 bits"
             ;;
+        ubuntu-19.10-64)
+            IMAGE="ubuntu-1910-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-1910-64"
+            DESCRIPTION="Ubuntu 19.10 64 bits"
+            ;;
         # Debian
         debian-9-64-base)
             IMAGE="debian-9-64-base-v$(date +'%Y%m%d')"

@@ -275,6 +275,12 @@ get_env_for_task_google() {
             RUN_SNAPD=true
             TEST_WORKERS=12
             ;;
+        update-ubuntu-19.10-64)
+            SOURCE_SYSTEM=ubuntu-19.10-64-base
+            TARGET_SYSTEM=ubuntu-19.10-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
         *)
             echo "ERROR: Unsupported distribution '$SPREAD_SYSTEM'"
             exit 1
