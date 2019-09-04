@@ -153,7 +153,10 @@ suites:
                 echo "Service account file not found in root path"
                 exit 1
             fi
-            distro_initial_repo_setup
-            distro_update_package_db
-            install_pkg_dependencies
-            gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
+
+            if [ "$SPREAD_BACKEND" = google ]; then
+                distro_initial_repo_setup
+                distro_update_package_db
+                install_pkg_dependencies
+                gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
+            fi
