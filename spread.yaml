@@ -124,7 +124,7 @@ backends:
                 username: ubuntu
                 password: ubuntu
             - rpi2-16:
-                image: http://cdimage.ubuntu.com/ubuntu-core/16/stable/current/ubuntu-core-16-pi2.img.xz
+                image: https://cachio.s3-us-west-2.amazonaws.com/images/pi2-16-beta/pi2.img.xz
                 username: ubuntu
                 password: ubuntu
             - rpi2-18:
