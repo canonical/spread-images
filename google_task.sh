@@ -24,8 +24,7 @@ run_spread_images() {
     local task=$1
     get_env_for_task_google "$task"
 
-    local backend="$(get_google_backend $SPREAD_IMAGES_DIR $SOURCE_SYSTEM)"
-    if ! run_spread_images_task "$backend" "$SOURCE_SYSTEM" "$task" "$RUN_SNAPD"; then
+    if ! run_spread_images_task google "$SOURCE_SYSTEM" "$task" "$RUN_SNAPD"; then
         echo "image task failed"
         exit 1
     fi
