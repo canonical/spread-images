@@ -121,9 +121,9 @@ get_spread() {
 get_google_backend() {
     local spread_yaml_dir=$1
     local system=$2
-    if ( cd "$spread_yaml_dir" && "$SPREAD_DIR/spread" -list google:"$system" >& /dev/null ); then
+    if ( cd "$spread_yaml_dir" && "$SPREAD_DIR/spread" -list google:"$system"  >/dev/null 2>&1 ); then
         echo google
-    elif ( cd "$spread_yaml_dir" && "$SPREAD_DIR/spread" -list google-unstable:"$system" >& /dev/null ); then
+    elif ( cd "$spread_yaml_dir" && "$SPREAD_DIR/spread" -list google-unstable:"$system"  >/dev/null 2>&1 ); then
         echo google-unstable
     else
         echo "System not included in any google backend, plase check spread.yaml"
