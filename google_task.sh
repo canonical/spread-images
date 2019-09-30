@@ -24,7 +24,8 @@ run_spread_images() {
     local task=$1
     get_env_for_task_google "$task"
 
-    if ! run_spread_images_task google "$SOURCE_SYSTEM" "$task" "$RUN_SNAPD"; then
+    local backend="$(get_google_backend $SPREAD_IMAGES_DIR $SOURCE_SYSTEM)"
+    if ! run_spread_images_task "$backend" "$SOURCE_SYSTEM" "$task" "$RUN_SNAPD"; then
         echo "image task failed"
         exit 1
     fi
@@ -41,7 +42,8 @@ run_snapd() {
         . "$SPREAD_IMAGES_DIR/lib/names.sh"
         local tmp_image="$IMAGE"
         local tmp_family="$FAMILY"
-        if run_snapd_tests google "$TARGET_SYSTEM" "$tmp_image" "$TEST_WORKERS"; then
+        local backend="$(get_google_backend $SNAPD_DIR $TARGET_SYSTEM)"
+        if run_snapd_tests "$backend" "$TARGET_SYSTEM" "$tmp_image" "$TEST_WORKERS"; then
             echo "snapd test suite passed, clonning tmp image"
             TMP_IMAGE_ID= . "$SPREAD_IMAGES_DIR/lib/names.sh"
             local final_image="$IMAGE"
@@ -71,7 +73,7 @@ run_spread_images_task() {
         return 1
     fi
     if [ "$run_snapd" = "true" ]; then
-        echo "Running spread-imags task and creating tmp image"
+        echo "Running spread-images task and creating tmp image"
         ( cd "$SPREAD_IMAGES_DIR" && SPREAD_TMP_IMAGE_ID="$TMP_IMAGE_ID" "$SPREAD_DIR/spread" "${backend}:${system}:tasks/${backend}/${task}" )
     else
         echo "Running spread-imags task and creating final image"
@@ -115,6 +117,20 @@ get_spread() {
         ( cd "$SPREAD_DIR" && curl -s -O https://niemeyer.s3.amazonaws.com/spread-amd64.tar.gz && tar xzvf spread-amd64.tar.gz ) 
         echo "Spread downloaded and ready to use"
     fi
+}
+
+get_google_backend() {
+    local spread_yaml_dir=$1
+    local system=$2
+    if ( cd "$spread_yaml_dir" && "$SPREAD_DIR/spread" -list google:"$system" >& /dev/null ); then
+        echo google
+    elif ( cd "$spread_yaml_dir" && "$SPREAD_DIR/spread" -list google-unstable:"$system" >& /dev/null ); then
+        echo google-unstable
+    else
+        echo "System not included in any google backend, plase check spread.yaml"
+        exit 1
+    fi
+
 }
 
 get_env_for_task_google() {
