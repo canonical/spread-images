@@ -42,7 +42,7 @@ backends:
             - ubuntu-19.04-64:
                 image: ubuntu-1904-64
             - ubuntu-19.10-64-base:
-                image: ubuntu-os-cloud-devel/ubuntu-1910
+                image: ubuntu-os-cloud/ubuntu-1910
             - ubuntu-19.10-64:
                 image: ubuntu-1910-64
 
