@@ -1,11 +1,11 @@
-summary: Add new fedora 30 64 bits image to google account
+summary: Add new fedora 31 64 bits image to google account
 
 systems: [fedora-*-64]
 
 environment:
-    TARGET_SYSTEM: fedora-30-64-base
-    IMAGE_FILE: fedora-30-64
-    IMAGE_URL: http://fedora.c3sl.ufpr.br/linux/releases/30/Cloud/x86_64/images/Fedora-Cloud-Base-30-1.2.x86_64.raw.xz
+    TARGET_SYSTEM: fedora-31-64-base
+    IMAGE_FILE: fedora-31-64
+    IMAGE_URL: http://fedora.c3sl.ufpr.br/linux/releases/31/Cloud/x86_64/images/Fedora-Cloud-Base-31-1.9.x86_64.raw.xz
 
 execute: |
     . "$TESTSLIB/google.sh"

@@ -1,15 +1,15 @@
-summary: Add new fedora 30 64 bits image to google account
+summary: Add new fedora 29 64 bits image to google account
 
-systems: [fedora-*-64]
+systems: [fedora-29-64-base, fedora-30-64-base]
 
 environment:
-    TARGET_SYSTEM: fedora-30-64-base
-    IMAGE_FILE: fedora-30-64
-    IMAGE_URL: http://fedora.c3sl.ufpr.br/linux/releases/30/Cloud/x86_64/images/Fedora-Cloud-Base-30-1.2.x86_64.raw.xz
+    TARGET_SYSTEM: fedora-rawhide-v2-64
+    IMAGE_FILE: fedora-rawhide-v2-64
+    IMAGE_URL: https://kojipkgs.fedoraproject.org/compose/rawhide/latest-Fedora-Rawhide/compose/Cloud/x86_64/images/Fedora-Cloud-Base-Rawhide-20190723.n.0.x86_64.raw.xz
 
 execute: |
     . "$TESTSLIB/google.sh"
-    . "$TESTSLIB/names.sh"
+    #. "$TESTSLIB/names.sh"
 
     # Get the image
     wget -O - "$IMAGE_URL" | xz -cd - > disk.raw
@@ -72,6 +72,20 @@ execute: |
     # Disable the auditd service due to it often hungs when the system starts
     chroot /mnt/disk /bin/bash -c "systemctl disable auditd.service"
 
+    # Enable unified hierarchy for cgroups
+    tee /mnt/disk/etc/default/grub << EOF
+    GRUB_TIMEOUT=1
+    GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+    GRUB_DEFAULT=saved
+    GRUB_DISABLE_SUBMENU=true
+    GRUB_TERMINAL_OUTPUT="console"
+    #### add systemd.unified_cgroup_hierarchy
+    GRUB_CMDLINE_LINUX="no_timer_check net.ifnames=0 console=tty1 console=ttyS0,115200n8 systemd.unified_cgroup_hierarchy"
+    GRUB_DISABLE_RECOVERY="true"
+    GRUB_ENABLE_BLSCFG=true
+    EOF
+    chroot /mnt/disk /bin/bash -c "grub2-mkconfig -o /boot/grub/grub.cfg"
+
     # Clean the image
     find /mnt/disk/var/log /mnt/disk/var/cache/dnf /mnt/disk/var/lib/dnf/history.* -type f -exec rm -f {} \;
 
@@ -86,8 +100,8 @@ execute: |
     gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
     
     # Create the image in computeengine project
-    delete_image "$IMAGE" "$FAMILY"
-    create_image_from_bucket "$IMAGE" "$FAMILY" "$DESCRIPTION" "${IMAGE_FILE}.tar.gz"
+    delete_image test-fedora-rawhide-64-base test-fedora-rawhide-64-base
+    create_image_from_bucket test-fedora-rawhide-64-base test-fedora-rawhide-64-base "test image" "${IMAGE_FILE}.tar.gz"
 
 restore: |
     sudo umount -AR /mnt/disk || true

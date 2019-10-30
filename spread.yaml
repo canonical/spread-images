@@ -73,6 +73,10 @@ backends:
                 image: fedora-30-64-base
             - fedora-30-64:
                 image: fedora-30-64
+            - fedora-31-64-base:
+                image: fedora-31-64-base
+            - fedora-31-64:
+                image: fedora-31-64
             - fedora-rawhide-64:
                 image: fedora-rawhide-64
 

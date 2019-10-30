@@ -166,6 +166,16 @@ get_env_for_task_google() {
             TARGET_SYSTEM=fedora-29-64-base
             RUN_SNAPD=false
             ;;
+        add-fedora-30-64)
+            SOURCE_SYSTEM=fedora-29-64
+            TARGET_SYSTEM=fedora-30-64-base
+            RUN_SNAPD=false
+            ;;
+        add-fedora-31-64)
+            SOURCE_SYSTEM=fedora-30-64
+            TARGET_SYSTEM=fedora-31-64-base
+            RUN_SNAPD=false
+            ;;
         add-opensuse-42-2-64)
             SOURCE_SYSTEM=ubuntu-16.04-64
             TARGET_SYSTEM=opensuse-42.2-64-base
@@ -227,6 +237,12 @@ get_env_for_task_google() {
         update-fedora-30-64)
             SOURCE_SYSTEM=fedora-30-64-base
             TARGET_SYSTEM=fedora-30-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
+        update-fedora-31-64)
+            SOURCE_SYSTEM=fedora-31-64-base
+            TARGET_SYSTEM=fedora-31-64
             RUN_SNAPD=true
             TEST_WORKERS=12
             ;;

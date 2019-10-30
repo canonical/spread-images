@@ -129,6 +129,16 @@ else
             FAMILY="fedora-30-64"
             DESCRIPTION="Fedora 30 64 bits with test dependencies"
             ;;
+        fedora-31-64-base)
+            IMAGE="fedora-31-64-base-v$(date +'%Y%m%d')"
+            FAMILY="fedora-31-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        fedora-31-64)
+            IMAGE="fedora-31-64-v$(date +'%Y%m%d')"
+            FAMILY="fedora-31-64"
+            DESCRIPTION="Fedora 31 64 bits with test dependencies"
+            ;;
         fedora-rawhide-64)
             IMAGE="fedora-rawhide-64-v$(date +'%Y%m%d')"
             FAMILY="fedora-rawhide-64"
