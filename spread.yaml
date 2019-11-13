@@ -1,6 +1,8 @@
 project: spread-images
 
 environment:
+    GOHOME: /home/gopath
+    GOPATH: $GOHOME
     PROJECT_PATH: /root/spread
     TESTSLIB: $PROJECT_PATH/lib
     TESTSFILES: $PROJECT_PATH/files
@@ -45,6 +47,8 @@ backends:
                 image: ubuntu-os-cloud/ubuntu-1910
             - ubuntu-19.10-64:
                 image: ubuntu-1910-64
+            - ubuntu-20.04-64:
+                image: ubuntu-os-cloud-devel/ubuntu-2004-lts
 
             - debian-9-64-external:
                 image: debian-9-stretch
@@ -94,6 +98,8 @@ backends:
                 image: opensuse-leap-15-0-64-base
             - opensuse-15.0-64:
                 image: opensuse-leap-15-0-64
+            - opensuse-15.1-64-external:
+                image: opensuse-leap-15-1-v20190618
             - opensuse-15.1-64-base:
                 image: opensuse-leap-15-1-64-base
             - opensuse-15.1-64:

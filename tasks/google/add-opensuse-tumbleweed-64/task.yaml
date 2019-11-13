@@ -1,6 +1,6 @@
 summary: Add opensuse tumbleweed base image with the latest updates
 
-systems: [opensuse-15.0-64-base]
+systems: [opensuse-15.1-64-base]
 
 environment:
     TARGET_SYSTEM: opensuse-tumbleweed-64-base

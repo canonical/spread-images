@@ -1,6 +1,6 @@
 summary: Add new opensuse leap 15.1 64 bits image to google account
 
-systems: [opensuse-15.0-64-base]
+systems: [opensuse-15.1-64-external]
 
 environment:
     TARGET_SYSTEM: opensuse-15.1-64-base
@@ -10,17 +10,6 @@ execute: |
     . "$TESTSLIB/names.sh"
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
-
-    zypper addrepo --check --refresh --name 'openSUSE-Leap-15.1-Update' http://download.opensuse.org/update/leap/15.1/oss/ repo-update
-
-    distro_update_package_db
-    zypper update -y
-
-    sed -i 's/15.0/15.1/g' /etc/zypp/repos.d/*
-    zypper --gpg-auto-import-keys ref
-    distro_upgrade_packages
-
-    distro_clean_package_cache
 
     # Clean disk before create the shapshot
     clean_machine

@@ -20,6 +20,19 @@ execute: |
         REBOOT
     fi
 
+    # update vendoring
+    if [ -z "$(command -v govendor)" ]; then
+        rm -rf "${GOPATH%%:*}/src/github.com/kardianos/govendor"
+        go get -u github.com/kardianos/govendor
+    fi
+    # Retry govendor sync to minimize the number of connection errors during the sync
+    for _ in $(seq 10); do
+        if quiet govendor sync; then
+            break
+        fi
+        sleep 1
+    done
+
     # Avoid checking for new release, it could cause lock on apt
     sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
 
@@ -30,7 +43,7 @@ execute: |
     clean_machine
 
     # Create a new image based on the current disk
-    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+    create_image_from_disk test-bionic-perf-1 test-bionic-perf-1 test-bionic-perf-1 "$DISK"
 
 restore: |
     . "$TESTSLIB/google.sh"
