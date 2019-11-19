@@ -31,10 +31,6 @@ execute: |
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
 
-        distro_install_google_compute_engine
-        # Disable google-shutdown-scripts service because it hungs during reboot
-        systemctl disable --now google-shutdown-scripts.service
-
         # since 4.16, kernel crng init can take significant time, thus services
         # depending on crypto such as sshd will take longer to start
         distro_install_package haveged
@@ -42,6 +38,23 @@ execute: |
 
         REBOOT
     fi
+
+    # Install the new version os gce packages    
+    curl -L -o /tmp/pkgbuilds.tar.gz https://github.com/bboozzoo/pkgbuilds/archive/master.tar.gz
+    tar -C /tmp/ -xvf /tmp/pkgbuilds.tar.gz
+    cd /tmp/pkgbuilds-master/google-compute-engine
+
+    useradd -p ubuntu test
+    chown test:test /tmp/pkgbuilds-master/google-compute-engine
+    su -c 'makepkg' test
+    distro_purge_package gce-compute-image-packages
+    pacman --noconfirm -U /tmp/pkgbuilds-master/google-compute-engine/*.pkg.tar.xz
+    userdel test
+    rm -rf /tmp/pkgbuilds-master/
+
+    #distro_install_google_compute_engine
+    # Disable google-shutdown-scripts service because it hungs during reboot
+    systemctl disable --now google-shutdown-scripts.service
 
     # Enable apparmor
     if ! MATCH "apparmor=1" < /etc/default/grub; then
