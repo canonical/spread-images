@@ -25,6 +25,7 @@ execute: |
         fi
 
         # Make the upgrade
+        pacman-key --populate
         distro_update_package_db
         distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
