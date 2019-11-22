@@ -12,6 +12,14 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
+
+        # Prepare kernel 4.15 to run in bionic
+        apt install -y linux-headers-4.15.0-1006-gcp
+        apt install -y linux-headers-4.15.0-22-generic
+        apt install -y linux-image-4.15.0-1006-gcp
+        apt remove -y linux-headers-5.*
+        apt remove -y linux-image-5.*
+
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
@@ -19,19 +27,6 @@ execute: |
         remove_pkg_blacklist
         REBOOT
     fi
-
-    # update vendoring
-    if [ -z "$(command -v govendor)" ]; then
-        rm -rf "${GOPATH%%:*}/src/github.com/kardianos/govendor"
-        go get -u github.com/kardianos/govendor
-    fi
-    # Retry govendor sync to minimize the number of connection errors during the sync
-    for _ in $(seq 10); do
-        if quiet govendor sync; then
-            break
-        fi
-        sleep 1
-    done
 
     # Avoid checking for new release, it could cause lock on apt
     sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
@@ -43,7 +38,7 @@ execute: |
     clean_machine
 
     # Create a new image based on the current disk
-    create_image_from_disk test-bionic-perf-1 test-bionic-perf-1 test-bionic-perf-1 "$DISK"
+    create_image_from_disk test-bionic-2 test-bionic-2 test-bionic-2 "$DISK"
 
 restore: |
     . "$TESTSLIB/google.sh"
