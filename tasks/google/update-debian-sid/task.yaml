@@ -27,6 +27,9 @@ execute: |
         REBOOT
     fi
 
+    # Disable the service because sometimes is failing
+    systemctl disable --now fwupd.service
+
     # Clean disk before create the shapshot
     clean_machine
 

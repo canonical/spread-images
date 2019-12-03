@@ -22,11 +22,14 @@ execute: |
         REBOOT
     fi
 
+    # Disable the service because sometimes is failing
+    systemctl disable --now fwupd.service
+
     # Clean disk before create the shapshot
     clean_machine
 
     # Create a new image based on the current disk
-    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+    create_image_from_disk test-debian-9 test-debian-9 test-debian-9 "$DISK"
 
 restore: |
     . "$TESTSLIB/google.sh"
