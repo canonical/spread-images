@@ -28,7 +28,6 @@ execute: |
     fi
 
     # Disable the service because sometimes is failing
-    systemctl stop fwupd.service fwupd-refresh.service fwupd-refresh.timer
     systemctl disable --now fwupd.service fwupd-refresh.service fwupd-refresh.timer
 
     # Clean disk before create the shapshot
