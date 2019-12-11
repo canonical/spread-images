@@ -23,7 +23,7 @@ execute: |
     fi
 
     # Disable the service because sometimes is failing
-    systemctl disable --now fwupd.service fwupd-refresh.service fwupd-refresh.timer
+    systemctl disable --now fwupd.service
 
     # Clean disk before create the shapshot
     clean_machine
