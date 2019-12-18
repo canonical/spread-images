@@ -17,6 +17,15 @@ create_image_from_snapshot_with_licenses(){
     gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT" --licenses "$LICENSES"
 }
 
+create_image_from_snapshot_with_os_features(){
+    local IMAGE=$1
+    local FAMILY=$2
+    local DESCRIPTION="$3"
+    local SNAPSHOT=$4
+    local OS_FEATURES=$5
+    gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT" --guest-os-features="$OS_FEATURES"
+}
+
 create_image_from_bucket(){
     local IMAGE=$1
     local FAMILY=$2
@@ -130,6 +139,20 @@ create_image_from_disk_with_licences(){
     create_snapshot_from_disk "$DISK"
     delete_image "$IMAGE" "$FAMILY"
     create_image_from_snapshot_with_licenses "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "$LICENSES"
+    deprecate_old_images "$FAMILY" "$latest_image_name"
+}
+
+create_image_from_disk_with_os_features(){
+    local IMAGE=$1
+    local FAMILY=$2
+    local DESCRIPTION="$3"
+    local DISK=$4
+    local OS_FEATURES=$5
+
+    local latest_image_name=$(get_latest_image_name "$FAMILY")
+    create_snapshot_from_disk "$DISK"
+    delete_image "$IMAGE" "$FAMILY"
+    create_image_from_snapshot_with_os_features "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "$OS_FEATURES"
     deprecate_old_images "$FAMILY" "$latest_image_name"
 }
 

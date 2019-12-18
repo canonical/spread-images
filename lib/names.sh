@@ -32,6 +32,11 @@ else
             FAMILY="ubuntu-1604-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
             ;;
+        ubuntu-16.04-64-uefi-enabled)
+            IMAGE="ubuntu-1604-64-v$(date +'%Y%m%d')-uefi-enabled"
+            FAMILY="ubuntu-1604-64-uefi-enabled"
+            DESCRIPTION="Image with uefi enabled"
+            ;;
         ubuntu-16.04-64-nested)
             IMAGE="ubuntu-1604-64-v$(date +'%Y%m%d')-nested"
             FAMILY="ubuntu-1604-64-nested"
@@ -46,6 +51,11 @@ else
             IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-virt-enabled"
             FAMILY="ubuntu-1804-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
+            ;;
+        ubuntu-18.04-64-uefi-enabled)
+            IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-uefi-enabled"
+            FAMILY="ubuntu-1804-64-uefi-enabled"
+            DESCRIPTION="Image with uefi enabled"
             ;;
         ubuntu-18.04-64-nested)
             IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-nested"
