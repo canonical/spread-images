@@ -25,8 +25,9 @@ execute: |
         fi
 
         # Make the upgrade
-        pacman-key --populate
         distro_update_package_db
+        # update the keyring first to account for expired keys
+        pacman -S --noconfirm archlinux-keyring
         distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
