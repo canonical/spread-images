@@ -257,6 +257,8 @@ distro_update_package_db() {
             zypper --gpg-auto-import-keys refresh
             ;;
         arch-*)
+            # Refresh keys first to account for expired keys
+            pacman-key --refresh-keys
             pacman -Syq
             ;;
         amazon-*|centos-*)
