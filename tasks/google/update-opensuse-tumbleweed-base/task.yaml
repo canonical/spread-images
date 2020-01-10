@@ -1,0 +1,42 @@
+summary: Update opensuse tumbleweed base image with the latest updates
+
+systems: [opensuse-tumbleweed-64-base]
+
+environment:
+    TARGET_SYSTEM: opensuse-tumbleweed-64-base
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        
+        # The following lines are needed to update zypper because last version breks
+        # with segmentation fault, and it is mostly happening when refreshing packages from
+        # Cloud_Tools repository.
+        distro_install_package curl zypper
+        distro_purge_package exim
+        zypper dup -y --allow-downgrade --force-resolution -r Cloud_Tools
+
+        distro_upgrade_packages
+        install_test_dependencies "$TARGET_SYSTEM"
+        remove_pkg_blacklist
+        REBOOT
+    fi
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"
+    delete_deprecated_images

@@ -369,6 +369,7 @@ pkg_dependencies_opensuse(){
     echo "
         git
         jq
+        rpm-build
         "
 }
 
