@@ -1,6 +1,6 @@
-summary: Update Ubuntu xenial/bionic 64 bits image with the latest updates and kvm enabled
+summary: Update Ubuntu xenial/bionic/focal 64 bits image with the latest updates and kvm enabled
 
-systems: [ubuntu-16.04-64-base, ubuntu-18.04-64-base]
+systems: [ubuntu-16.04-64-base, ubuntu-18.04-64-base, ubuntu-20.04-64-base]
 
 environment:
     LICENSES: https://www.googleapis.com/compute/v1/projects/vm-options/global/licenses/enable-vmx
@@ -12,6 +12,9 @@ execute: |
         ;;
         ubuntu-18.04-64*)
             TARGET_SYSTEM=ubuntu-18.04-64-virt-enabled
+        ;;
+        ubuntu-20.04-64*)
+            TARGET_SYSTEM=ubuntu-20.04-64-virt-enabled
         ;;
         *)
             echo "System not supported"
@@ -51,6 +54,9 @@ restore: |
         ;;
         ubuntu-18.04-64*)
             TARGET_SYSTEM=ubuntu-18.04-64-virt-enabled
+        ;;
+        ubuntu-20.04-64*)
+            TARGET_SYSTEM=ubuntu-20.04-64-virt-enabled
         ;;
         *)
             echo "System not supported"

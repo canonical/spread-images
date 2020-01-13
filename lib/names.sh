@@ -37,11 +37,6 @@ else
             FAMILY="ubuntu-1604-64-uefi-enabled"
             DESCRIPTION="Image with uefi enabled"
             ;;
-        ubuntu-16.04-64-nested)
-            IMAGE="ubuntu-1604-64-v$(date +'%Y%m%d')-nested"
-            FAMILY="ubuntu-1604-64-nested"
-            DESCRIPTION="Image with nested vm running"
-            ;;
         ubuntu-18.04-64)
             IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-1804-64"
@@ -57,11 +52,6 @@ else
             FAMILY="ubuntu-1804-64-uefi-enabled"
             DESCRIPTION="Image with uefi enabled"
             ;;
-        ubuntu-18.04-64-nested)
-            IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-nested"
-            FAMILY="ubuntu-1804-64-nested"
-            DESCRIPTION="Image with nested vm running"
-            ;;
         ubuntu-18.10-64)
             IMAGE="ubuntu-1810-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-1810-64"
@@ -76,6 +66,16 @@ else
             IMAGE="ubuntu-1910-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-1910-64"
             DESCRIPTION="Ubuntu 19.10 64 bits"
+            ;;
+        ubuntu-20.04-64)
+            IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-2004-64"
+            DESCRIPTION="Ubuntu 20.04 64 bits"
+            ;;
+        ubuntu-20.04-64-virt-enabled)
+            IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')-virt-enabled"
+            FAMILY="ubuntu-2004-64-virt-enabled"
+            DESCRIPTION="Image with virtualization enabled"
             ;;
         # Debian
         debian-9-64-base)
