@@ -1,9 +1,9 @@
-summary: Update Debian sid 64 bits image with the latest updates and test dependencies
+summary: Update Debian sid 64 bits base image with the latest updates and test dependencies
 
 systems: [debian-sid-64-base]
 
 environment:
-    TARGET_SYSTEM: debian-sid-64
+    TARGET_SYSTEM: debian-sid-64-base
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -12,19 +12,11 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
-
-        # Install/remove needed packages
-        distro_install_package eatmydata
-        distro_upgrade_packages
-        install_test_dependencies "$TARGET_SYSTEM"
+        apt --fix-broken dist-upgrade -y
         remove_pkg_blacklist
         REBOOT
     fi
-
-    # Disable the service because sometimes is failing
-    systemctl disable --now fwupd.service fwupd-refresh.service fwupd-refresh.timer
 
     # Clean disk before create the shapshot
     clean_machine

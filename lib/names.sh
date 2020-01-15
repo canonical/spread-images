@@ -52,6 +52,11 @@ else
             FAMILY="ubuntu-1804-64-uefi-enabled"
             DESCRIPTION="Image with uefi enabled"
             ;;
+        ubuntu-18.04-64-virt-uefi-enabled)
+            IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-virt-uefi-enabled"
+            FAMILY="ubuntu-1804-64-virt-uefi-enabled"
+            DESCRIPTION="Image with virtualization and uefi enabled"
+            ;;
         ubuntu-18.10-64)
             IMAGE="ubuntu-1810-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-1810-64"
@@ -72,10 +77,20 @@ else
             FAMILY="ubuntu-2004-64"
             DESCRIPTION="Ubuntu 20.04 64 bits"
             ;;
+        ubuntu-20.04-64-uefi-enabled)
+            IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')-uefi-enabled"
+            FAMILY="ubuntu-2004-64-uefi-enabled"
+            DESCRIPTION="Image with uefi enabled"
+            ;;
         ubuntu-20.04-64-virt-enabled)
             IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')-virt-enabled"
             FAMILY="ubuntu-2004-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
+            ;;
+        ubuntu-20.04-64-virt-uefi-enabled)
+            IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')-virt-uefi-enabled"
+            FAMILY="ubuntu-2004-64-virt-uefi-enabled"
+            DESCRIPTION="Image with virtualization and uefi enabled"
             ;;
         # Debian
         debian-9-64-base)
