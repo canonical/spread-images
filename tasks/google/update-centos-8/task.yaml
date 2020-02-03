@@ -20,7 +20,6 @@ execute: |
         # is enabled in snapd test suite
         #install_test_dependencies "$TARGET_SYSTEM"
 
-        distro_install_package
         remove_pkg_blacklist
         REBOOT
     fi
