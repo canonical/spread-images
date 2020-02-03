@@ -254,6 +254,17 @@ else
             FAMILY="centos-7-64"
             DESCRIPTION="Centos 7 64 bits"
             ;;
+        # Centos 8
+        centos-8-64-base)
+            IMAGE="centos-8-64-base-v$(date +'%Y%m%d')"
+            FAMILY="centos-8-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        centos-8-64)
+            IMAGE="centos-8-64-v$(date +'%Y%m%d')"
+            FAMILY="centos-8-64"
+            DESCRIPTION="Centos 8 64 bits"
+            ;;
         *)
             echo "ERROR: Unsupported distribution '$TARGET_SYSTEM'"
             exit 1

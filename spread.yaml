@@ -53,6 +53,8 @@ backends:
                 image: ubuntu-1910-64
             - ubuntu-20.04-64-base:
                 image: ubuntu-os-cloud-devel/ubuntu-2004-lts
+            - ubuntu-20.04-64:
+                image: ubuntu-2004-64
             - ubuntu-20.04-64-uefi-enabled:
                 image: ubuntu-2004-64-uefi-enabled
             - ubuntu-20.04-64-virt-uefi-enabled:
@@ -133,6 +135,10 @@ backends:
                 image: centos-cloud/centos-7
             - centos-7-64:
                 image: centos-7-64
+            - centos-8-64-base:
+                image: centos-cloud/centos-8
+            - centos-8-64:
+                image: centos-8-64
 
 path: /root/spread
 

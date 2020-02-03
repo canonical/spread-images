@@ -204,6 +204,12 @@ get_env_for_task_google() {
             RUN_SNAPD=true
             TEST_WORKERS=12
             ;;
+        update-centos-8)
+            SOURCE_SYSTEM=centos-8-64-base
+            TARGET_SYSTEM=centos-8-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
         update-debian-9)
             SOURCE_SYSTEM=debian-9-64-base
             TARGET_SYSTEM=debian-9-64
@@ -309,6 +315,12 @@ get_env_for_task_google() {
         update-ubuntu-19.10-64)
             SOURCE_SYSTEM=ubuntu-19.10-64-base
             TARGET_SYSTEM=ubuntu-19.10-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
+        update-ubuntu-20.04-64)
+            SOURCE_SYSTEM=ubuntu-20.04-64-base
+            TARGET_SYSTEM=ubuntu-20.04-64
             RUN_SNAPD=true
             TEST_WORKERS=12
             ;;

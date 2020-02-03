@@ -1,0 +1,42 @@
+summary: Update centos 8 image in google account and install test dependencies
+
+systems: [centos-8-64-base]
+
+environment:
+    TARGET_SYSTEM: centos-8-64
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade
+        distro_update_package_db
+        distro_upgrade_packages
+
+        # The dependencies are not installed until the system
+        # is enabled in snapd test suite
+        #install_test_dependencies "$TARGET_SYSTEM"
+
+        distro_install_package
+        remove_pkg_blacklist
+        REBOOT
+    fi
+
+    # Set selinux as permissive
+    sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"
+    delete_deprecated_images
