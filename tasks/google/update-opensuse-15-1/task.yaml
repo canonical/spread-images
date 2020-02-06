@@ -1,0 +1,59 @@
+summary: Update opensuse 15.1 64 bits image with the latest updates and test dependencies
+
+systems: [opensuse-15.1-64-base]
+
+environment:
+    TARGET_SYSTEM: opensuse-15.1-64
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        distro_upgrade_packages
+        install_test_dependencies "$TARGET_SYSTEM"
+        remove_pkg_blacklist
+
+        REBOOT
+    fi
+
+    # Create systemd unit to restart the failing service
+    tee /usr/lib/systemd/system/systemd-vconsole-setup-rexec.service << EOF
+    [Unit]
+    Description=Setup Virtual Console Reexecution
+    After=local-fs.target network-online.target network.target rsyslog.service
+    After=google-instance-setup.service
+    Wants=local-fs.target network-online.target network.target
+    Requires=network.target
+    PartOf=network.service
+    ConditionPathExists=/dev/tty0
+
+    [Service]
+    Type=simple
+    Restart=on-failure
+    RestartSec=5
+    ExecStart=/usr/bin/systemctl restart systemd-vconsole-setup.service
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+
+    systemctl daemon-reload
+    systemctl enable systemd-vconsole-setup-rexec.service
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"
+    delete_deprecated_images

@@ -1,6 +1,6 @@
 summary: Add fedora image with the latest updates with selinux permissive
 
-systems: [fedora-29-64-base]
+systems: [fedora-29-64-base, fedora-30-64-base]
 
 environment:
     TARGET_SYSTEM: fedora-rawhide-64

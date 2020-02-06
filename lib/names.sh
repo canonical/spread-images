@@ -32,10 +32,10 @@ else
             FAMILY="ubuntu-1604-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
             ;;
-        ubuntu-16.04-64-nested)
-            IMAGE="ubuntu-1604-64-v$(date +'%Y%m%d')-nested"
-            FAMILY="ubuntu-1604-64-nested"
-            DESCRIPTION="Image with nested vm running"
+        ubuntu-16.04-64-uefi-enabled)
+            IMAGE="ubuntu-1604-64-v$(date +'%Y%m%d')-uefi-enabled"
+            FAMILY="ubuntu-1604-64-uefi-enabled"
+            DESCRIPTION="Image with uefi enabled"
             ;;
         ubuntu-18.04-64)
             IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')"
@@ -47,15 +47,55 @@ else
             FAMILY="ubuntu-1804-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
             ;;
-        ubuntu-18.04-64-nested)
-            IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-nested"
-            FAMILY="ubuntu-1804-64-nested"
-            DESCRIPTION="Image with nested vm running"
+        ubuntu-18.04-64-uefi-enabled)
+            IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-uefi-enabled"
+            FAMILY="ubuntu-1804-64-uefi-enabled"
+            DESCRIPTION="Image with uefi enabled"
+            ;;
+        ubuntu-18.04-64-virt-uefi-enabled)
+            IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-virt-uefi-enabled"
+            FAMILY="ubuntu-1804-64-virt-uefi-enabled"
+            DESCRIPTION="Image with virtualization and uefi enabled"
             ;;
         ubuntu-18.10-64)
             IMAGE="ubuntu-1810-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-1810-64"
             DESCRIPTION="Ubuntu 18.10 64 bits"
+            ;;
+        ubuntu-19.04-64)
+            IMAGE="ubuntu-1904-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-1904-64"
+            DESCRIPTION="Ubuntu 19.04 64 bits"
+            ;;
+        ubuntu-19.10-64)
+            IMAGE="ubuntu-1910-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-1910-64"
+            DESCRIPTION="Ubuntu 19.10 64 bits"
+            ;;
+        ubuntu-19.10-64-virt-enabled)
+            IMAGE="ubuntu-1910-64-v$(date +'%Y%m%d')-virt-enabled"
+            FAMILY="ubuntu-1910-64-virt-enabled"
+            DESCRIPTION="Image with virtualization enabled"
+            ;;
+        ubuntu-20.04-64)
+            IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-2004-64"
+            DESCRIPTION="Ubuntu 20.04 64 bits"
+            ;;
+        ubuntu-20.04-64-uefi-enabled)
+            IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')-uefi-enabled"
+            FAMILY="ubuntu-2004-64-uefi-enabled"
+            DESCRIPTION="Image with uefi enabled"
+            ;;
+        ubuntu-20.04-64-virt-enabled)
+            IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')-virt-enabled"
+            FAMILY="ubuntu-2004-64-virt-enabled"
+            DESCRIPTION="Image with virtualization enabled"
+            ;;
+        ubuntu-20.04-64-virt-uefi-enabled)
+            IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')-virt-uefi-enabled"
+            FAMILY="ubuntu-2004-64-virt-uefi-enabled"
+            DESCRIPTION="Image with virtualization and uefi enabled"
             ;;
         # Debian
         debian-9-64-base)
@@ -109,6 +149,26 @@ else
             FAMILY="fedora-29-64"
             DESCRIPTION="Fedora 29 64 bits with test dependencies"
             ;;
+        fedora-30-64-base)
+            IMAGE="fedora-30-64-base-v$(date +'%Y%m%d')"
+            FAMILY="fedora-30-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        fedora-30-64)
+            IMAGE="fedora-30-64-v$(date +'%Y%m%d')"
+            FAMILY="fedora-30-64"
+            DESCRIPTION="Fedora 30 64 bits with test dependencies"
+            ;;
+        fedora-31-64-base)
+            IMAGE="fedora-31-64-base-v$(date +'%Y%m%d')"
+            FAMILY="fedora-31-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        fedora-31-64)
+            IMAGE="fedora-31-64-v$(date +'%Y%m%d')"
+            FAMILY="fedora-31-64"
+            DESCRIPTION="Fedora 31 64 bits with test dependencies"
+            ;;
         fedora-rawhide-64)
             IMAGE="fedora-rawhide-64-v$(date +'%Y%m%d')"
             FAMILY="fedora-rawhide-64"
@@ -136,6 +196,16 @@ else
             IMAGE="opensuse-leap-15-0-64-v$(date +'%Y%m%d')"
             FAMILY="opensuse-leap-15-0-64"
             DESCRIPTION="Opensuse leap 15.0 64 bits with test dependencies"
+            ;;
+        opensuse-15.1-64-base)
+            IMAGE="opensuse-leap-15-1-64-base-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-leap-15-1-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        opensuse-15.1-64)
+            IMAGE="opensuse-leap-15-1-64-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-leap-15-1-64"
+            DESCRIPTION="Opensuse leap 15.1 64 bits with test dependencies"
             ;;
         opensuse-42.2-64-base)
             IMAGE="opensuse-leap-42-2-64-base-v$(date +'%Y%m%d')"
@@ -188,6 +258,17 @@ else
             IMAGE="centos-7-64-v$(date +'%Y%m%d')"
             FAMILY="centos-7-64"
             DESCRIPTION="Centos 7 64 bits"
+            ;;
+        # Centos 8
+        centos-8-64-base)
+            IMAGE="centos-8-64-base-v$(date +'%Y%m%d')"
+            FAMILY="centos-8-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        centos-8-64)
+            IMAGE="centos-8-64-v$(date +'%Y%m%d')"
+            FAMILY="centos-8-64"
+            DESCRIPTION="Centos 8 64 bits"
             ;;
         *)
             echo "ERROR: Unsupported distribution '$TARGET_SYSTEM'"

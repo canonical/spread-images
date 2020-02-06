@@ -1,6 +1,8 @@
 project: spread-images
 
 environment:
+    GOHOME: /home/gopath
+    GOPATH: $GOHOME
     PROJECT_PATH: /root/spread
     TESTSLIB: $PROJECT_PATH/lib
     TESTSFILES: $PROJECT_PATH/files
@@ -27,20 +29,38 @@ backends:
                 image: ubuntu-1604-64
             - ubuntu-16.04-64-virt-enabled:
                 image: ubuntu-1604-64-virt-enabled
-            - ubuntu-16.04-64-nested:
-                image: ubuntu-1604-64-nested
+            - ubuntu-16.04-64-uefi-enabled:
+                image: ubuntu-1604-64-uefi-enabled
             - ubuntu-18.04-64-base:
                 image: ubuntu-os-cloud/ubuntu-1804-lts
             - ubuntu-18.04-64:
                 image: ubuntu-1804-64
             - ubuntu-18.04-64-virt-enabled:
                 image: ubuntu-1804-64-virt-enabled
-            - ubuntu-18.04-64-nested:
-                image: ubuntu-1804-64-nested
+            - ubuntu-18.04-64-uefi-enabled:
+                image: ubuntu-1804-64-uefi-enabled
             - ubuntu-18.10-64-base:
                 image: ubuntu-os-cloud/ubuntu-1810
             - ubuntu-18.10-64:
                 image: ubuntu-1810-64
+            - ubuntu-19.04-64-base:
+                image: ubuntu-os-cloud/ubuntu-1904
+            - ubuntu-19.04-64:
+                image: ubuntu-1904-64
+            - ubuntu-19.10-64-base:
+                image: ubuntu-os-cloud/ubuntu-1910
+            - ubuntu-19.10-64:
+                image: ubuntu-1910-64
+            - ubuntu-19.10-64-virt-enabled:
+                image: ubuntu-1910-64-virt-enabled
+            - ubuntu-20.04-64-base:
+                image: ubuntu-os-cloud-devel/ubuntu-2004-lts
+            - ubuntu-20.04-64:
+                image: ubuntu-2004-64
+            - ubuntu-20.04-64-uefi-enabled:
+                image: ubuntu-2004-64-uefi-enabled
+            - ubuntu-20.04-64-virt-uefi-enabled:
+                image: ubuntu-2004-64-virt-uefi-enabled
 
             - debian-9-64-external:
                 image: debian-9-stretch
@@ -65,6 +85,14 @@ backends:
                 image: fedora-29-64-base
             - fedora-29-64:
                 image: fedora-29-64
+            - fedora-30-64-base:
+                image: fedora-30-64-base
+            - fedora-30-64:
+                image: fedora-30-64
+            - fedora-31-64-base:
+                image: fedora-31-64-base
+            - fedora-31-64:
+                image: fedora-31-64
             - fedora-rawhide-64:
                 image: fedora-rawhide-64
 
@@ -82,6 +110,12 @@ backends:
                 image: opensuse-leap-15-0-64-base
             - opensuse-15.0-64:
                 image: opensuse-leap-15-0-64
+            - opensuse-15.1-64-external:
+                image: opensuse-leap-15-1-v20190618
+            - opensuse-15.1-64-base:
+                image: opensuse-leap-15-1-64-base
+            - opensuse-15.1-64:
+                image: opensuse-leap-15-1-64
             - opensuse-tumbleweed-64-base:
                 image: opensuse-tumbleweed-64-base
             - opensuse-tumbleweed-64:
@@ -103,6 +137,10 @@ backends:
                 image: centos-cloud/centos-7
             - centos-7-64:
                 image: centos-7-64
+            - centos-8-64-base:
+                image: centos-cloud/centos-8
+            - centos-8-64:
+                image: centos-8-64
 
     testflinger:
         key: "$(HOST: echo $SPREAD_LP_KEY:-lp:sergio-j-cazzolato)"

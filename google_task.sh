@@ -133,6 +133,20 @@ get_google_backend() {
 
 }
 
+get_google_backend() {
+    local spread_yaml_dir=$1
+    local system=$2
+    if ( cd "$spread_yaml_dir" && "$SPREAD_DIR/spread" -list google:"$system"  >/dev/null 2>&1 ); then
+        echo google
+    elif ( cd "$spread_yaml_dir" && "$SPREAD_DIR/spread" -list google-unstable:"$system"  >/dev/null 2>&1 ); then
+        echo google-unstable
+    else
+        echo "System not included in any google backend, plase check spread.yaml"
+        exit 1
+    fi
+
+}
+
 get_env_for_task_google() {
     local task=$1    
     case "$task" in
@@ -167,6 +181,16 @@ get_env_for_task_google() {
             TARGET_SYSTEM=fedora-29-64-base
             RUN_SNAPD=false
             ;;
+        add-fedora-30-64)
+            SOURCE_SYSTEM=fedora-29-64
+            TARGET_SYSTEM=fedora-30-64-base
+            RUN_SNAPD=false
+            ;;
+        add-fedora-31-64)
+            SOURCE_SYSTEM=fedora-30-64
+            TARGET_SYSTEM=fedora-31-64-base
+            RUN_SNAPD=false
+            ;;
         add-opensuse-42-2-64)
             SOURCE_SYSTEM=ubuntu-16.04-64
             TARGET_SYSTEM=opensuse-42.2-64-base
@@ -192,6 +216,12 @@ get_env_for_task_google() {
         update-centos-7)
             SOURCE_SYSTEM=centos-7-64-base
             TARGET_SYSTEM=centos-7-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
+        update-centos-8)
+            SOURCE_SYSTEM=centos-8-64-base
+            TARGET_SYSTEM=centos-8-64
             RUN_SNAPD=true
             TEST_WORKERS=12
             ;;
@@ -225,6 +255,18 @@ get_env_for_task_google() {
             RUN_SNAPD=true
             TEST_WORKERS=12
             ;;
+        update-fedora-30-64)
+            SOURCE_SYSTEM=fedora-30-64-base
+            TARGET_SYSTEM=fedora-30-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
+        update-fedora-31-64)
+            SOURCE_SYSTEM=fedora-31-64-base
+            TARGET_SYSTEM=fedora-31-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
         update-opensuse-42-3)
             SOURCE_SYSTEM=opensuse-42.3-64-base
             TARGET_SYSTEM=opensuse-42.3-64
@@ -234,6 +276,12 @@ get_env_for_task_google() {
         update-opensuse-15-0)
             SOURCE_SYSTEM=opensuse-15.0-64-base
             TARGET_SYSTEM=opensuse-15.0-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
+        update-opensuse-15-1)
+            SOURCE_SYSTEM=opensuse-15.1-64-base
+            TARGET_SYSTEM=opensuse-15.1-64
             RUN_SNAPD=true
             TEST_WORKERS=12
             ;;
@@ -270,6 +318,24 @@ get_env_for_task_google() {
         update-ubuntu-18.10-64)
             SOURCE_SYSTEM=ubuntu-18.10-64-base
             TARGET_SYSTEM=ubuntu-18.10-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
+        update-ubuntu-19.04-64)
+            SOURCE_SYSTEM=ubuntu-19.04-64-base
+            TARGET_SYSTEM=ubuntu-19.04-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
+        update-ubuntu-19.10-64)
+            SOURCE_SYSTEM=ubuntu-19.10-64-base
+            TARGET_SYSTEM=ubuntu-19.10-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
+        update-ubuntu-20.04-64)
+            SOURCE_SYSTEM=ubuntu-20.04-64-base
+            TARGET_SYSTEM=ubuntu-20.04-64
             RUN_SNAPD=true
             TEST_WORKERS=12
             ;;

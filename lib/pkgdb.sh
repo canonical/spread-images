@@ -125,6 +125,28 @@ distro_install_google_compute_engine() {
     esac
 }
 
+distro_clean_old_packages() {
+    # Clean all the packages but the newest one
+    local pkg_filter=$1
+    local pkgs pkgs_array
+    case "$SPREAD_SYSTEM" in
+        ubuntu-*|debian-*)
+            echo "Not implemented for ubuntu/debian yet"
+            exit 1
+            ;;
+        fedora-*|opensuse-*|arch-*|amazon-*|centos-*)
+            pkgs=$(rpm -qa "$pkg_filter" --last | awk '{print $1}')
+            ;;
+    esac
+
+    if [ "$(echo "$pkgs" | wc -w)" -gt 1 ]; then
+        pkgs_list=$(echo $pkgs | cut -d' ' -f2-)
+        for pkg in $pkgs_list; do
+            distro_purge_package "$pkg"
+        done
+    fi
+}
+
 distro_install_package() {
     # Parse additional arguments; once we find the first unknown
     # part we break argument parsing and process all further
@@ -235,6 +257,8 @@ distro_update_package_db() {
             zypper --gpg-auto-import-keys refresh
             ;;
         arch-*)
+            # Refresh keys first to account for expired keys
+            pacman-key --refresh-keys
             pacman -Syq
             ;;
         amazon-*|centos-*)
@@ -345,6 +369,7 @@ pkg_dependencies_opensuse(){
     echo "
         git
         jq
+        rpm-build
         "
 }
 

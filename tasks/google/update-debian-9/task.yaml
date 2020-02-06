@@ -18,10 +18,12 @@ execute: |
         remove_pkg_blacklist
         install_test_dependencies "$TARGET_SYSTEM"
         distro_install_google_compute_engine
-        distro_clean_package_cache
 
         REBOOT
     fi
+
+    # Disable the service because sometimes is failing
+    systemctl disable --now fwupd.service
 
     # Clean disk before create the shapshot
     clean_machine

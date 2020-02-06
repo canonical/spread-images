@@ -1,0 +1,34 @@
+summary: Update Debian 9 64 bits base image with the latest updates
+
+systems: [debian-9-64-base]
+
+environment:
+    TARGET_SYSTEM: debian-9-64-base
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        distro_update_package_db
+        distro_upgrade_packages
+        remove_pkg_blacklist
+        distro_install_google_compute_engine
+
+        REBOOT
+    fi
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"
+    delete_deprecated_images

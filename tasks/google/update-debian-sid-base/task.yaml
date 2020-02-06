@@ -1,0 +1,32 @@
+summary: Update Debian sid 64 bits base image with the latest updates and test dependencies
+
+systems: [debian-sid-64-base]
+
+environment:
+    TARGET_SYSTEM: debian-sid-64-base
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        distro_update_package_db
+        apt --fix-broken dist-upgrade -y
+        remove_pkg_blacklist
+        REBOOT
+    fi
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"
+    delete_deprecated_images

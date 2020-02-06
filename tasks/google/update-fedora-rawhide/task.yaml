@@ -14,7 +14,6 @@ execute: |
     if [ "$SPREAD_REBOOT" = 0 ]; then
         distro_update_package_db
         distro_upgrade_packages
-        distro_clean_package_cache
 
         # Disable google-network-daemon service because it conflicts with spread ssh configuration during startup
         systemctl disable --now google-network-daemon.service || true
@@ -26,12 +25,9 @@ execute: |
         REBOOT
     fi
 
-    # Purge old kernel-core package
-    pkgs=$(rpm -qa kernel-core)
-    if [ $(echo "$pkgs" | wc -w) -gt 1 ]; then
-        pkg=$(echo $pkgs | cut --delimiter " " --fields 2)
-        distro_purge_package "$pkg"
-    fi
+    # Purge old kernel-core package and install kernel modules
+    distro_clean_old_packages kernel-core
+    distro_install_package kernel-modules
 
     # Clean disk before create the shapshot
     clean_machine
