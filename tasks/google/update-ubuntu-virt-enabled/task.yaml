@@ -1,6 +1,6 @@
 summary: Update Ubuntu xenial/bionic/focal 64 bits image with the latest updates and kvm enabled
 
-systems: [ubuntu-16.04-64-base, ubuntu-18.04-64-base, ubuntu-18.04-64-uefi-enabled, ubuntu-20.04-64-base, ubuntu-20.04-64-uefi-enabled]
+systems: [ubuntu-16.04-64-base, ubuntu-18.04-64-base, ubuntu-18.04-64-uefi-enabled, ubuntu-19.10-64-base, ubuntu-20.04-64-base, ubuntu-20.04-64-uefi-enabled]
 
 environment:
     LICENSES: https://www.googleapis.com/compute/v1/projects/vm-options/global/licenses/enable-vmx
@@ -15,6 +15,9 @@ execute: |
         ;;
         ubuntu-18.04-64*)
             TARGET_SYSTEM=ubuntu-18.04-64-virt-enabled
+        ;;
+        ubuntu-19.10-64*)
+            TARGET_SYSTEM=ubuntu-19.10-64-virt-enabled
         ;;
         ubuntu-20.04-64-uefi*)
             TARGET_SYSTEM=ubuntu-20.04-64-virt-uefi-enabled
@@ -63,6 +66,9 @@ restore: |
         ;;
         ubuntu-18.04-64*)
             TARGET_SYSTEM=ubuntu-18.04-64-virt-enabled
+        ;;
+        ubuntu-19.10-64*)
+            TARGET_SYSTEM=ubuntu-19.10-64-virt-enabled
         ;;
         ubuntu-20.04-64-uefi*)
             TARGET_SYSTEM=ubuntu-20.04-64-virt-uefi-enabled

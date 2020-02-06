@@ -51,6 +51,8 @@ backends:
                 image: ubuntu-os-cloud/ubuntu-1910
             - ubuntu-19.10-64:
                 image: ubuntu-1910-64
+            - ubuntu-19.10-64-virt-enabled:
+                image: ubuntu-1910-64-virt-enabled
             - ubuntu-20.04-64-base:
                 image: ubuntu-os-cloud-devel/ubuntu-2004-lts
             - ubuntu-20.04-64:

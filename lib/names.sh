@@ -72,6 +72,11 @@ else
             FAMILY="ubuntu-1910-64"
             DESCRIPTION="Ubuntu 19.10 64 bits"
             ;;
+        ubuntu-19.10-64-virt-enabled)
+            IMAGE="ubuntu-1910-64-v$(date +'%Y%m%d')-virt-enabled"
+            FAMILY="ubuntu-1910-64-virt-enabled"
+            DESCRIPTION="Image with virtualization enabled"
+            ;;
         ubuntu-20.04-64)
             IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-2004-64"
