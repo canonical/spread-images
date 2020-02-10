@@ -1,4 +1,4 @@
-    #!/bin/bash
+#!/bin/bash
 
 if [ ! -z "$TMP_IMAGE_ID" ]; then
     IMAGE="tmp-$TMP_IMAGE_ID"
@@ -6,7 +6,7 @@ if [ ! -z "$TMP_IMAGE_ID" ]; then
     DESCRIPTION="tmp-$TMP_IMAGE_ID"
 else
     case "$TARGET_SYSTEM" in
-    # Ubuntu
+        # Ubuntu
         ubuntu-14.04-64)
             IMAGE="ubuntu-1404-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-1404-64"
@@ -52,6 +52,11 @@ else
             FAMILY="ubuntu-1804-64-uefi-enabled"
             DESCRIPTION="Image with uefi enabled"
             ;;
+        ubuntu-18.04-64-tpm-enabled)
+            IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-tpm-enabled"
+            FAMILY="ubuntu-1804-64-tpm-enabled"
+            DESCRIPTION="Image with tpm enabled"
+            ;;        
         ubuntu-18.04-64-virt-uefi-enabled)
             IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')-virt-uefi-enabled"
             FAMILY="ubuntu-1804-64-virt-uefi-enabled"
@@ -77,6 +82,11 @@ else
             FAMILY="ubuntu-1910-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
             ;;
+        ubuntu-19.10-64-tpm-enabled)
+            IMAGE="ubuntu-1910-64-v$(date +'%Y%m%d')-tpm-enabled"
+            FAMILY="ubuntu-1910-64-tpm-enabled"
+            DESCRIPTION="Image with tpm enabled"
+            ;;  
         ubuntu-20.04-64)
             IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-2004-64"
@@ -87,6 +97,16 @@ else
             FAMILY="ubuntu-2004-64-uefi-enabled"
             DESCRIPTION="Image with uefi enabled"
             ;;
+        ubuntu-20.04-64-tpm-enabled-base)
+            IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')-tpm-enabled-base"
+            FAMILY="ubuntu-2004-64-tpm-enabled-base"
+            DESCRIPTION="Base image"
+            ;;  
+        ubuntu-20.04-64-tpm-enabled)
+            IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')-tpm-enabled"
+            FAMILY="ubuntu-2004-64-tpm-enabled"
+            DESCRIPTION="Image with tpm enabled"
+            ;;  
         ubuntu-20.04-64-virt-enabled)
             IMAGE="ubuntu-2004-64-v$(date +'%Y%m%d')-virt-enabled"
             FAMILY="ubuntu-2004-64-virt-enabled"

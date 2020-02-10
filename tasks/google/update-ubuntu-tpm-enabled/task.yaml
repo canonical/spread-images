@@ -1,0 +1,70 @@
+summary: Update Ubuntu bionic/eoan/focal 64 bits image with the latest updates and tpm enabled
+
+systems: [ubuntu-18.04-64-tpm-enabled-base, ubuntu-19.10-64-tpm-enabled-base, ubuntu-20.04-64-tpm-enabled-base]
+
+execute: |
+    case "$SPREAD_SYSTEM" in
+        ubuntu-18.04-64*)
+            TARGET_SYSTEM=ubuntu-18.04-64-tpm-enabled
+        ;;
+        ubuntu-19.10-64*)
+            TARGET_SYSTEM=ubuntu-19.10-64-tpm-enabled
+        ;;
+        ubuntu-20.04-64*)
+            TARGET_SYSTEM=ubuntu-20.04-64-tpm-enabled
+        ;;
+        *)
+            echo "System not supported"
+            exit 1
+        ;;
+    esac
+
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    rm -rf /root/spread
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        distro_upgrade_packages
+        remove_pkg_blacklist
+        REBOOT
+    fi
+
+    # Avoid checking for new release, it could cause lock on apt
+    sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
+
+    # Disable daily checks for updates to avoid apt locks
+    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk_with_os_features "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "UEFI_COMPATIBLE"
+
+restore: |
+    case "$SPREAD_SYSTEM" in
+        ubuntu-18.04-64*)
+            TARGET_SYSTEM=ubuntu-18.04-64-tpm-enabled
+        ;;
+        ubuntu-19.10-64*)
+            TARGET_SYSTEM=ubuntu-19.10-64-tpm-enabled
+        ;;
+        ubuntu-20.04-64*)
+            TARGET_SYSTEM=ubuntu-20.04-64-tpm-enabled
+        ;;
+        *)
+            echo "System not supported"
+            exit 1
+        ;;
+    esac
+
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"
+    delete_deprecated_images
