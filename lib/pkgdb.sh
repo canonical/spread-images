@@ -181,7 +181,7 @@ distro_install_package() {
             ;;
         fedora-*)
             # shellcheck disable=SC2086
-            dnf -y --refresh install $DNF_FLAGS "${pkg_names[@]}"
+            dnf -y --refresh --nogpgcheck install $DNF_FLAGS "${pkg_names[@]}"
             ;;
         opensuse-*)
             # shellcheck disable=SC2086
