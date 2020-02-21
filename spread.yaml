@@ -131,6 +131,8 @@ backends:
             - opensuse-tumbleweed-64:
                 image: opensuse-tumbleweed-64
 
+            - arch-linux-64-external:
+                image: cachio-cloud/arch-linux-64-base
             - arch-linux-64-base:
                 image: arch-linux-64-base
             - arch-linux-64:

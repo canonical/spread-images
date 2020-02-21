@@ -297,14 +297,7 @@ else
     esac
 fi
 
-case "$SPREAD_SYSTEM" in
-    arch-*)
-        DISK="$(dhcpcd -T | sed -n 's/new_host_name=\(.*\).c.computeengine.internal/\1/gp')"
-        ;;
-    *)
-        DISK="$(hostname)"
-        ;;
-esac
+DISK="$(hostname)"
 
 export IMAGE
 export FAMILY

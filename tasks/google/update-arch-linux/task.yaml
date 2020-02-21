@@ -12,18 +12,6 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # remove the user account that was present in the base image
-        userdel -r -f alrii14344 || true
-
-        # Fix shadow.service by creating missing home dirs for users
-        if [ ! -d /home/user ]; then
-            mkdir -p /home/user
-            chown -R user:user /home/user
-            mkdir -p /home/guest
-            chown -R guest:guest /home/guest
-            systemctl restart shadow.service
-        fi
-
         # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
@@ -37,23 +25,6 @@ execute: |
 
         REBOOT
     fi
-
-    # Install the new version os gce packages    
-    curl -L -o /tmp/pkgbuilds.tar.gz https://github.com/bboozzoo/pkgbuilds/archive/master.tar.gz
-    tar -C /tmp/ -xvf /tmp/pkgbuilds.tar.gz
-    cd /tmp/pkgbuilds-master/google-compute-engine
-
-    useradd -p ubuntu test
-    chown test:test /tmp/pkgbuilds-master/google-compute-engine
-    su -c 'makepkg' test
-    distro_purge_package gce-compute-image-packages
-    pacman --noconfirm -U /tmp/pkgbuilds-master/google-compute-engine/*.pkg.tar.xz
-    userdel test
-    rm -rf /tmp/pkgbuilds-master/
-
-    #distro_install_google_compute_engine
-    # Disable google-shutdown-scripts service because it hungs during reboot
-    systemctl disable --now google-shutdown-scripts.service
 
     # Enable apparmor
     if ! MATCH "apparmor=1" < /etc/default/grub; then

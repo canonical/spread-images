@@ -46,7 +46,7 @@ delete_image(){
 
 get_latest_image_name(){
     local FAMILY=$1
-    echo $(gcloud compute images describe-from-family "$FAMILY" --project "$GCE_PROJECT" --format json | jq -r '.name')
+    echo $(gcloud compute images describe-from-family "$FAMILY" --project "$GCE_PROJECT" --format json 2>/dev/null | jq -r '.name')
 }
 
 
@@ -125,7 +125,9 @@ create_image_from_disk(){
     create_snapshot_from_disk "$DISK"
     delete_image "$IMAGE" "$FAMILY"
     create_image_from_snapshot "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
-    deprecate_old_images "$FAMILY" "$latest_image_name"
+    if [ -n "$latest_image_name" ]; then
+        deprecate_old_images "$FAMILY" "$latest_image_name"
+    fi
 }
 
 create_image_from_disk_with_licences(){
@@ -139,7 +141,9 @@ create_image_from_disk_with_licences(){
     create_snapshot_from_disk "$DISK"
     delete_image "$IMAGE" "$FAMILY"
     create_image_from_snapshot_with_licenses "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "$LICENSES"
-    deprecate_old_images "$FAMILY" "$latest_image_name"
+    if [ -n "$latest_image_name" ]; then
+        deprecate_old_images "$FAMILY" "$latest_image_name"
+    fi
 }
 
 create_image_from_disk_with_os_features(){
@@ -153,7 +157,9 @@ create_image_from_disk_with_os_features(){
     create_snapshot_from_disk "$DISK"
     delete_image "$IMAGE" "$FAMILY"
     create_image_from_snapshot_with_os_features "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "$OS_FEATURES"
-    deprecate_old_images "$FAMILY" "$latest_image_name"
+    if [ -n "$latest_image_name" ]; then
+        deprecate_old_images "$FAMILY" "$latest_image_name"
+    fi
 }
 
 create_image_from_image(){
@@ -165,7 +171,9 @@ create_image_from_image(){
     local latest_image_name=$(get_latest_image_name "$FAMILY")
     delete_image "$IMAGE" "$FAMILY"
     gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-image "$SOURCE_IMAGE"
-    deprecate_old_images "$FAMILY" "$latest_image_name"
+    if [ -n "$latest_image_name" ]; then
+        deprecate_old_images "$FAMILY" "$latest_image_name"
+    fi
 }
 
 delete_latest_image_from_family(){

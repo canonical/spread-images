@@ -16,8 +16,10 @@ execute: |
         distro_update_package_db
         distro_upgrade_packages
 
-        install_test_dependencies "$TARGET_SYSTEM"
         distro_install_package epel-release
+        # The dependencies are not installed until the system
+        # is enabled in snapd test suite
+        # install_test_dependencies "$TARGET_SYSTEM"
 
         remove_pkg_blacklist
         REBOOT
