@@ -288,7 +288,7 @@ distro_upgrade_packages() {
             pacman --needed --noconfirm -Syu
             ;;
         amazon-*|centos-*)
-            yum -y update
+            yum update -y --skip-broken
             ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"

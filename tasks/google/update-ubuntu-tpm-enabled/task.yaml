@@ -1,6 +1,6 @@
 summary: Update Ubuntu bionic/eoan/focal 64 bits image with the latest updates and tpm enabled
 
-systems: [ubuntu-18.04-64-tpm-enabled-base, ubuntu-19.10-64-tpm-enabled-base, ubuntu-20.04-64-tpm-enabled-base]
+systems: [ubuntu-18.04-64-tpm-enabled, ubuntu-19.10-64-tpm-enabled, ubuntu-20.04-64-tpm-enabled]
 
 execute: |
     case "$SPREAD_SYSTEM" in
@@ -24,13 +24,11 @@ execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
-    rm -rf /root/spread
-
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
-        distro_upgrade_packages
-        remove_pkg_blacklist
+        apt-get upgrade -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold'
+        #distro_upgrade_packages
         REBOOT
     fi
 
@@ -44,7 +42,7 @@ execute: |
     clean_machine
 
     # Create a new image based on the current disk
-    create_image_from_disk_with_os_features "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "UEFI_COMPATIBLE"
+    create_image_from_disk_with_os_features "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "SECURE_BOOT"
 
 restore: |
     case "$SPREAD_SYSTEM" in

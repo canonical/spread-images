@@ -69,6 +69,8 @@ backends:
                 image: ubuntu-2004-64-uefi-enabled
             - ubuntu-20.04-64-virt-uefi-enabled:
                 image: ubuntu-2004-64-virt-uefi-enabled
+            - ubuntu-20.04-64-virt-enabled:
+                image: ubuntu-2004-64-virt-enabled
             - ubuntu-20.04-64-tpm-enabled:
                 image: ubuntu-2004-64-tpm-enabled
 
@@ -153,6 +155,26 @@ backends:
                 image: centos-cloud/centos-8
             - centos-8-64:
                 image: centos-8-64
+
+    google-nested:
+        type: google
+        key: '$(HOST: echo "$SPREAD_GOOGLE_KEY")'
+        location: computeengine/us-east1-b
+        plan: n1-standard-2
+        halt-timeout: 2h
+        systems:
+            - ubuntu-16.04-64:
+                image: ubuntu-1604-64-virt-enabled
+                storage: 20G
+                workers: 1
+            - ubuntu-18.04-64:
+                image: ubuntu-1804-64-virt-enabled
+                storage: 20G
+                workers: 1
+            - ubuntu-20.04-64:
+                image: ubuntu-2004-64-virt-enabled
+                storage: 20G
+                workers: 1
 
 path: /root/spread
 
