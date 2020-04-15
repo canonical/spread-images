@@ -149,12 +149,16 @@ backends:
 
             - centos-7-64-base:
                 image: centos-cloud/centos-7
+                storage: preserve-size
             - centos-7-64:
                 image: centos-7-64
+                storage: preserve-size
             - centos-8-64-base:
                 image: centos-cloud/centos-8
+                storage: preserve-size
             - centos-8-64:
                 image: centos-8-64
+                storage: preserve-size
 
     google-nested:
         type: google

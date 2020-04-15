@@ -103,6 +103,9 @@ distro_install_google_compute_engine() {
 
             distro_purge_package gce-compute-image-packages
 
+            if ! $(id user); then
+                useradd -m user
+            fi
             su -c 'cd /tmp && curl https://aur.archlinux.org/cgit/aur.git/snapshot/google-compute-engine.tar.gz | tar zxvf - && cd google-compute-engine && makepkg --syncdeps --noconfirm' - user
             pkgfiles=$(find /tmp/google-compute-engine -name '*.pkg.tar.xz')
             for pkg in $pkgfiles; do
@@ -203,19 +206,6 @@ distro_install_package() {
 }
 
 distro_purge_package() {
-    # shellcheck disable=SC2046
-    set -- $(
-        for pkg in "$@" ; do
-            package_name=$(distro_name_package "$pkg")
-            # When we could not find a different package name for the distribution
-            # we're running on we try the package name given as last attempt
-            if [ -z "$package_name" ]; then
-                package_name="$pkg"
-            fi
-            echo "$package_name"
-        done
-        )
-
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
             apt-get remove -y --purge "$@" || true
@@ -374,6 +364,7 @@ pkg_dependencies_opensuse(){
 
 pkg_dependencies_arch(){
     echo "
+        base-devel
         git
         jq
         python2

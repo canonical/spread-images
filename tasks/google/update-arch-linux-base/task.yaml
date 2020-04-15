@@ -12,6 +12,11 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Updating the pacman database
+        sed -i 's/^Server = http:\/\/www.caco.ic.unicamp.br/#Server = http:\/\/www.caco.ic.unicamp.br/g' /etc/pacman.d/mirrorlist
+        sed -i 's/^Server = https:\/\/www.caco.ic.unicamp.br/#Server = https:\/\/www.caco.ic.unicamp.br/g' /etc/pacman.d/mirrorlist
+        sudo pacman -Syy
+
         # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
