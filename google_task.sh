@@ -219,8 +219,7 @@ get_env_for_task_google() {
         update-debian-sid)
             SOURCE_SYSTEM=debian-sid-64-base
             TARGET_SYSTEM=debian-sid-64
-            RUN_SNAPD=true
-            TEST_WORKERS=12
+            RUN_SNAPD=false
             ;;
         update-fedora-27-64)
             SOURCE_SYSTEM=fedora-27-64-base
@@ -279,8 +278,7 @@ get_env_for_task_google() {
         update-opensuse-tumbleweed)
             SOURCE_SYSTEM=opensuse-tumbleweed-64-base
             TARGET_SYSTEM=opensuse-tumbleweed-64
-            RUN_SNAPD=true
-            TEST_WORKERS=12
+            RUN_SNAPD=false
             ;;
         update-ubuntu-14.04-64)
             SOURCE_SYSTEM=ubuntu-14.04-64-base
