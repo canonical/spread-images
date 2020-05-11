@@ -472,7 +472,6 @@ install_pkg_dependencies(){
 install_test_dependencies(){
     local TARGET="$1"
     git clone https://github.com/snapcore/snapd.git snapd-master
-    sed -i 's/distro_install_package $pkgs/distro_install_package --no-install-recommends $pkgs/g' snapd-master/tests/lib/pkgdb.sh
     TESTSLIB=./snapd-master/tests/lib . snapd-master/tests/lib/pkgdb.sh
     TESTSLIB=./snapd-master/tests/lib SPREAD_SYSTEM="$TARGET" install_pkg_dependencies
     rm -rf snapd-master

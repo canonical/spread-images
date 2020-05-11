@@ -12,7 +12,6 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-
         # Prepare kernel 4.15 to run in bionic
         apt install -y linux-headers-4.15.0-1006-gcp
         apt install -y linux-headers-4.15.0-22-generic
@@ -20,11 +19,16 @@ execute: |
         apt remove -y linux-headers-5.*
         apt remove -y linux-image-5.*
 
+        REBOOT
+    fi
+
+    if [ "$SPREAD_REBOOT" = 1 ]; then
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
+
         REBOOT
     fi
 

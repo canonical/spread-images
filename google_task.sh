@@ -255,7 +255,6 @@ get_env_for_task_google() {
             SOURCE_SYSTEM=fedora-rawhide-64
             TARGET_SYSTEM=fedora-rawhide-64
             RUN_SNAPD=false
-            TEST_WORKERS=12
             ;;
         update-opensuse-42-3)
             SOURCE_SYSTEM=opensuse-42.3-64-base
