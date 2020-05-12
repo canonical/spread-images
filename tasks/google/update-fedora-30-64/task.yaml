@@ -41,7 +41,7 @@ execute: |
     clean_machine
 
     # Create a new image based on the current disk
-    create_image_from_disk "test-fedora-1" "test-fedora-1" "test-fedora-1" "$DISK"
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
 
 restore: |
     . "$TESTSLIB/google.sh"
