@@ -1,9 +1,9 @@
-summary: Update opensuse tumbleweed base image with the latest updates
+summary: Update fedora base image with the latest updates
 
-systems: [opensuse-tumbleweed-64-base]
+systems: [fedora-32-64-base]
 
 environment:
-    TARGET_SYSTEM: opensuse-tumbleweed-64-base
+    TARGET_SYSTEM: fedora-32-64-base
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -12,13 +12,18 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
-        
         distro_upgrade_packages
-        remove_pkg_blacklist
+
         REBOOT
     fi
+
+    # Purge old kernel-core package and install kernel modules
+    distro_clean_old_packages kernel-core
+    distro_install_package kernel-modules
+
+    # Purge conflicting packages
+    distro_purge_package whois-mkpasswd
 
     # Clean disk before create the shapshot
     clean_machine

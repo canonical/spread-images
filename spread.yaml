@@ -105,6 +105,10 @@ backends:
                 image: fedora-31-64-base
             - fedora-31-64:
                 image: fedora-31-64
+            - fedora-32-64-base:
+                image: fedora-32-64-base
+            - fedora-32-64:
+                image: fedora-32-64
             - fedora-rawhide-64:
                 image: fedora-rawhide-64
 
@@ -200,5 +204,5 @@ suites:
             fi
             distro_initial_repo_setup
             distro_update_package_db
-            install_pkg_dependencies
+            #install_pkg_dependencies
             gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"

@@ -251,6 +251,12 @@ get_env_for_task_google() {
             RUN_SNAPD=true
             TEST_WORKERS=12
             ;;
+        update-fedora-32-64)
+            SOURCE_SYSTEM=fedora-32-64-base
+            TARGET_SYSTEM=fedora-32-64
+            RUN_SNAPD=true
+            TEST_WORKERS=12
+            ;;
         update-fedora-rawhide-64)
             SOURCE_SYSTEM=fedora-rawhide-64
             TARGET_SYSTEM=fedora-rawhide-64
