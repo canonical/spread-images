@@ -103,7 +103,7 @@ distro_install_google_compute_engine() {
 
             distro_purge_package gce-compute-image-packages
 
-            if ! $(id user); then
+            if ! id user >/dev/null 2>&1; then
                 useradd -m user
             fi
             su -c 'cd /tmp && curl https://aur.archlinux.org/cgit/aur.git/snapshot/google-compute-engine.tar.gz | tar zxvf - && cd google-compute-engine && makepkg --syncdeps --noconfirm' - user
