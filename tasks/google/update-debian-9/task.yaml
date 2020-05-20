@@ -29,7 +29,7 @@ execute: |
     clean_machine
 
     # Create a new image based on the current disk
-    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+    create_image_from_disk_with_os_features "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "UEFI_COMPATIBLE"
 
 restore: |
     . "$TESTSLIB/google.sh"
