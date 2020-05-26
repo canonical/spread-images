@@ -15,6 +15,8 @@ execute: |
         distro_update_package_db
         distro_upgrade_packages
         remove_pkg_blacklist
+
+        distro_purge_package google-compute-engine
         distro_install_google_compute_engine
 
         REBOOT
@@ -24,7 +26,7 @@ execute: |
     clean_machine
 
     # Create a new image based on the current disk
-    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+    create_image_from_disk_with_os_features "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "UEFI_COMPATIBLE"
 
 restore: |
     . "$TESTSLIB/google.sh"

@@ -27,12 +27,27 @@ execute: |
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
 
+        # Fedora 32 is using a non authselect setup by default now.
+        dnf install authselect -y
+        authselect select minimal --force
+
+        # Disable cloud init because 32 cloud-init fails on start making fail the services:
+        # 1. cloud-config.service
+        # 2. cloud-final.service
+        # 3. cloud-init-local.service
+        # 4. cloud-init.service
+        touch /etc/cloud/cloud-init.disabled
+
         REBOOT
     fi
 
-    # Purge old kernel-core package and install kernel modules
-    distro_clean_old_packages kernel-core
-    distro_install_package kernel-modules
+    if [ "$SPREAD_REBOOT" = 1 ]; then
+        # Purge old kernel-core package and install kernel modules
+        distro_clean_old_packages kernel-core 
+        distro_install_package kernel-modules
+
+        REBOOT
+    fi
 
     # Set selinux as permissive
     sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
@@ -41,7 +56,7 @@ execute: |
     clean_machine
 
     # Create a new image based on the current disk
-    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+    create_image_from_disk_with_os_features "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "UEFI_COMPATIBLE"
 
 restore: |
     . "$TESTSLIB/google.sh"

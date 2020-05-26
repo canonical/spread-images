@@ -1,10 +1,9 @@
-summary: Update opensuse 15.1 64 bits image with the latest updates
+summary: Update amazon linux 2 base image in google account
 
-systems: [opensuse-15.1-64-base]
+systems: [amazon-linux-2-64-base]
 
 environment:
-    TARGET_SYSTEM: opensuse-15.1-64-base
-
+    TARGET_SYSTEM: amazon-linux-2-64-base
 execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/names.sh"
@@ -12,9 +11,11 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Make the upgrade and install the dependencies needed to run snapd tests
+        # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
+        remove_pkg_blacklist
+        REBOOT
     fi
 
     # Clean disk before create the shapshot
