@@ -286,7 +286,7 @@ get_env_for_task_google() {
             RUN_SNAPD=false
             ;;
         update-ubuntu-14.04-64)
-            SOURCE_SYSTEM=ubuntu-14.04-64-base
+            SOURCE_SYSTEM=ubuntu-14.04-64
             TARGET_SYSTEM=ubuntu-14.04-64
             RUN_SNAPD=true
             TEST_WORKERS=12
