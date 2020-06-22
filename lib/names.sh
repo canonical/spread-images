@@ -307,7 +307,7 @@ else
     esac
 fi
 
-DISK="$(hostname)"
+DISK="$(curl http://metadata.google.internal/computeMetadata/v1/instance/hostname -H Metadata-Flavor:Google | cut -d . -f1)"
 
 export IMAGE
 export FAMILY
