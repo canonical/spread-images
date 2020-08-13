@@ -24,7 +24,8 @@ run_spread_images() {
     local task=$1
     get_env_for_task_google "$task"
 
-    if ! run_spread_images_task google "$SOURCE_SYSTEM" "$task" "$RUN_SNAPD"; then
+    local backend="$(get_google_backend $SPREAD_IMAGES_DIR $SOURCE_SYSTEM)"
+    if ! run_spread_images_task "$backend" "$SOURCE_SYSTEM" "$task" "$RUN_SNAPD"; then
         echo "image task failed"
         exit 1
     fi
@@ -116,6 +117,20 @@ get_spread() {
         ( cd "$SPREAD_DIR" && curl -s -O https://niemeyer.s3.amazonaws.com/spread-amd64.tar.gz && tar xzvf spread-amd64.tar.gz ) 
         echo "Spread downloaded and ready to use"
     fi
+}
+
+get_google_backend() {
+    local spread_yaml_dir=$1
+    local system=$2
+    if ( cd "$spread_yaml_dir" && "$SPREAD_DIR/spread" -list google:"$system" >& /dev/null ); then
+        echo google
+    elif ( cd "$spread_yaml_dir" && "$SPREAD_DIR/spread" -list google-unstable:"$system" >& /dev/null ); then
+        echo google-unstable
+    else
+        echo "System not included in any google backend, plase check spread.yaml"
+        exit 1
+    fi
+
 }
 
 get_google_backend() {
