@@ -16,9 +16,16 @@ execute: |
         distro_update_package_db
         
         distro_upgrade_packages
+
         remove_pkg_blacklist
         REBOOT
     fi
+
+    exit 1
+    # Make sure we have google-compute-engine installed
+    distro_purge_package google-guest-configs
+    distro_install_package google-compute-engine-init
+
 
     # Clean disk before create the shapshot
     clean_machine

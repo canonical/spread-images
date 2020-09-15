@@ -117,6 +117,16 @@ else
             FAMILY="ubuntu-2004-64-virt-uefi-enabled"
             DESCRIPTION="Image with virtualization and uefi enabled"
             ;;
+        ubuntu-20.10-64)
+            IMAGE="ubuntu-2010-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-2010-64"
+            DESCRIPTION="Ubuntu 20.10 64 bits"
+            ;;
+        ubuntu-20.10-64-virt-enabled)
+            IMAGE="ubuntu-2010-64-v$(date +'%Y%m%d')-virt-enabled"
+            FAMILY="ubuntu-2010-64-virt-enabled"
+            DESCRIPTION="Image with virtualization enabled"
+            ;;
         # Debian
         debian-9-64-base)
             IMAGE="debian-9-64-base-v$(date +'%Y%m%d')"
@@ -236,6 +246,16 @@ else
             IMAGE="opensuse-leap-15-1-64-v$(date +'%Y%m%d')"
             FAMILY="opensuse-leap-15-1-64"
             DESCRIPTION="Opensuse leap 15.1 64 bits with test dependencies"
+            ;;
+        opensuse-15.2-64-base)
+            IMAGE="opensuse-leap-15-2-64-base-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-leap-15-2-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        opensuse-15.2-64)
+            IMAGE="opensuse-leap-15-2-64-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-leap-15-2-64"
+            DESCRIPTION="Opensuse leap 15.2 64 bits with test dependencies"
             ;;
         opensuse-42.2-64-base)
             IMAGE="opensuse-leap-42-2-64-base-v$(date +'%Y%m%d')"

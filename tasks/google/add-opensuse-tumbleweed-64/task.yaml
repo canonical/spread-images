@@ -1,6 +1,6 @@
 summary: Add opensuse tumbleweed base image with the latest updates
 
-systems: [opensuse-15.1-64-base]
+systems: [opensuse-15.2-64-base]
 
 environment:
     TARGET_SYSTEM: opensuse-tumbleweed-64-base
@@ -23,10 +23,12 @@ execute: |
         zypper ar -f -c http://download.opensuse.org/update/tumbleweed/ repo-update
 
         zypper addrepo https://download.opensuse.org/repositories/Cloud:Tools/openSUSE_Tumbleweed/Cloud:Tools.repo
-    
+
         # Make the upgrade and install the dependencies needed to run snapd tests
         zypper --gpg-auto-import-keys refresh
-        zypper --gpg-auto-import-keys dup -y
+
+        distro_install_package google-guest-agent
+        zypper --gpg-auto-import-keys dup -y || true
         remove_pkg_blacklist
         distro_clean_package_cache
 
