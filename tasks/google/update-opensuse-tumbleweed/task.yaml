@@ -14,22 +14,10 @@ execute: |
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
-        #distro_upgrade_packages
+        distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
 
-        # Make sure we install the 5.3.18-lp152.19.2 kernel to prevent deadlock doing govendor sync
-        # Bug associated https://bugzilla.kernel.org/show_bug.cgi?id=203317
-        prefered_kernel="$(rpm -qa kernel-default | grep kernel-default-5.3.18)"
-        if [ -z "$prefered_kernel" ]; then
-            echo "Needed 5.3.18 kernel not available, exiting..."
-            exit 1
-        fi
-        grub2-set-default 'gnulinux-5.3.18-lp152.19-default-advanced-5a843a8f-5dd4-4356-aad3-7838c6c27965'
-        for kernel in $(rpm -qa kernel-default | grep -v kernel-default-5.3.18); do
-            rpm -e "$kernel"
-        done
-        grub2-mkconfig -o /boot/grub2/grub.cfg
         REBOOT
     fi
 
