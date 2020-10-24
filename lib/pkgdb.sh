@@ -272,6 +272,7 @@ distro_upgrade_packages() {
             ;;
         opensuse-*)
             zypper dup -y --allow-downgrade --force-resolution
+            zypper dist-upgrade -y
             ;;
         arch-*)
             pacman --needed --noconfirm -Syu
