@@ -74,7 +74,9 @@ backends:
             - ubuntu-20.04-64-tpm-enabled:
                 image: ubuntu-2004-64-tpm-enabled
             - ubuntu-20.10-64-base:
-                image: ubuntu-os-cloud-devel/ubuntu-2010
+                image: ubuntu-os-cloud/ubuntu-2010
+            - ubuntu-20.10-64:
+                image: ubuntu-2010-64
 
             - debian-9-64-external:
                 image: debian-9-stretch
@@ -111,6 +113,10 @@ backends:
                 image: fedora-32-64-base
             - fedora-32-64:
                 image: fedora-32-64
+            - fedora-33-64-base:
+                image: fedora-33-64-base
+            - fedora-33-64:
+                image: fedora-33-64
             - fedora-rawhide-64:
                 image: fedora-rawhide-64
 
