@@ -280,7 +280,7 @@ get_env_for_task_google() {
             RUN_SNAPD=true
             TEST_WORKERS=12
             ;;
-        update-opensuse-15-1)
+        update-opensuse-15-2)
             SOURCE_SYSTEM=opensuse-15.2-64-base
             TARGET_SYSTEM=opensuse-15.2-64
             RUN_SNAPD=true
@@ -289,7 +289,8 @@ get_env_for_task_google() {
         update-opensuse-tumbleweed)
             SOURCE_SYSTEM=opensuse-tumbleweed-64-base
             TARGET_SYSTEM=opensuse-tumbleweed-64
-            RUN_SNAPD=false
+            RUN_SNAPD=true
+            TEST_WORKERS=12
             ;;
         update-ubuntu-14.04-64)
             SOURCE_SYSTEM=ubuntu-14.04-64
