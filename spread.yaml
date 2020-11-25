@@ -77,6 +77,8 @@ backends:
                 image: ubuntu-os-cloud/ubuntu-2010
             - ubuntu-20.10-64:
                 image: ubuntu-2010-64
+            - ubuntu-20.10-64-virt-enabled:
+                image: ubuntu-2010-64-virt-enabled
 
             - debian-9-64-external:
                 image: debian-9-stretch
