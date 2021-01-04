@@ -473,8 +473,12 @@ install_pkg_dependencies(){
 install_test_dependencies(){
     local TARGET="$1"
     git clone https://github.com/snapcore/snapd.git snapd-master
-    TESTSLIB=./snapd-master/tests/lib . snapd-master/tests/lib/pkgdb.sh
-    TESTSLIB=./snapd-master/tests/lib SPREAD_SYSTEM="$TARGET" install_pkg_dependencies
+    export TESTSLIB=./snapd-master/tests/lib
+    export PATH=$PATH:./snapd-master/tests/bin
+    export SPREAD_SYSTEM="$TARGET"
+
+    . snapd-master/tests/lib/pkgdb.sh
+    install_pkg_dependencies
     rm -rf snapd-master
 }
 
