@@ -4,7 +4,6 @@ set -x
 
 SPREAD_IMAGES_DIR=${SPREAD_IMAGES_DIR:-"$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"}
 SNAPD_DIR=${SNAPD_DIR:-"$(pwd)/snapd"}
-SPREAD_DIR=${SPREAD_DIR:-"$(pwd)/spread"}
 TMP_IMAGE_ID=${TMP_IMAGE_ID:-"$RANDOM"}
 
 GCE_PROJECT=computeengine
@@ -14,7 +13,6 @@ BUCKET_NAME=spread-images
 run_task_google() {
     local task=$1
     
-    get_spread
     get_env_for_task_google "$task"
     run_spread_images "$task"
     run_snapd "$task"
@@ -73,10 +71,10 @@ run_spread_images_task() {
     fi
     if [ "$run_snapd" = "true" ]; then
         echo "Running spread-images task and creating tmp image"
-        ( cd "$SPREAD_IMAGES_DIR" && SPREAD_TMP_IMAGE_ID="$TMP_IMAGE_ID" "$SPREAD_DIR/spread" "${backend}:${system}:tasks/${backend}/${task}" )
+        ( cd "$SPREAD_IMAGES_DIR" && SPREAD_TMP_IMAGE_ID="$TMP_IMAGE_ID" spread "${backend}:${system}:tasks/${backend}/${task}" )
     else
         echo "Running spread-imags task and creating final image"
-        ( cd "$SPREAD_IMAGES_DIR" && "$SPREAD_DIR/spread" "${backend}:${system}:tasks/${backend}/${task}" )
+        ( cd "$SPREAD_IMAGES_DIR" && spread "${backend}:${system}:tasks/${backend}/${task}" )
     fi
     return $?
 }
@@ -102,28 +100,16 @@ run_snapd_tests() {
     echo "Configuring target image"
     python3 "$SPREAD_IMAGES_DIR/update_image.py" "$SNAPD_DIR/spread.yaml" "$backend" "$system" "$image" "$workers"
 
-    ( cd "$SNAPD_DIR" && "$SPREAD_DIR/spread" "${backend}:${system}" )
+    ( cd "$SNAPD_DIR" && spread "${backend}:${system}" )
     return $?
-}
-
-get_spread() {
-    echo "Getting spread"
-
-    if [ -x "$SPREAD_DIR/spread" ]; then
-        echo "Spread already downloaded and ready to use"
-    else
-        mkdir -p "$SPREAD_DIR"
-        ( cd "$SPREAD_DIR" && curl -s -O https://niemeyer.s3.amazonaws.com/spread-amd64.tar.gz && tar xzvf spread-amd64.tar.gz ) 
-        echo "Spread downloaded and ready to use"
-    fi
 }
 
 get_google_backend() {
     local spread_yaml_dir=$1
     local system=$2
-    if ( cd "$spread_yaml_dir" && "$SPREAD_DIR/spread" -list google:"$system"  >/dev/null 2>&1 ); then
+    if ( cd "$spread_yaml_dir" && spread -list google:"$system"  >/dev/null 2>&1 ); then
         echo google
-    elif ( cd "$spread_yaml_dir" && "$SPREAD_DIR/spread" -list google-unstable:"$system"  >/dev/null 2>&1 ); then
+    elif ( cd "$spread_yaml_dir" && spread -list google-unstable:"$system"  >/dev/null 2>&1 ); then
         echo google-unstable
     else
         echo "System not included in any google backend, plase check spread.yaml"
