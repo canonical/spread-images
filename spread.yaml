@@ -221,4 +221,4 @@ suites:
             distro_initial_repo_setup
             distro_update_package_db
             install_pkg_dependencies
-            gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
+            gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json" --project computeengine
