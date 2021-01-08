@@ -1,0 +1,31 @@
+summary: Publish a temporal image
+
+environment:
+    TARGET_SYSTEM: "$(HOST: echo ${SPREAD_TARGET_SYSTEM})"
+
+execute: |
+    if [ -z "$TMP_IMAGE_ID" ]; then
+        echo "The variable TMP_IMAGE_ID is not set, exiting..."
+        exit 1
+    fi
+
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/google.sh"
+    init_image="$IMAGE"
+
+    TMP_IMAGE_ID= . "$TESTSLIB/names.sh"
+    final_image="$IMAGE"
+    final_family="$FAMILY"
+    final_description="$DESCRIPTION"
+
+    create_image_from_image "$final_image" "$final_family" "$final_description" "$init_image"
+
+restore:
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/google.sh"
+
+    echo "deleting tmp image"
+    delete_image "$IMAGE" "$FAMILY"
+
+    echo "deleting deprecated images"
+    delete_deprecated_images 

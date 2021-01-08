@@ -1,0 +1,13 @@
+summary: Delete a temporal image
+
+execute: |
+    if [ -z "$TMP_IMAGE_ID" ]; then
+        echo "The variable TMP_IMAGE_ID is not set, exiting..."
+        exit 1
+    fi
+
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/google.sh"
+
+    echo "deleting tmp image"
+    delete_image "$IMAGE" "$FAMILY"
