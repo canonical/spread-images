@@ -8,6 +8,10 @@ execute: |
         echo "The variable TMP_IMAGE_ID is not set, exiting..."
         exit 1
     fi
+    if [ -z "$TARGET_SYSTEM" ]; then
+        echo "The variable TARGET_SYSTEM is not set, exiting..."
+        exit 1
+    fi
 
     . "$TESTSLIB/names.sh"
     . "$TESTSLIB/google.sh"
