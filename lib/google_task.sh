@@ -10,7 +10,7 @@ if [ -z "$GOOGLE_ACTION" ]; then
     exit 1
 fi
 
-if [ "$GOOGLE_ACTION" = "add" ]; then
+if [ "$GOOGLE_ACTION" = "add-image" ]; then
     case "$GOOGLE_TASK" in
         amazon-linux-2)
             SOURCE_SYSTEM=ubuntu-16.04-64
@@ -68,7 +68,7 @@ if [ "$GOOGLE_ACTION" = "add" ]; then
         exit 1
         ;;
     esac
-elif [ "$GOOGLE_ACTION" = "update" ]; then
+elif [ "$GOOGLE_ACTION" = "update-image" ]; then
     case "$GOOGLE_TASK" in
         amazon-linux-2)
             SOURCE_SYSTEM=amazon-linux-2-64-base
