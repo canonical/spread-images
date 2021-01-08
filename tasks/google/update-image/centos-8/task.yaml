@@ -1,9 +1,9 @@
-summary: Update fedora image with the latest updates and test dependencies with selinux permissive
+summary: Update centos 8 image in google account and install test dependencies
 
-systems: [fedora-28-64-base]
+systems: [centos-8-64-base]
 
 environment:
-    TARGET_SYSTEM: fedora-28-64
+    TARGET_SYSTEM: centos-8-64
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -12,19 +12,21 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Make the upgrade and install the dependencies needed to run snapd tests
+        # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
-        install_test_dependencies "$TARGET_SYSTEM"
+
+        distro_install_package epel-release
+        # The dependencies are not installed until the system
+        # is enabled in snapd test suite
+        # install_test_dependencies "$TARGET_SYSTEM"
+
         remove_pkg_blacklist
         REBOOT
     fi
 
     # Set selinux as permissive
     sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
-
-    # Disable google-network-daemon service because it conflicts with spread ssh configuration during startup
-    systemctl disable --now google-network-daemon.service
 
     # Clean disk before create the shapshot
     clean_machine
@@ -35,6 +37,6 @@ execute: |
 restore: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/names.sh"
-    
+
     delete_snapshot "$DISK"
     delete_deprecated_images

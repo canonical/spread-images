@@ -1,6 +1,6 @@
 summary: Update opensuse tumbleweed image with the latest updates and test dependencies
 
-systems: [opensuse-tumbleweed-64-base, opensuse-tumbleweed-64]
+systems: [opensuse-tumbleweed-64-base]
 
 environment:
     TARGET_SYSTEM: opensuse-tumbleweed-64

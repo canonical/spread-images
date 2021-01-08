@@ -29,50 +29,18 @@ backends:
                 image: ubuntu-1604-64
             - ubuntu-16.04-64-virt-enabled:
                 image: ubuntu-1604-64-virt-enabled
-            - ubuntu-16.04-64-uefi-enabled:
-                image: ubuntu-1604-64-uefi-enabled
             - ubuntu-18.04-64-base:
                 image: ubuntu-os-cloud/ubuntu-1804-lts
             - ubuntu-18.04-64:
                 image: ubuntu-1804-64
             - ubuntu-18.04-64-virt-enabled:
                 image: ubuntu-1804-64-virt-enabled
-            - ubuntu-18.04-64-uefi-enabled:
-                image: ubuntu-1804-64-uefi-enabled
-            - ubuntu-18.04-64-tpm-enabled-base:
-                image: gce-uefi-images/ubuntu-1804-lts
-            - ubuntu-18.04-64-tpm-enabled:
-                image: ubuntu-1804-64-tpm-enabled
-            - ubuntu-18.10-64-base:
-                image: ubuntu-os-cloud/ubuntu-1810
-            - ubuntu-18.10-64:
-                image: ubuntu-1810-64
-            - ubuntu-19.04-64-base:
-                image: ubuntu-os-cloud/ubuntu-1904
-            - ubuntu-19.04-64:
-                image: ubuntu-1904-64
-            - ubuntu-19.10-64-base:
-                image: ubuntu-os-cloud/ubuntu-1910
-            - ubuntu-19.10-64:
-                image: ubuntu-1910-64
-            - ubuntu-19.10-64-virt-enabled:
-                image: ubuntu-1910-64-virt-enabled
-            - ubuntu-19.10-64-tpm-enabled-base:
-                image: ubuntu-1910-64-tpm-enabled
-            - ubuntu-19.10-64-tpm-enabled:
-                image: ubuntu-1910-64-tpm-enabled
             - ubuntu-20.04-64-base:
                 image: ubuntu-os-cloud/ubuntu-2004-lts
             - ubuntu-20.04-64:
                 image: ubuntu-2004-64
-            - ubuntu-20.04-64-uefi-enabled:
-                image: ubuntu-2004-64-uefi-enabled
-            - ubuntu-20.04-64-virt-uefi-enabled:
-                image: ubuntu-2004-64-virt-uefi-enabled
             - ubuntu-20.04-64-virt-enabled:
                 image: ubuntu-2004-64-virt-enabled
-            - ubuntu-20.04-64-tpm-enabled:
-                image: ubuntu-2004-64-tpm-enabled
             - ubuntu-20.10-64-base:
                 image: ubuntu-os-cloud/ubuntu-2010
             - ubuntu-20.10-64:
@@ -91,22 +59,6 @@ backends:
             - debian-sid-64:
                 image: debian-sid-64
 
-            - fedora-27-64-base:
-                image: fedora-27-64-base
-            - fedora-27-64:
-                image: fedora-27-64
-            - fedora-28-64-base:
-                image: fedora-28-64-base
-            - fedora-28-64:
-                image: fedora-28-64
-            - fedora-29-64-base:
-                image: fedora-29-64-base
-            - fedora-29-64:
-                image: fedora-29-64
-            - fedora-30-64-base:
-                image: fedora-30-64-base
-            - fedora-30-64:
-                image: fedora-30-64
             - fedora-31-64-base:
                 image: fedora-31-64-base
             - fedora-31-64:
@@ -122,20 +74,6 @@ backends:
             - fedora-rawhide-64:
                 image: fedora-rawhide-64
 
-            - opensuse-42.2-64-base:
-                image: opensuse-leap-42-2-64-base
-            - opensuse-42.2-64:
-                image: opensuse-leap-42-2-64
-            - opensuse-42.3-64-base:
-                image: opensuse-leap-42-3-64-base
-            - opensuse-42.3-64:
-                image: opensuse-leap-42-3-64
-            - opensuse-15.0-64-external:
-                image: opensuse-leap-15-v20181106
-            - opensuse-15.0-64-base:
-                image: opensuse-leap-15-0-64-base
-            - opensuse-15.0-64:
-                image: opensuse-leap-15-0-64
             - opensuse-15.1-64-external:
                 image: opensuse-cloud/opensuse-leap-15-1-v20190618
             - opensuse-15.1-64-base:
@@ -202,11 +140,12 @@ backends:
 
 path: /root/spread
 
+
 kill-timeout: 50m
 
 suites:
-    tasks/google/:
-        summary: Create and update images for google backend
+    tasks/google/add-image/:
+        summary: Create images for google backend
         environment:
             GCE_PROJECT: computeengine
             ZONE: us-east1-b
@@ -222,3 +161,41 @@ suites:
             distro_update_package_db
             install_pkg_dependencies
             gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
+
+    tasks/google/update-image/:
+        summary: Update images for google backend
+        environment:
+            GCE_PROJECT: computeengine
+            ZONE: us-east1-b
+            BUCKET_NAME: spread-images
+        prepare: |
+            . "$TESTSLIB/pkgdb.sh"
+
+            if ! [ -f "$PROJECT_PATH/sa.json" ]; then
+                echo "Service account file not found in root path"
+                exit 1
+            fi
+            distro_initial_repo_setup
+            distro_update_package_db
+            install_pkg_dependencies
+            gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
+
+
+    tasks/google/common/:
+        summary: Commmon tasks for google backend
+        environment:
+            GCE_PROJECT: computeengine
+            ZONE: us-east1-b
+            BUCKET_NAME: spread-images
+        prepare: |
+            . "$TESTSLIB/pkgdb.sh"
+
+            if ! [ -f "$PROJECT_PATH/sa.json" ]; then
+                echo "Service account file not found in root path"
+                exit 1
+            fi
+            distro_initial_repo_setup
+            distro_update_package_db
+            install_pkg_dependencies
+            gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
+

@@ -22,7 +22,8 @@ execute: |
         zypper ar -f -c http://download.opensuse.org/tumbleweed/repo/debug repo-debug
         zypper ar -f -c http://download.opensuse.org/update/tumbleweed/ repo-update
 
-        zypper addrepo https://download.opensuse.org/repositories/Cloud:Tools/openSUSE_Tumbleweed/Cloud:Tools.repo
+        zypper ar -f -c http://download.opensuse.org/repositories/Cloud:Tools/openSUSE_Tumbleweed/Cloud:Tools.repo
+        zypper ar -f -c http://download.opensuse.org/repositories/Kernel:/HEAD/standard/ kernel-repo
 
         # Make the upgrade and install the dependencies needed to run snapd tests
         zypper --gpg-auto-import-keys refresh
