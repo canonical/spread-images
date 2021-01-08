@@ -182,25 +182,21 @@ get_env_for_task_google() {
             SOURCE_SYSTEM=arch-linux-64-base
             TARGET_SYSTEM=arch-linux-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-centos-7)
             SOURCE_SYSTEM=centos-7-64-base
             TARGET_SYSTEM=centos-7-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-centos-8)
             SOURCE_SYSTEM=centos-8-64-base
             TARGET_SYSTEM=centos-8-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-debian-9)
             SOURCE_SYSTEM=debian-9-64-base
             TARGET_SYSTEM=debian-9-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-debian-sid)
             SOURCE_SYSTEM=debian-sid-64-base
@@ -211,37 +207,31 @@ get_env_for_task_google() {
             SOURCE_SYSTEM=fedora-27-64-base
             TARGET_SYSTEM=fedora-27-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-fedora-28-64)
             SOURCE_SYSTEM=fedora-28-64-base
             TARGET_SYSTEM=fedora-28-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-fedora-29-64)
             SOURCE_SYSTEM=fedora-29-64-base
             TARGET_SYSTEM=fedora-29-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-fedora-30-64)
             SOURCE_SYSTEM=fedora-30-64-base
             TARGET_SYSTEM=fedora-30-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-fedora-31-64)
             SOURCE_SYSTEM=fedora-31-64-base
             TARGET_SYSTEM=fedora-31-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-fedora-32-64)
             SOURCE_SYSTEM=fedora-32-64-base
             TARGET_SYSTEM=fedora-32-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-fedora-rawhide-64)
             SOURCE_SYSTEM=fedora-rawhide-64
@@ -252,79 +242,66 @@ get_env_for_task_google() {
             SOURCE_SYSTEM=opensuse-42.3-64-base
             TARGET_SYSTEM=opensuse-42.3-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-opensuse-15-0)
             SOURCE_SYSTEM=opensuse-15.0-64-base
             TARGET_SYSTEM=opensuse-15.0-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-opensuse-15-1)
             SOURCE_SYSTEM=opensuse-15.1-64-base
             TARGET_SYSTEM=opensuse-15.1-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-opensuse-15-2)
             SOURCE_SYSTEM=opensuse-15.2-64-base
             TARGET_SYSTEM=opensuse-15.2-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-opensuse-tumbleweed)
             SOURCE_SYSTEM=opensuse-tumbleweed-64-base
             TARGET_SYSTEM=opensuse-tumbleweed-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-ubuntu-14.04-64)
             SOURCE_SYSTEM=ubuntu-14.04-64
             TARGET_SYSTEM=ubuntu-14.04-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-ubuntu-16.04-32)
             SOURCE_SYSTEM=ubuntu-16.04-32-base
             TARGET_SYSTEM=ubuntu-16.04-32
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-ubuntu-16.04-64)
             SOURCE_SYSTEM=ubuntu-16.04-64-base
             TARGET_SYSTEM=ubuntu-16.04-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-ubuntu-18.04-64)
             SOURCE_SYSTEM=ubuntu-18.04-64-base
             TARGET_SYSTEM=ubuntu-18.04-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;            
         update-ubuntu-18.10-64)
             SOURCE_SYSTEM=ubuntu-18.10-64-base
             TARGET_SYSTEM=ubuntu-18.10-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-ubuntu-19.04-64)
             SOURCE_SYSTEM=ubuntu-19.04-64-base
             TARGET_SYSTEM=ubuntu-19.04-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-ubuntu-19.10-64)
             SOURCE_SYSTEM=ubuntu-19.10-64-base
             TARGET_SYSTEM=ubuntu-19.10-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         update-ubuntu-20.04-64)
             SOURCE_SYSTEM=ubuntu-20.04-64-base
             TARGET_SYSTEM=ubuntu-20.04-64
             RUN_SNAPD=true
-            TEST_WORKERS=12
             ;;
         *)
             echo "ERROR: Unsupported distribution '$SPREAD_SYSTEM'"

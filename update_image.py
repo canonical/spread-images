@@ -8,7 +8,7 @@ import yamlordereddictloader
 SUPPORTED_BACKENDS = ['google', 'google-unstable']
 
 
-def update_image(filepath, backend, system, image, workers):
+def update_image(filepath, backend, system, image):
     
     with open(filepath, "r") as f:
         filemap = yaml.load(f, Loader=yamlordereddictloader.Loader)
@@ -23,8 +23,6 @@ def update_image(filepath, backend, system, image, workers):
         if system in sys.keys():
             if image:
                 sys[system]['image'] = image
-            if workers:
-                sys[system]['workers'] = workers
             break
 
     with open(filepath, "w") as f:
@@ -69,15 +67,12 @@ if __name__ == '__main__':
         help='system to update')
     args_parser.add_argument('image', type=str,
         help='image to use')
-    args_parser.add_argument('workers', type=str, nargs='?',
-        help='workers to use')
 
     args = args_parser.parse_args()
 
     backend = get_backend_for_system(args.filepath, args.backend, args.system)
     if backend:
-        update_image(args.filepath, backend, args.system, args.image,
-            int(args.workers) if args.workers and args.workers.isdigit() else None)
+        update_image(args.filepath, backend, args.system, args.image)
     else:
         print('System not available on any supported backend')
         sys.exit(1)
