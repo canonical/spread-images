@@ -100,26 +100,6 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             TARGET_SYSTEM=debian-sid-64
             RUN_SNAPD=false
             ;;
-        fedora-27-64)
-            SOURCE_SYSTEM=fedora-27-64-base
-            TARGET_SYSTEM=fedora-27-64
-            RUN_SNAPD=true
-            ;;
-        fedora-28-64)
-            SOURCE_SYSTEM=fedora-28-64-base
-            TARGET_SYSTEM=fedora-28-64
-            RUN_SNAPD=true
-            ;;
-        fedora-29-64)
-            SOURCE_SYSTEM=fedora-29-64-base
-            TARGET_SYSTEM=fedora-29-64
-            RUN_SNAPD=true
-            ;;
-        fedora-30-64)
-            SOURCE_SYSTEM=fedora-30-64-base
-            TARGET_SYSTEM=fedora-30-64
-            RUN_SNAPD=true
-            ;;
         fedora-31-64)
             SOURCE_SYSTEM=fedora-31-64-base
             TARGET_SYSTEM=fedora-31-64
@@ -130,20 +110,15 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             TARGET_SYSTEM=fedora-32-64
             RUN_SNAPD=true
             ;;
+        fedora-33-64)
+            SOURCE_SYSTEM=fedora-33-64-base
+            TARGET_SYSTEM=fedora-33-64
+            RUN_SNAPD=true
+            ;;
         fedora-rawhide-64)
             SOURCE_SYSTEM=fedora-rawhide-64
             TARGET_SYSTEM=fedora-rawhide-64
             RUN_SNAPD=false
-            ;;
-        opensuse-42-3)
-            SOURCE_SYSTEM=opensuse-42.3-64-base
-            TARGET_SYSTEM=opensuse-42.3-64
-            RUN_SNAPD=true
-            ;;
-        opensuse-15-0)
-            SOURCE_SYSTEM=opensuse-15.0-64-base
-            TARGET_SYSTEM=opensuse-15.0-64
-            RUN_SNAPD=true
             ;;
         opensuse-15-1)
             SOURCE_SYSTEM=opensuse-15.1-64-base
@@ -180,24 +155,14 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             TARGET_SYSTEM=ubuntu-18.04-64
             RUN_SNAPD=true
             ;;            
-        ubuntu-18.10-64)
-            SOURCE_SYSTEM=ubuntu-18.10-64-base
-            TARGET_SYSTEM=ubuntu-18.10-64
-            RUN_SNAPD=true
-            ;;
-        ubuntu-19.04-64)
-            SOURCE_SYSTEM=ubuntu-19.04-64-base
-            TARGET_SYSTEM=ubuntu-19.04-64
-            RUN_SNAPD=true
-            ;;
-        ubuntu-19.10-64)
-            SOURCE_SYSTEM=ubuntu-19.10-64-base
-            TARGET_SYSTEM=ubuntu-19.10-64
-            RUN_SNAPD=true
-            ;;
         ubuntu-20.04-64)
             SOURCE_SYSTEM=ubuntu-20.04-64-base
             TARGET_SYSTEM=ubuntu-20.04-64
+            RUN_SNAPD=true
+            ;;
+        ubuntu-21.04-64)
+            SOURCE_SYSTEM=ubuntu-21.04-64-base
+            TARGET_SYSTEM=ubuntu-21.04-64
             RUN_SNAPD=true
             ;;
         *)
