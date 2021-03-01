@@ -45,6 +45,9 @@ execute: |
     systemctl daemon-reload
     systemctl enable systemd-vconsole-setup-rexec.service
 
+    # Disable purge-kernels service which makes fail zypper purge-kernels with the current kernel configuration
+    systemctl disable purge-kernels
+
     # Clean disk before create the shapshot
     clean_machine
 
