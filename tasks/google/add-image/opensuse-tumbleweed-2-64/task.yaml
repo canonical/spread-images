@@ -5,7 +5,8 @@ systems: [opensuse-*]
 environment:
     TARGET_SYSTEM: opensuse-tumbleweed-2-64-base
     IMAGE_FILE: opensuse-tumbleweed-2-64
-    IMAGE_URL: https://download.opensuse.org/tumbleweed/appliances/openSUSE-Tumbleweed-JeOS.x86_64-OpenStack-Cloud.qcow2
+    #IMAGE_URL: https://download.opensuse.org/tumbleweed/appliances/openSUSE-Tumbleweed-JeOS.x86_64-OpenStack-Cloud.qcow2
+    IMAGE_URL: https://download.opensuse.org/repositories/home:/maciek_borzecki:/Virtualization:/Appliances:/Images:/openSUSE-Tumbleweed/openSUSE_Tumbleweed/openSUSE-Tumbleweed-JeOS.x86_64-OpenStack-Cloud.qcow2
     DOWNLOAD_NAME: image.qcow2
 
 execute: |
@@ -49,6 +50,8 @@ execute: |
     
     # Install dependencies
     zypper --root /mnt/disk install -y google-compute-engine-init google-compute-engine-oslogin || true
+    zypper --root /mnt/disk remove -y kernel-default-base || true
+    zypper --root /mnt/disk install -y google-compute-engine-init rpm-build kernel-firmware-all kernel-default || true
     zypper --root /mnt/disk update -y || true
     zypper --root /mnt/disk clean
 

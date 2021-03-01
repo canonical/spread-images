@@ -360,6 +360,7 @@ pkg_dependencies_opensuse(){
         git
         jq
         rpm-build
+        unzip
         "
 }
 
