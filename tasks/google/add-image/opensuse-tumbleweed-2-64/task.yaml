@@ -50,8 +50,6 @@ execute: |
     
     # Install dependencies
     zypper --root /mnt/disk install -y google-compute-engine-init google-compute-engine-oslogin || true
-    zypper --root /mnt/disk remove -y kernel-default-base || true
-    zypper --root /mnt/disk install -y google-compute-engine-init rpm-build kernel-firmware-all kernel-default || true
     zypper --root /mnt/disk update -y || true
     zypper --root /mnt/disk clean
 
