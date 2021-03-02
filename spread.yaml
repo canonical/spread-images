@@ -90,7 +90,6 @@ backends:
                 image: opensuse-tumbleweed-64-base
             - opensuse-tumbleweed-64:
                 image: opensuse-tumbleweed-64
-
             - opensuse-tumbleweed-2-64-base:
                 image: opensuse-tumbleweed-2-64-base
 
