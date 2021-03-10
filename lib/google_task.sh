@@ -131,8 +131,13 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             RUN_SNAPD=true
             ;;
         opensuse-tumbleweed)
-            SOURCE_SYSTEM=opensuse-tumbleweed-2-64-base
+            SOURCE_SYSTEM=opensuse-tumbleweed-64-base
             TARGET_SYSTEM=opensuse-tumbleweed-64
+            RUN_SNAPD=true
+            ;;
+        opensuse-tumbleweed-2)
+            SOURCE_SYSTEM=opensuse-tumbleweed-2-64-base
+            TARGET_SYSTEM=opensuse-tumbleweed-2-64
             RUN_SNAPD=true
             ;;
         ubuntu-14.04-64)
