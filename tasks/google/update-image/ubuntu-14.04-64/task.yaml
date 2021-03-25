@@ -23,6 +23,11 @@ execute: |
     # Avoid checking for new release, it could cause lock on apt
     sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
 
+    # Remove lxd snap
+    if snap list lxd; then
+        snap remove lxd
+    fi
+
     # Clean disk before create the shapshot
     clean_machine
 

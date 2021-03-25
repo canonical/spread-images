@@ -26,6 +26,11 @@ execute: |
     # Disable daily checks for updates to avoid apt locks
     systemctl disable --now apt-daily{,-upgrade}.{timer,service}
 
+    # Remove lxd snap
+    if snap list lxd; then
+        snap remove lxd
+    fi
+
     # Clean disk before create the shapshot
     clean_machine
 
