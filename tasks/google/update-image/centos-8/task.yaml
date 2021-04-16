@@ -17,9 +17,12 @@ execute: |
         distro_upgrade_packages
 
         distro_install_package epel-release
-        # The dependencies are not installed until the system
-        # is enabled in snapd test suite
-        # install_test_dependencies "$TARGET_SYSTEM"
+        install_test_dependencies "$TARGET_SYSTEM"
+
+        # This is to avoid the following error while runing snapd tests
+        # Error: Unable to find a match: compiler(go-compiler) glibc-static
+        dnf config-manager --set-enabled powertools
+        distro_install_package glibc-static
 
         remove_pkg_blacklist
         REBOOT
