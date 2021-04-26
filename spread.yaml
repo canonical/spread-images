@@ -12,7 +12,7 @@ backends:
 
     google:
         key: "$(HOST: echo $SPREAD_GOOGLE_KEY)"
-        location: computeengine/us-east1-b
+        location: snapd-spread/us-east1-b
         halt-timeout: 2h
         systems:
             - ubuntu-14.04-64-base:
@@ -123,7 +123,7 @@ backends:
     google-nested:
         type: google
         key: '$(HOST: echo "$SPREAD_GOOGLE_KEY")'
-        location: computeengine/us-east1-b
+        location: snapd-spread/us-east1-b
         plan: n1-standard-2
         halt-timeout: 2h
         systems:
@@ -149,9 +149,9 @@ suites:
     tasks/google/add-image/:
         summary: Create images for google backend
         environment:
-            GCE_PROJECT: computeengine
+            GCE_PROJECT: snapd-spread
             ZONE: us-east1-b
-            BUCKET_NAME: spread-images
+            BUCKET_NAME: snapd-spread-images
         prepare: |
             . "$TESTSLIB/pkgdb.sh"
 
@@ -167,9 +167,9 @@ suites:
     tasks/google/update-image/:
         summary: Update images for google backend
         environment:
-            GCE_PROJECT: computeengine
+            GCE_PROJECT: snapd-spread
             ZONE: us-east1-b
-            BUCKET_NAME: spread-images
+            BUCKET_NAME: snapd-spread-images
         prepare: |
             . "$TESTSLIB/pkgdb.sh"
 
@@ -186,9 +186,9 @@ suites:
     tasks/google/common/:
         summary: Commmon tasks for google backend
         environment:
-            GCE_PROJECT: computeengine
+            GCE_PROJECT: snapd-spread
             ZONE: us-east1-b
-            BUCKET_NAME: spread-images
+            BUCKET_NAME: snapd-spread-images
         prepare: |
             . "$TESTSLIB/pkgdb.sh"
 

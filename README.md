@@ -17,13 +17,13 @@ The system name in the spread.yaml is used by default to match the image in gce,
 	- ubuntu-14.04-64:
         image: ubuntu-os-cloud/ubuntu-1404-lts
 
-To select the project, when it is provided in the image property, then it is used, oterwise computeengine will be used by default and if there is not match it will retry with these projects: "ubuntu-os-cloud", "centos-cloud", "debian-cloud", "opensuse-cloud", "freebsd-org-cloud-dev".
+To select the project, when it is provided in the image property, then it is used, oterwise snapd-spread will be used by default and if there is not match it will retry with these projects: "ubuntu-os-cloud", "centos-cloud", "debian-cloud", "opensuse-cloud", "freebsd-org-cloud-dev".
 
 To select the image, first it is considered exact matches on name, next is considered exact matches on family and otherwise use term matching. Terms matching method matches when all the single terms of the image name used in the spread.yaml are contained in the description of an image. See this example:
 
 	- ubuntu-16.04-64
 
-	will match by description with the following image on computeengine project:
+	will match by description with the following image on snapd-spread project:
 
 	name: ubuntu-1604-64-v20180628
 	family: ubuntu-1604-64
@@ -31,9 +31,9 @@ To select the image, first it is considered exact matches on name, next is consi
 
 The images to be matched are ordered by creation date (latest first).
 
-## Naming images on computeengine
+## Naming images on snapd-spread
 
-The criteria for naming images on computeengine project follows the rule:
+The criteria for naming images on snapd-spread project follows the rule:
 
 	name: <osname>-<version>-<arch>-v<date>
 	family: <osname>-<version>-<arch>
@@ -47,9 +47,9 @@ When there is not match by family, the match is done by description.
 
 Base images are images with no any dependency or extra configuration, just the settings needed to boot on gce. Those images are used as baed to create final images with test dependencies which are used for snapd test suite.
 
-Some base images are created as part of the computeengine projects and others are used from other projects like ubuntu-os-cloud. 
+Some base images are created as part of the snapd-spread projects and others are used from other projects like ubuntu-os-cloud. 
 
-The criteria for naming base images on computeengine project follows the rule:
+The criteria for naming base images on snapd-spread project follows the rule:
 
 	name: <osname>-<version>-<arch>-base-v<date>
 	family: <osname>-<version>-<arch>-base
@@ -166,7 +166,7 @@ The generated image has not SElinux configured as permissive, so snapd tests wil
 
 ## Update images
 
-The update tasks are intended to update a base image installing test dependencies and updating and configuring the system to run the snapd test suite optimally. Some update tasks use base images which are generated on the computeengine project, and other take images from other projects such as we get ubuntu-1604-lts images from project ubuntu-os-cloud.
+The update tasks are intended to update a base image installing test dependencies and updating and configuring the system to run the snapd test suite optimally. Some update tasks use base images which are generated on the snapd-spread project, and other take images from other projects such as we get ubuntu-1604-lts images from project ubuntu-os-cloud.
 
 ### Amazon Linux 2
 

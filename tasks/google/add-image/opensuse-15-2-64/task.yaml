@@ -14,7 +14,7 @@ execute: |
     # Clean disk before create the shapshot
     clean_machine
 
-    # Create the image in computeengine project
+    # Create the image in snapd-spread project
     delete_image "$IMAGE" "$FAMILY"
     create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
 
