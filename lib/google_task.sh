@@ -100,19 +100,14 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             TARGET_SYSTEM=debian-sid-64
             RUN_SNAPD=false
             ;;
-        fedora-31-64)
-            SOURCE_SYSTEM=fedora-31-64-base
-            TARGET_SYSTEM=fedora-31-64
-            RUN_SNAPD=true
-            ;;
-        fedora-32-64)
-            SOURCE_SYSTEM=fedora-32-64-base
-            TARGET_SYSTEM=fedora-32-64
-            RUN_SNAPD=true
-            ;;
         fedora-33-64)
             SOURCE_SYSTEM=fedora-33-64-base
             TARGET_SYSTEM=fedora-33-64
+            RUN_SNAPD=true
+            ;;
+        fedora-34-64)
+            SOURCE_SYSTEM=fedora-34-64-base
+            TARGET_SYSTEM=fedora-34-64
             RUN_SNAPD=true
             ;;
         fedora-rawhide-64)
