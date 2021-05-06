@@ -95,6 +95,11 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             TARGET_SYSTEM=debian-9-64
             RUN_SNAPD=true
             ;;
+        debian-10)
+            SOURCE_SYSTEM=debian-10-64-base
+            TARGET_SYSTEM=debian-10-64
+            RUN_SNAPD=true
+            ;;
         debian-sid)
             SOURCE_SYSTEM=debian-sid-64-base
             TARGET_SYSTEM=debian-sid-64

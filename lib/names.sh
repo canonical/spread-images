@@ -73,6 +73,16 @@ else
             FAMILY="debian-9-64"
             DESCRIPTION="Debian 9 64 bits"
             ;;
+       debian-10-64-base)
+            IMAGE="debian-10-64-base-v$(date +'%Y%m%d')"
+            FAMILY="debian-10-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        debian-10-64)
+            IMAGE="debian-10-64-v$(date +'%Y%m%d')"
+            FAMILY="debian-10-64"
+            DESCRIPTION="Debian 10 64 bits"
+            ;;
         debian-sid-64-base)
             IMAGE="debian-sid-64-base-v$(date +'%Y%m%d')"
             FAMILY="debian-sid-64-base"
@@ -84,16 +94,6 @@ else
             DESCRIPTION="Debian sid 64 bits"
             ;;
         # Fedora
-        fedora-31-64-base)
-            IMAGE="fedora-31-64-base-v$(date +'%Y%m%d')"
-            FAMILY="fedora-31-64-base"
-            DESCRIPTION="Base image"
-            ;;
-        fedora-31-64)
-            IMAGE="fedora-31-64-v$(date +'%Y%m%d')"
-            FAMILY="fedora-31-64"
-            DESCRIPTION="Fedora 31 64 bits with test dependencies"
-            ;;
         fedora-32-64-base)
             IMAGE="fedora-32-64-base-v$(date +'%Y%m%d')"
             FAMILY="fedora-32-64-base"

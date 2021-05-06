@@ -49,20 +49,22 @@ backends:
                 image: ubuntu-2010-64-virt-enabled
 
             - debian-9-64-external:
-                image: debian-9-stretch
+                image: debian-cloud/debian-9
             - debian-9-64-base:
                 image: debian-9-64-base
             - debian-9-64:
                 image: debian-9-64
+            - debian-10-64-external:
+                image: debian-cloud/debian-10
+            - debian-10-64-base:
+                image: debian-10-64-base
+            - debian-10-64:
+                image: debian-10-64
             - debian-sid-64-base:
                 image: debian-sid-64-base
             - debian-sid-64:
                 image: debian-sid-64
 
-            - fedora-31-64-base:
-                image: fedora-31-64-base
-            - fedora-31-64:
-                image: fedora-31-64
             - fedora-32-64-base:
                 image: fedora-32-64-base
             - fedora-32-64:
@@ -71,6 +73,10 @@ backends:
                 image: fedora-33-64-base
             - fedora-33-64:
                 image: fedora-33-64
+            - fedora-34-64-base:
+                image: fedora-34-64-base
+            - fedora-34-64:
+                image: fedora-34-64
             - fedora-rawhide-64:
                 image: fedora-rawhide-64
 
