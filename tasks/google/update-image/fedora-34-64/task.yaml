@@ -22,8 +22,9 @@ execute: |
 
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
-        distro_install_package kernel-modules
+        distro_install_package "kernel-modules-$(uname -r)"
         distro_upgrade_packages
+
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
 
@@ -37,14 +38,6 @@ execute: |
         # 3. cloud-init-local.service
         # 4. cloud-init.service
         touch /etc/cloud/cloud-init.disabled
-
-        REBOOT
-    fi
-
-    if [ "$SPREAD_REBOOT" = 1 ]; then
-        # Purge old kernel-core package and install kernel modules
-        distro_clean_old_packages kernel-core 
-        distro_install_package kernel-modules
 
         REBOOT
     fi
