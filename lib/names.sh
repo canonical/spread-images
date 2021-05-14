@@ -32,6 +32,16 @@ else
             FAMILY="ubuntu-1604-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
             ;;
+        ubuntu-18.04-32-base)
+            IMAGE="ubuntu-1804-32-base-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-1804-32-base"
+            DESCRIPTION="Base image"
+            ;;
+        ubuntu-18.04-32)
+            IMAGE="ubuntu-1804-32-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-1804-32"
+            DESCRIPTION="Ubuntu 18.04 32 bits"
+            ;;
         ubuntu-18.04-64)
             IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-1804-64"

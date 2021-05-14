@@ -29,6 +29,10 @@ backends:
                 image: ubuntu-1604-64
             - ubuntu-16.04-64-virt-enabled:
                 image: ubuntu-1604-64-virt-enabled
+            - ubuntu-18.04-32-base:
+                image: ubuntu-1804-32-base
+            - ubuntu-18.04-32:
+                image: ubuntu-1804-32
             - ubuntu-18.04-64-base:
                 image: ubuntu-os-cloud/ubuntu-1804-lts
             - ubuntu-18.04-64:
