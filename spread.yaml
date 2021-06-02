@@ -51,6 +51,12 @@ backends:
                 image: ubuntu-2010-64
             - ubuntu-20.10-64-virt-enabled:
                 image: ubuntu-2010-64-virt-enabled
+            - ubuntu-21.04-64-base:
+                image: ubuntu-os-cloud/ubuntu-2104
+            - ubuntu-21.04-64:
+                image: ubuntu-2104-64
+            - ubuntu-21.04-64-virt-enabled:
+                image: ubuntu-2104-64-virt-enabled
 
             - debian-9-64-external:
                 image: debian-cloud/debian-9

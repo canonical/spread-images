@@ -72,6 +72,16 @@ else
             FAMILY="ubuntu-2010-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
             ;;
+        ubuntu-21.04-64)
+            IMAGE="ubuntu-2104-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-2104-64"
+            DESCRIPTION="Ubuntu 21.04 64 bits"
+            ;;
+        ubuntu-21.04-64-virt-enabled)
+            IMAGE="ubuntu-2104-64-v$(date +'%Y%m%d')-virt-enabled"
+            FAMILY="ubuntu-2104-64-virt-enabled"
+            DESCRIPTION="Image with virtualization enabled"
+            ;;
         # Debian
         debian-9-64-base)
             IMAGE="debian-9-64-base-v$(date +'%Y%m%d')"
