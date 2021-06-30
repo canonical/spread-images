@@ -51,8 +51,10 @@ execute: |
     # Set environment variable to use supported python for gcloud
     echo "CLOUDSDK_PYTHON=python3.7" >> /mnt/disk/etc/environment
 
-    # Create service for resizing the root partition on boot
+    # Force google services be enabled to work with spread
+    chroot /mnt/disk /bin/bash -c "systemctl enable google-startup-scripts.service"
 
+    # Create service for resizing the root partition on boot
     tee /mnt/disk/lib/systemd/system/expand-part.service << EOF
     [Unit]
     Description=Expand partition on fedora

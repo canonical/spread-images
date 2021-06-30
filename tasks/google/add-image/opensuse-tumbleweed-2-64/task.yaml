@@ -49,9 +49,12 @@ execute: |
     zypper --root /mnt/disk ar -f -c http://download.opensuse.org/repositories/Cloud:Tools/openSUSE_Tumbleweed/Cloud:Tools.repo
     
     # Install dependencies
-    zypper --root /mnt/disk install -y google-compute-engine-init google-compute-engine-oslogin || true
-    zypper --root /mnt/disk update -y || true
+    zypper --root /mnt/disk --no-gpg-checks install -y google-guest-oslogin google-guest-agent
+    #zypper --root /mnt/disk --no-gpg-checks update -y || true
     zypper --root /mnt/disk clean
+
+    # Force google services be enabled to work with
+    chroot /mnt/disk /bin/bash -c "systemctl enable google-startup-scripts.service"
 
     # Create the disk image
     umount -AR /mnt/disk
