@@ -25,13 +25,13 @@ execute: |
 
     # Make mounting directory and mount
     mkdir -p /mnt/disk
-    
+
     for _ in $(seq 10); do
         if losetup -f --show -o $OFFSET disk.raw; then
             LOOP_DEV="$(losetup -f --show -o $OFFSET disk.raw)"
             continue
         fi
-        sleep 2
+        sleep 10
     done
     mount "$LOOP_DEV" /mnt/disk
     mount -o bind,offset=$OFFSET /run /mnt/disk/run
@@ -42,8 +42,29 @@ execute: |
     EOF
 
     chroot /mnt/disk /bin/bash -c "apt update"
-    chroot /mnt/disk /bin/bash -c "apt install -y python ssh netcat google-compute-engine google-compute-engine-oslogin google-guest-agent google-osconfig-agent" 
+    chroot /mnt/disk /bin/bash -c "apt install -y python ssh netcat google-compute-engine google-compute-engine-oslogin google-guest-agent"
     chroot /mnt/disk /bin/bash -c "apt autoremove -y"
+
+    # Note: The user needs to be deleted after the image is created and booted manually
+    # Add user to be able to boot the machine the first time
+    chroot /mnt/disk /bin/bash -c "useradd -m testuser"
+    echo "testuser:testpassword123" | chroot /mnt/disk /bin/bash -c "chpasswd"
+    echo 'testuser ALL=(ALL) NOPASSWD:ALL' | sudo tee /mnt/disk/etc/sudoers.d/create-user-testuser
+    sed -i 's/^\s*#\?\s*\(PermitRootLogin\|PasswordAuthentication\)\>.*/\1 yes/' /mnt/disk/etc/ssh/sshd_config
+
+    # Manual step on first boot
+    # Clean the test user
+    #   > sudo su
+    #   > passwd -d testuser
+    #   > deluser testuser sudo
+    #   > rm /etc/sudoers.d/create-user-testuser 
+    # Force google services be enabled to work with spread
+    #   > systemctl enable google-guest-agent.service
+    #   > systemctl enable google-startup-scripts.service
+    # Then save the snapshot 
+    #   > gcloud compute disks snapshot <DISK_NAME> --zone us-east1-b --snapshot-names <DISK_NAME>
+    # Remove the instance and create the image from created snapshot
+    #   > gcloud compute images create ubuntu-1804-32-base-v$(date +'%Y%m%d') --family ubuntu-1804-32-base --description "Base image" --source-snapshot <DISK_NAME>
 
     # Avoid checking for new release, it could cause lock on apt
     sed -i 's/^Prompt=.*$/Prompt=never/' /mnt/disk/etc/update-manager/release-upgrades
@@ -57,7 +78,7 @@ execute: |
 
     # Copy ubuntu bionic 32 bits image to spread-images bucket
     gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
-    
+
     # Create the image in snapd-spread project
     delete_image "$IMAGE" "$FAMILY"
     create_image_from_bucket "$IMAGE" "$FAMILY" "$DESCRIPTION" "${IMAGE_FILE}.tar.gz"
