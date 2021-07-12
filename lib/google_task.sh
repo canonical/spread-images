@@ -155,6 +155,11 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             TARGET_SYSTEM=ubuntu-16.04-64
             RUN_SNAPD=true
             ;;
+        ubuntu-18.04-32)
+            SOURCE_SYSTEM=ubuntu-18.04-32-base
+            TARGET_SYSTEM=ubuntu-18.04-32
+            RUN_SNAPD=true
+            ;;
         ubuntu-18.04-64)
             SOURCE_SYSTEM=ubuntu-18.04-64-base
             TARGET_SYSTEM=ubuntu-18.04-64
