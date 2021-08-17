@@ -57,8 +57,10 @@ backends:
                 image: ubuntu-2104-64
             - ubuntu-21.04-64-virt-enabled:
                 image: ubuntu-2104-64-virt-enabled
+            - ubuntu-21.10-64-external:
+                image: ubuntu-os-cloud-devel/ubuntu-2110
             - ubuntu-21.10-64:
-                  image: ubuntu-os-cloud-devel/ubuntu-2110
+                image: ubuntu-2110-64
 
             - debian-9-64-external:
                 image: debian-cloud/debian-9

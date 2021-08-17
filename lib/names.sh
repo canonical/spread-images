@@ -82,6 +82,12 @@ else
             FAMILY="ubuntu-2104-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
             ;;
+        ubuntu-21.10-64)
+            IMAGE="ubuntu-2110-64-cgroups-v2-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-2110-64"
+            DESCRIPTION="Ubuntu 21.10 64 bits with cgrupos v2 enabled"
+            ;;
+
         # Debian
         debian-9-64-base)
             IMAGE="debian-9-64-base-v$(date +'%Y%m%d')"
