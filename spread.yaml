@@ -108,6 +108,12 @@ backends:
                 image: opensuse-leap-15-2-64-base
             - opensuse-15.2-64:
                 image: opensuse-leap-15-2-64
+            - opensuse-15.3-64-external:
+                image: opensuse-cloud/opensuse-leap-15-3-v20210708
+            - opensuse-15.3-64-base:
+                image: opensuse-leap-15-3-64-base
+            - opensuse-15.3-64:
+                image: opensuse-leap-15-3-64
             - opensuse-tumbleweed-64-base:
                 image: opensuse-tumbleweed-64-base
             - opensuse-tumbleweed-64:
