@@ -15,6 +15,11 @@ execute: |
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
+
+        # Install other dependencies
+        zypper remove -y kernel-default-base
+        zypper install -y rpm-build kernel-default
+
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
 
