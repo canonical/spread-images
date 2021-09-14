@@ -49,6 +49,17 @@ get_latest_image_name(){
     echo $(gcloud compute images describe-from-family "$FAMILY" --project "$GCE_PROJECT" --format json 2>/dev/null | jq -r '.name')
 }
 
+get_ordered_image_names(){
+    local FAMILY=$1
+    # Get by default the latest images first
+    local ORDER=${2:-~creationTimestamp}
+
+    if [ -z "$FAMILY" ]; then
+        echo "Family required to retrieve images, exiting..."
+        exit 1
+    fi
+    gcloud compute images list --project "$GCE_PROJECT" --sort-by "$ORDER" --format json --filter "family = $FAMILY" | jq -r ".[] | select(.family==\"$FAMILY\") | .name"
+}
 
 deprecate_old_images(){
     local FAMILY=$1
