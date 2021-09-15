@@ -26,6 +26,9 @@ execute: |
     # Disable the service because sometimes is failing
     systemctl disable --now fwupd.service fwupd-refresh.service fwupd-refresh.timer
 
+    # Disable daily checks for updates to avoid apt locks
+    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
+
     # Clean disk before create the shapshot
     clean_machine
 
