@@ -18,9 +18,6 @@ execute: |
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
 
-        sed -i 's/^GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=1"/' /etc/default/grub
-        grub-mkconfig -o /boot/grub/grub.cfg
-
         REBOOT
     fi
 
