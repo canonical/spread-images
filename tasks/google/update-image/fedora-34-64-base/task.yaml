@@ -1,9 +1,9 @@
 summary: Update fedora base image with the latest updates
 
-systems: [fedora-32-64-base]
+systems: [fedora-34-64-base]
 
 environment:
-    TARGET_SYSTEM: fedora-32-64-base
+    TARGET_SYSTEM: fedora-34-64-base
 
 execute: |
     . "$TESTSLIB/google.sh"
