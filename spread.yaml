@@ -76,6 +76,10 @@ backends:
                 image: debian-10-64
             - debian-11-64-external:
                 image: debian-cloud/debian-11
+            - debian-11-64-base:
+                image: debian-11-64-base
+            - debian-11-64:
+                image: debian-11-64
             - debian-sid-64-base:
                 image: debian-sid-64-base
             - debian-sid-64:

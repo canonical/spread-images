@@ -47,8 +47,8 @@ execute: |
         distro_install_package snapd qemu qemu-utils genisoimage sshpass qemu-kvm cloud-image-utils ovmf kpartx
  
         if [[ "$SPREAD_SYSTEM" =~ ubuntu-20.04* ]]; then
-            apt remove -y linux-headers-5.4.0-1024-gcp
-            apt remove -y linux-image-5.4.0-1024-gcp
+            apt remove -y linux-headers-5.11.0-1020-gcp
+            apt remove -y linux-image-5.11.0-1020-gcp
             wget http://security.ubuntu.com/ubuntu/pool/main/l/linux-gcp/linux-modules-4.15.0-1078-gcp_4.15.0-1078.88~16.04.1_amd64.deb
             wget http://security.ubuntu.com/ubuntu/pool/main/l/linux-gcp/linux-gcp-headers-4.15.0-1078_4.15.0-1078.88~16.04.1_amd64.deb
             wget http://security.ubuntu.com/ubuntu/pool/universe/l/linux-signed-gcp-4.15/linux-image-4.15.0-1078-gcp_4.15.0-1078.88_amd64.deb

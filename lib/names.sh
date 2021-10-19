@@ -109,6 +109,16 @@ else
             FAMILY="debian-10-64"
             DESCRIPTION="Debian 10 64 bits"
             ;;
+       debian-11-64-base)
+            IMAGE="debian-11-64-base-v$(date +'%Y%m%d')"
+            FAMILY="debian-11-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        debian-11-64)
+            IMAGE="debian-11-64-v$(date +'%Y%m%d')"
+            FAMILY="debian-11-64"
+            DESCRIPTION="Debian 11 64 bits"
+            ;;
         debian-sid-64-base)
             IMAGE="debian-sid-64-base-v$(date +'%Y%m%d')"
             FAMILY="debian-sid-64-base"
