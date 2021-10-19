@@ -1,0 +1,37 @@
+summary: Update ubuntu 18.04 32 bits image with the latest updates
+
+systems: [ubuntu-18.04-32-base]
+
+environment:
+    TARGET_SYSTEM: ubuntu-18.04-32-base
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        distro_upgrade_packages
+    fi
+
+    # Avoid checking for new release, it could cause lock on apt
+    sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
+
+    # Disable daily checks for updates to avoid apt locks
+    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk_with_os_features "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "UEFI_COMPATIBLE"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"
+    delete_deprecated_images
