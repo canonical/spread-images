@@ -42,6 +42,7 @@ backends:
             - ubuntu-20.04-64-base:
                 image: ubuntu-os-cloud/ubuntu-2004-lts
             - ubuntu-20.04-64:
+                disks: 0
                 image: ubuntu-2004-64
             - ubuntu-20.04-64-virt-enabled:
                 image: ubuntu-2004-64-virt-enabled
@@ -58,7 +59,7 @@ backends:
             - ubuntu-21.04-64-virt-enabled:
                 image: ubuntu-2104-64-virt-enabled
             - ubuntu-21.10-64-external:
-                image: ubuntu-os-cloud-devel/ubuntu-2110
+                image: ubuntu-os-cloud/ubuntu-2110
             - ubuntu-21.10-64:
                 image: ubuntu-2110-64
 
@@ -97,6 +98,10 @@ backends:
                 image: fedora-34-64-base
             - fedora-34-64:
                 image: fedora-34-64
+            - fedora-35-64-base:
+                image: fedora-35-64-base
+            - fedora-35-64:
+                image: fedora-35-64
             - fedora-rawhide-64:
                 image: fedora-rawhide-64
 

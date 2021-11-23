@@ -24,6 +24,11 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
             fi
+            if [ -z "${CLOUDSDK_PYTHON:-}" ]; then
+                CURR_PYTHON="$(readlink $(which python3))"
+                echo "CLOUDSDK_PYTHON=$CURR_PYTHON" >> /etc/environment
+                export CLOUDSDK_PYTHON="$CURR_PYTHON"
+            fi
             dnf makecache
             dnf install -y google-cloud-sdk
             ;;
