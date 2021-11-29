@@ -32,13 +32,6 @@ execute: |
         dnf install authselect -y
         authselect select minimal --force
 
-        # Disable cloud init because 35 cloud-init fails on start making fail the services:
-        # 1. cloud-config.service
-        # 2. cloud-final.service
-        # 3. cloud-init-local.service
-        # 4. cloud-init.service
-        touch /etc/cloud/cloud-init.disabled
-
         REBOOT
     fi
 

@@ -13,21 +13,31 @@ distro_install_google_sdk() {
             ;;
         fedora-*)
             if [ $(find /etc/yum.repos.d/google-cloud*.repo | wc -l) -eq 0 ]; then
-                cat >> /etc/yum.repos.d/google-cloud-sdk.repo <<-EOF
+                sudo tee -a /etc/yum.repos.d/google-cloud-sdk.repo << EOM
 [google-cloud-sdk]
 name=Google Cloud SDK
-baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el7-x86_64
+baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el8-x86_64
 enabled=1
 gpgcheck=1
-repo_gpgcheck=1
+repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-EOF
+EOM
             fi
             if [ -z "${CLOUDSDK_PYTHON:-}" ]; then
                 CURR_PYTHON="$(readlink $(which python3))"
-                echo "CLOUDSDK_PYTHON=$CURR_PYTHON" >> /etc/environment
-                export CLOUDSDK_PYTHON="$CURR_PYTHON"
+                # TODO: remove this when python3.10 works with gcloud command
+                # + gcloud auth activate-service-account --key-file=/root/spread/sa.json
+                # ERROR: gcloud failed to load: module 'collections' has no attribute 'Mapping'
+                if [ "$CURR_PYTHON" = "python3.10" ]; then
+                    dnf install -y python3.9
+                    echo "CLOUDSDK_PYTHON=python3.9" >> /etc/environment
+                    export CLOUDSDK_PYTHON="python3.9"
+                else
+                    echo "CLOUDSDK_PYTHON=$CURR_PYTHON" >> /etc/environment
+                    export CLOUDSDK_PYTHON="$CURR_PYTHON"
+                fi
+                
             fi
             dnf makecache
             dnf install -y google-cloud-sdk
