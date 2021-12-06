@@ -489,6 +489,7 @@ install_pkg_dependencies(){
 install_test_dependencies(){
     local TARGET="$1"
     git clone https://github.com/snapcore/snapd.git snapd-master
+    cp -r snapd-master/tests/lib/external/snpad-testing-tools/tools/* snapd-master/tests/lib/tools/
     export TESTSLIB="$(pwd)"/snapd-master/tests/lib
     export PATH=$PATH:"$(pwd)"/snapd-master/tests/bin
     export SPREAD_SYSTEM="$TARGET"
