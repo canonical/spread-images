@@ -403,7 +403,7 @@ pkg_dependencies_centos(){
     echo "
         git
         jq
-        libffi-dev
+        libffi-devel
         wget
         "
 }
