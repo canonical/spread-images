@@ -403,6 +403,7 @@ pkg_dependencies_centos(){
     echo "
         git
         jq
+        python3
         wget
         "
 }
