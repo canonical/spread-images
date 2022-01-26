@@ -1,6 +1,6 @@
 summary: Add fedora image with the latest updates with selinux permissive
 
-systems: [fedora-29-64-base, fedora-30-64-base]
+systems: [fedora-35-64-base]
 
 environment:
     TARGET_SYSTEM: fedora-rawhide-64
@@ -11,29 +11,12 @@ execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
-    if [ "$SPREAD_REBOOT" = 0 ]; then
+    if ! grep "rawhide" /etc/os-release; then
         # Make the upgrade and install the dependencies needed to run snapd tests
-        dnf makecache
-        dnf upgrade -y
-        dnf install -y dnf-plugins-core fedora-repos-rawhide
-        dnf config-manager --set-disabled fedora updates updates-testing
-        dnf config-manager --set-enabled rawhide
-        dnf clean -q dbcache packages metadata
-        wget https://getfedora.org/static/CFC659B9.txt -O key.asc
-        rpm --import key.asc
-
-        # Remove fedora 29 modular repos because are failing to sync
-        rm -rf /etc/yum.repos.d/fedora-modular.repo
-        rm -rf /etc/yum.repos.d/fedora-updates-modular.repo
-        dnf --releasever=rawhide --setopt=deltarpm=false distro-sync -y
-
-        # Disable google-network-daemon service because it conflicts with spread ssh configuration during startup
-        systemctl disable --now google-network-daemon.service
-
-        # Disable cloud init because reset sshd config affecting spread metadata script
-        # Also in fedora 29 cloud-init fails on start
-        touch /etc/cloud/cloud-init.disabled
-
+        dnf install -y dnf-plugin-system-upgrade
+        dnf upgrade -y --refresh
+        dnf system-upgrade download -y --releasever=rawhide
+        dnf system-upgrade reboot
         REBOOT
     fi
 
