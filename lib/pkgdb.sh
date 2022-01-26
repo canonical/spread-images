@@ -91,6 +91,34 @@ EOM
     esac
 }
 
+distro_reinstall_google_sdk() {
+    distro_purge_package google-cloud-sdk
+    # Clean repository
+    case "$SPREAD_SYSTEM" in
+        ubuntu-*|debian-*)
+            rm -f /etc/apt/sources.list.d/google-cloud*.list
+            ;;
+        fedora-*)
+            rm -f /etc/yum.repos.d/google-cloud*.repo
+            ;;
+        opensuse-*)
+            rm -rf /usr/share/google
+            ;;
+        arch-*|amazon-*)
+            rm -rf /usr/share/google/google-cloud-sdk
+            ;;
+        centos-*)
+            rm -f /etc/yum.repos.d/google-cloud*.repo
+            ;;
+        *)
+            echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
+            exit 1
+            ;;
+    esac
+    distro_install_package google-cloud-sdk
+    gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
+}
+
 clean_google_services() {
     echo "Cleaning google services already running in the system"
     services="$(ls /usr/lib/systemd/system/google-*.service)" || return
