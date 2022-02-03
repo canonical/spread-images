@@ -15,7 +15,8 @@ execute: |
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
-        #install_test_dependencies "$TARGET_SYSTEM"
+        install_test_dependencies "$TARGET_SYSTEM"
+        distro_purge_package libntfs-3g883
         remove_pkg_blacklist
 
         REBOOT

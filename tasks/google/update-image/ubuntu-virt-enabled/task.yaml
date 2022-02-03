@@ -1,6 +1,6 @@
-summary: Update Ubuntu xenial/bionic/focal 64 bits image with the latest updates and kvm enabled
+summary: Update Ubuntu xenial/bionic/focal/jammy 64 bits image with the latest updates and kvm enabled
 
-systems: [ubuntu-16.04-64-external, ubuntu-18.04-64-external, ubuntu-20.04-64-external, ubuntu-21.10-64-external]
+systems: [ubuntu-16.04-64-external, ubuntu-18.04-64-external, ubuntu-20.04-64-external, ubuntu-21.10-64-external, ubuntu-22.04-64-external]
 
 environment:
     LICENSES: https://www.googleapis.com/compute/v1/projects/vm-options/global/licenses/enable-vmx
@@ -27,6 +27,9 @@ execute: |
         ;;
         ubuntu-21.10-64*)
             TARGET_SYSTEM=ubuntu-21.10-64-virt-enabled
+        ;;
+        ubuntu-22.04-64*)
+            TARGET_SYSTEM=ubuntu-22.04-64-virt-enabled
         ;;
         *)
             echo "System not supported"
@@ -100,6 +103,9 @@ restore: |
         ;;
         ubuntu-21.10-64*)
             TARGET_SYSTEM=ubuntu-21.10-64-virt-enabled
+        ;;
+        ubuntu-22.04-64*)
+            TARGET_SYSTEM=ubuntu-22.04-64-virt-enabled
         ;;
         *)
             echo "System not supported"
