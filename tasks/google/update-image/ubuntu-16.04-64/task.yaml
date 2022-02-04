@@ -1,6 +1,6 @@
 summary: Update Ubuntu xenial 64 bits image with the latest updates and test dependencies
 
-systems: [ubuntu-16.04-64-base]
+systems: [ubuntu-16.04-64-base, ubuntu-16.04-64]
 
 environment:
     TARGET_SYSTEM: ubuntu-16.04-64
