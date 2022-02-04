@@ -155,7 +155,7 @@ backends:
                 image: centos-7-64
                 storage: preserve-size
             - centos-8-64-base:
-                image: centos-cloud/centos-8
+                image: centos-cloud/centos-stream-8
                 storage: preserve-size
             - centos-8-64:
                 image: centos-8-64
