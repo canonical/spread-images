@@ -533,4 +533,5 @@ remove_pkg_blacklist(){
     if [ ! -z "$pkgs" ]; then
         distro_purge_package "$pkgs"
     fi
+    distro_auto_remove_packages
 }
