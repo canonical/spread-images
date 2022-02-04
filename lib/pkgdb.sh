@@ -291,8 +291,7 @@ distro_update_package_db() {
             ;;
         arch-*)
             # Refresh keys first to account for expired keys
-            pacman-key --keyserver hkp://pool.sks-keyservers.net --refresh-keys || true
-            pacman -Syq
+            pacman -Sy --noconfirm archlinux-keyring
             ;;
         amazon-*|centos-*)
             yum clean all

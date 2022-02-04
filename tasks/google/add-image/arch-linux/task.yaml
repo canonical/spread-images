@@ -3,13 +3,18 @@ summary: Add new arch linux image to google account
 systems: [arch-linux-64-external]
 
 environment:
-    TARGET_SYSTEM: arch-linux-64-base
+    TARGET_SYSTEM: arch-linux-64-external
 
 execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/names.sh"
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
+
+    # Add a base image by doing:
+    # gcloud compute instances create my-new-arch-linux --image-project=arch-linux-gce --image-family=arch --zone=us-east1-b
+    # Then create a snapshot from the running instace
+    # And then create the image from the snapshot
 
     # Clean disk before create the shapshot
     clean_machine
