@@ -15,9 +15,8 @@ execute: |
         # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
-        remove_pkg_blacklist
 
-        distro_install_google_compute_engine
+        distro_install_package inetutils
 
         REBOOT
     fi
