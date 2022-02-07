@@ -16,7 +16,9 @@ execute: |
         distro_update_package_db
         distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
-        distro_purge_package libntfs-3g883
+        if [ dpkg -l libntfs-3g883 ]; then
+            distro_purge_package libntfs-3g883
+        fi
         remove_pkg_blacklist
 
         REBOOT
