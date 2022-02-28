@@ -25,6 +25,9 @@ execute: |
         distro_install_package "kernel-modules-$(uname -r)"
         distro_upgrade_packages
 
+        # Remove old python
+        dnf remove -y python2.7
+
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
 
