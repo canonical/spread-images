@@ -11,10 +11,17 @@ execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
+    # Manual Process
     # Add a base image by doing:
-    # gcloud compute instances create my-new-arch-linux --image-project=arch-linux-gce --image-family=arch --zone=us-east1-b
+    # -> MACHINE_NAME=my-new-arch-linux
+    # -> MACHINE_ZONE=us-east1-b
+    # -> gcloud compute instances create "$MACHINE_NAME" --image-project=arch-linux-gce --image-family=arch --zone="$MACHINE_ZONE"
     # Then create a snapshot from the running instace
+    # -> gcloud compute snapshots delete "$MACHINE_NAME" --quiet || true
+    # -> gcloud compute disks snapshot "$MACHINE_NAME" --zone "$MACHINE_ZONE" --snapshot-names "$MACHINE_NAME"
     # And then create the image from the snapshot
+    # -> gcloud compute images create "arch-linux-64-base-v$(date +'%Y%m%d')" --family "arch-linux-64-base" --description "Base image" --source-snapshot "$MACHINE_NAME" --guest-os-features="UEFI_COMPATIBLE"
+    # -> gcloud compute snapshots delete "$MACHINE_NAME" --quiet
 
     # Clean disk before create the shapshot
     clean_machine
