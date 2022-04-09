@@ -63,7 +63,7 @@ backends:
             - ubuntu-21.10-64:
                 image: ubuntu-2110-64
             - ubuntu-22.04-64-external:
-                image: ubuntu-os-cloud-devel/ubuntu-2204-lts
+                image: ubuntu-os-cloud-devel/daily-ubuntu-2204-jammy-v20220407
             - ubuntu-22.04-64:
                 image: ubuntu-2204-64
 
@@ -178,6 +178,14 @@ backends:
                 workers: 1
             - ubuntu-20.04-64:
                 image: ubuntu-2004-64-virt-enabled
+                storage: 20G
+                workers: 1
+            - ubuntu-21.10-64:
+                image: ubuntu-2110-64-virt-enabled
+                storage: 20G
+                workers: 1
+            - ubuntu-22.04-64:
+                image: ubuntu-2204-64-virt-enabled
                 storage: 20G
                 workers: 1
 
