@@ -63,7 +63,7 @@ backends:
             - ubuntu-21.10-64:
                 image: ubuntu-2110-64
             - ubuntu-22.04-64-external:
-                image: ubuntu-os-cloud-devel/daily-ubuntu-2204-jammy-v20220407
+                image: ubuntu-os-cloud/ubuntu-2204-lts
             - ubuntu-22.04-64:
                 image: ubuntu-2204-64
 
@@ -122,7 +122,7 @@ backends:
             - opensuse-15.2-64:
                 image: opensuse-leap-15-2-64
             - opensuse-15.3-64-external:
-                image: opensuse-cloud/opensuse-leap-15-3-v20210708
+                image: opensuse-cloud/opensuse-leap-15-3-v20220128
             - opensuse-15.3-64-base:
                 image: opensuse-leap-15-3-64-base
             - opensuse-15.3-64:

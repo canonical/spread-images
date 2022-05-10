@@ -9,7 +9,7 @@ distro_install_google_sdk() {
                 echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
                 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
                 apt-get update && apt-get install -y google-cloud-sdk
-            fi
+            fi            
             ;;
         fedora-*)
             if [ $(find /etc/yum.repos.d/google-cloud*.repo | wc -l) -eq 0 ]; then
@@ -41,6 +41,7 @@ EOM
             fi
             dnf makecache
             dnf install -y google-cloud-sdk
+            rm -f /etc/yum.repos.d/google-cloud-sdk.repo
             ;;
         opensuse-*)
             if [ ! -d /usr/share/google ]; then
@@ -83,6 +84,7 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
 EOM
                 yum -y install google-cloud-sdk
             fi
+            rm -f /etc/yum.repos.d/google-cloud-sdk.repo
             ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
@@ -231,7 +233,7 @@ distro_install_package() {
             ;;
         opensuse-*)
             # shellcheck disable=SC2086
-            zypper --gpg-auto-import-keys install -y --allow-downgrade --force-resolution $ZYPPER_FLAGS "${pkg_names[@]}"
+            zypper --gpg-auto-import-keys install -y --force-resolution $ZYPPER_FLAGS "${pkg_names[@]}"
             ;;
         arch-*)
             # shellcheck disable=SC2086
@@ -287,7 +289,8 @@ distro_update_package_db() {
             dnf makecache
             ;;
         opensuse-*)
-            zypper --gpg-auto-import-keys refresh
+            zypper -q clean --all
+            zypper refresh
             ;;
         arch-*)
             # Refresh keys first to account for expired keys
@@ -313,7 +316,7 @@ distro_upgrade_packages() {
             dnf upgrade --nogpgcheck -y
             ;;
         opensuse-*)
-            zypper dup -y --allow-downgrade --force-resolution
+            zypper dup -y --force-resolution --no-recommends --replacefiles
             zypper dist-upgrade -y
             ;;
         arch-*)
@@ -489,6 +492,8 @@ distro_initial_repo_setup(){
         fedora-*)
             ;;
         opensuse-*)
+            zypper mr -d  repo-debug-update || true
+            zypper mr -d repo-sle-update || true
             ;;
         arch-*)
             # Delete the key wich is failing checking packages integrity
