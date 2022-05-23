@@ -295,6 +295,8 @@ distro_update_package_db() {
             pacman -Sy --noconfirm archlinux-keyring
             ;;
         amazon-*|centos-*)
+            # Delete google repository because it is not needed any more
+            rm -f /etc/yum.repos.d/google-cloud.repo
             yum clean all
             yum --nogpgcheck makecache
             ;;
