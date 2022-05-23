@@ -160,6 +160,12 @@ backends:
             - centos-8-64:
                 image: centos-8-64
                 storage: preserve-size
+            - centos-9-64-base:
+                image: centos-cloud/centos-stream-9
+                storage: preserve-size
+            - centos-9-64:
+                image: centos-9-64
+                storage: preserve-size
 
     google-nested:
         type: google
@@ -245,6 +251,7 @@ suites:
                 echo "Service account file not found in root path"
                 exit 1
             fi
+            distro_reinstall_google_sdk
             distro_initial_repo_setup
             distro_update_package_db
             install_pkg_dependencies

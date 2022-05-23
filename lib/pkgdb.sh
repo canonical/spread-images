@@ -12,8 +12,8 @@ distro_install_google_sdk() {
             fi            
             ;;
         fedora-*)
-            if [ $(find /etc/yum.repos.d/google-cloud*.repo | wc -l) -eq 0 ]; then
-                sudo tee -a /etc/yum.repos.d/google-cloud-sdk.repo << EOM
+            rm -rf /etc/yum.repos.d/google-cloud*.repo
+            tee /etc/yum.repos.d/google-cloud-sdk.repo << EOM
 [google-cloud-sdk]
 name=Google Cloud SDK
 baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el8-x86_64
@@ -23,7 +23,6 @@ repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOM
-            fi
             if [ -z "${CLOUDSDK_PYTHON:-}" ]; then
                 CURR_PYTHON="$(readlink $(which python3))"
                 # TODO: remove this when python3.10 works with gcloud command
@@ -71,8 +70,8 @@ EOM
             fi
             ;;
         centos-*)
-            if [ $(find /etc/yum.repos.d/google-cloud*.repo | wc -l) -eq 0 ]; then
-                sudo tee -a /etc/yum.repos.d/google-cloud-sdk.repo << EOM
+            rm -rf /etc/yum.repos.d/google-cloud*.repo
+            tee /etc/yum.repos.d/google-cloud-sdk.repo << EOM
 [google-cloud-sdk]
 name=Google Cloud SDK
 baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el7-x86_64
@@ -82,8 +81,7 @@ repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOM
-                yum -y install google-cloud-sdk
-            fi
+            yum -y install google-cloud-sdk
             rm -f /etc/yum.repos.d/google-cloud-sdk.repo
             ;;
         *)
@@ -492,7 +490,7 @@ distro_initial_repo_setup(){
         fedora-*)
             ;;
         opensuse-*)
-            zypper mr -d  repo-debug-update || true
+            zypper mr -d repo-debug-update || true
             zypper mr -d repo-sle-update || true
             ;;
         arch-*)
@@ -515,7 +513,7 @@ install_pkg_dependencies(){
         distro_install_package "$pkgs"
     fi
     if ! command -v gcloud >/dev/null; then
-        distro_install_google_sdk
+        distro_reinstall_google_sdk
     fi
 }
 
