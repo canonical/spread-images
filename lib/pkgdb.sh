@@ -503,6 +503,7 @@ distro_initial_repo_setup(){
         amazon-*)
             ;;
         centos-*)
+            rm -rf /etc/yum.repos.d/google-cloud*.repo
             ;;
         *)
             ;;

@@ -16,7 +16,8 @@ execute: |
         distro_update_package_db
         distro_upgrade_packages
 
-        install_test_dependencies "$TARGET_SYSTEM"
+        # The test dependencies need to be updated 
+        #install_test_dependencies "$TARGET_SYSTEM"
 
         remove_pkg_blacklist
         REBOOT
