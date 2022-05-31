@@ -91,8 +91,32 @@ EOM
     esac
 }
 
+distro_remove_google_sdk() {
+    case "$SPREAD_SYSTEM" in
+        ubuntu-*|debian-*)
+            distro_purge_package google-cloud-sdk
+            ;;
+        fedora-*)
+            distro_purge_package google-cloud-sdk
+            ;;
+        opensuse-*)
+            echo "Not required yet"
+            ;;
+        arch-*|amazon-*)
+            echo "Not required yet"
+            ;;
+        centos-*)
+            distro_purge_package google-cloud-sdk
+            ;;
+        *)
+            echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
+            exit 1
+            ;;
+    esac
+}
+
 distro_reinstall_google_sdk() {
-    distro_purge_package google-cloud-sdk
+    distro_remove_google_sdk
     # Clean repository
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
