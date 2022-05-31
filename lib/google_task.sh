@@ -95,7 +95,7 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         centos-7)
             SOURCE_SYSTEM=centos-7-64-base
             TARGET_SYSTEM=centos-7-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         centos-8)
@@ -125,7 +125,7 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         fedora-33-64)
             SOURCE_SYSTEM=fedora-33-64-base
             TARGET_SYSTEM=fedora-33-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         fedora-34-64)
