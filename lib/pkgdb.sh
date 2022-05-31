@@ -540,7 +540,7 @@ install_pkg_dependencies(){
         distro_install_package "$pkgs"
     fi
     if ! command -v gcloud >/dev/null; then
-        distro_reinstall_google_sdk
+        distro_install_google_sdk
     fi
 }
 
