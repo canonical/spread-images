@@ -83,13 +83,13 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         amazon-linux-2)
             SOURCE_SYSTEM=amazon-linux-2-64-base
             TARGET_SYSTEM=amazon-linux-2-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         arch-linux)
             SOURCE_SYSTEM=arch-linux-64-base
             TARGET_SYSTEM=arch-linux-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         centos-7)
@@ -101,19 +101,19 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         centos-8)
             SOURCE_SYSTEM=centos-8-64-base
             TARGET_SYSTEM=centos-8-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         debian-10)
             SOURCE_SYSTEM=debian-10-64-base
             TARGET_SYSTEM=debian-10-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         debian-11)
             SOURCE_SYSTEM=debian-11-64-base
             TARGET_SYSTEM=debian-11-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         debian-sid)
@@ -131,13 +131,13 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         fedora-34-64)
             SOURCE_SYSTEM=fedora-34-64-base
             TARGET_SYSTEM=fedora-34-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         fedora-35-64)
             SOURCE_SYSTEM=fedora-35-64-base
             TARGET_SYSTEM=fedora-35-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         fedora-rawhide-64)
@@ -149,13 +149,13 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         opensuse-15-2)
             SOURCE_SYSTEM=opensuse-15.2-64-base
             TARGET_SYSTEM=opensuse-15.2-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         opensuse-15-3)
             SOURCE_SYSTEM=opensuse-15.3-64-base
             TARGET_SYSTEM=opensuse-15.3-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         opensuse-tumbleweed)
@@ -167,43 +167,43 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         ubuntu-14.04-64)
             SOURCE_SYSTEM=ubuntu-14.04-64
             TARGET_SYSTEM=ubuntu-14.04-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=1
             ;;
         ubuntu-16.04-64)
             SOURCE_SYSTEM=ubuntu-16.04-64
             TARGET_SYSTEM=ubuntu-16.04-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=1
             ;;
         ubuntu-18.04-32)
             SOURCE_SYSTEM=ubuntu-18.04-32-base
             TARGET_SYSTEM=ubuntu-18.04-32
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=1
             ;;
         ubuntu-18.04-64)
             SOURCE_SYSTEM=ubuntu-18.04-64-base
             TARGET_SYSTEM=ubuntu-18.04-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;            
         ubuntu-20.04-64)
             SOURCE_SYSTEM=ubuntu-20.04-64-base
             TARGET_SYSTEM=ubuntu-20.04-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         ubuntu-20.10-64)
             SOURCE_SYSTEM=ubuntu-20.10-64-base
             TARGET_SYSTEM=ubuntu-20.10-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         ubuntu-21.04-64)
             SOURCE_SYSTEM=ubuntu-21.04-64-base
             TARGET_SYSTEM=ubuntu-21.04-64
-            RUN_SNAPD=true
+            RUN_SNAPD=false
             BACKUPS=0
             ;;
         ubuntu-21.10-64)
