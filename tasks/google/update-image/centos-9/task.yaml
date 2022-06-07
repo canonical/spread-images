@@ -16,6 +16,11 @@ execute: |
         distro_update_package_db
         distro_upgrade_packages
 
+        wget https://vault.centos.org/centos/8/BaseOS/x86_64/os/Packages/xdelta-3.1.0-4.el8.x86_64.rpm
+        rpm -i xdelta-3.1.0-4.el8.x86_64.rpm
+        dnf --enablerepo=crb install -y glibc-static
+        dnf --enablerepo=crb install -y python3-docutils
+
         # The test dependencies need to be updated 
         #install_test_dependencies "$TARGET_SYSTEM"
 
