@@ -67,12 +67,6 @@ backends:
             - ubuntu-22.04-64:
                 image: ubuntu-2204-64
 
-            - debian-9-64-external:
-                image: debian-cloud/debian-9
-            - debian-9-64-base:
-                image: debian-9-64-base
-            - debian-9-64:
-                image: debian-9-64
             - debian-10-64-external:
                 image: debian-cloud/debian-10
             - debian-10-64-base:
@@ -90,10 +84,6 @@ backends:
             - debian-sid-64:
                 image: debian-sid-64
 
-            - fedora-32-64-base:
-                image: fedora-32-64-base
-            - fedora-32-64:
-                image: fedora-32-64
             - fedora-33-64-base:
                 image: fedora-33-64-base
             - fedora-33-64:
@@ -106,15 +96,13 @@ backends:
                 image: fedora-35-64-base
             - fedora-35-64:
                 image: fedora-35-64
+            - fedora-36-64-base:
+                image: fedora-36-64-base
+            - fedora-36-64:
+                image: fedora-36-64
             - fedora-rawhide-64:
                 image: fedora-rawhide-64
 
-            - opensuse-15.1-64-external:
-                image: opensuse-cloud/opensuse-leap-15-1-v20190618
-            - opensuse-15.1-64-base:
-                image: opensuse-leap-15-1-64-base
-            - opensuse-15.1-64:
-                image: opensuse-leap-15-1-64
             - opensuse-15.2-64-external:
                 image: opensuse-cloud/opensuse-leap-15-2-v20200702
             - opensuse-15.2-64-base:
@@ -127,6 +115,12 @@ backends:
                 image: opensuse-leap-15-3-64-base
             - opensuse-15.3-64:
                 image: opensuse-leap-15-3-64
+            - opensuse-15.4-64-external:
+                image: opensuse-cloud/opensuse-leap-15-4-v20220624-x86-64
+            - opensuse-15.4-64-base:
+                image: opensuse-leap-15-4-64-base
+            - opensuse-15.4-64:
+                image: opensuse-leap-15-4-64
             - opensuse-tumbleweed-64-base:
                 image: opensuse-tumbleweed-64-base
             - opensuse-tumbleweed-64:

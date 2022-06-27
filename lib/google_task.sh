@@ -30,43 +30,6 @@ if [ "$GOOGLE_ACTION" = "add-image" ]; then
             RUN_SNAPD=false
             BACKUPS=0
             ;;
-        fedora-27-64)
-            # First added manually using a local fedora vm
-            SOURCE_SYSTEM=fedora-26-64
-            TARGET_SYSTEM=fedora-27-64-base
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
-        fedora-28-64)
-            SOURCE_SYSTEM=fedora-27-64
-            TARGET_SYSTEM=fedora-28-64-base
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
-        fedora-29-64)
-            SOURCE_SYSTEM=fedora-28-64
-            TARGET_SYSTEM=fedora-29-64-base
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
-        fedora-30-64)
-            SOURCE_SYSTEM=fedora-29-64
-            TARGET_SYSTEM=fedora-30-64-base
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
-        fedora-31-64)
-            SOURCE_SYSTEM=fedora-30-64
-            TARGET_SYSTEM=fedora-31-64-base
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
-        opensuse-42-2-64)
-            SOURCE_SYSTEM=ubuntu-16.04-64
-            TARGET_SYSTEM=opensuse-42.2-64-base
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
         ubuntu-16.04-32)
             SOURCE_SYSTEM=ubuntu-16.04-64
             TARGET_SYSTEM=ubuntu-16.04-32-base
@@ -140,6 +103,12 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             RUN_SNAPD=false
             BACKUPS=0
             ;;
+        fedora-36-64)
+            SOURCE_SYSTEM=fedora-36-64-base
+            TARGET_SYSTEM=fedora-36-64
+            RUN_SNAPD=false
+            BACKUPS=0
+            ;;
         fedora-rawhide-64)
             SOURCE_SYSTEM=fedora-rawhide-64
             TARGET_SYSTEM=fedora-rawhide-64
@@ -155,6 +124,12 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         opensuse-15-3)
             SOURCE_SYSTEM=opensuse-15.3-64-base
             TARGET_SYSTEM=opensuse-15.3-64
+            RUN_SNAPD=false
+            BACKUPS=0
+            ;;
+        opensuse-15-4)
+            SOURCE_SYSTEM=opensuse-15.4-64-base
+            TARGET_SYSTEM=opensuse-15.4-64
             RUN_SNAPD=false
             BACKUPS=0
             ;;
@@ -191,18 +166,6 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         ubuntu-20.04-64)
             SOURCE_SYSTEM=ubuntu-20.04-64-base
             TARGET_SYSTEM=ubuntu-20.04-64
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
-        ubuntu-20.10-64)
-            SOURCE_SYSTEM=ubuntu-20.10-64-base
-            TARGET_SYSTEM=ubuntu-20.10-64
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
-        ubuntu-21.04-64)
-            SOURCE_SYSTEM=ubuntu-21.04-64-base
-            TARGET_SYSTEM=ubuntu-21.04-64
             RUN_SNAPD=false
             BACKUPS=0
             ;;

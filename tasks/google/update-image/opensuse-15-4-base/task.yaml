@@ -1,9 +1,9 @@
-summary: Update opensuse 15.1 64 bits image with the latest updates
+summary: Update opensuse 15.4 64 bits image with the latest updates
 
-systems: [opensuse-15.1-64-base]
+systems: [opensuse-15.4-64-base]
 
 environment:
-    TARGET_SYSTEM: opensuse-15.1-64-base
+    TARGET_SYSTEM: opensuse-15.4-64-base
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -12,7 +12,7 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Make the upgrade and install the dependencies needed to run snapd tests
+        # Make the upgrade and install the dependencies needed to run snapd tests        
         distro_update_package_db
         distro_upgrade_packages
     fi

@@ -1,9 +1,9 @@
-summary: Add new opensuse leap 15.1 64 bits image to google account
+summary: Add new opensuse leap 15.4 64 bits image to google account
 
-systems: [opensuse-15.1-64-external]
+systems: [opensuse-15.4-64-external]
 
 environment:
-    TARGET_SYSTEM: opensuse-15.1-64-base
+    TARGET_SYSTEM: opensuse-15.4-64-base
 
 execute: |
     . "$TESTSLIB/google.sh"
