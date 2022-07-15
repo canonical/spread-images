@@ -58,10 +58,6 @@ backends:
                 image: ubuntu-2104-64
             - ubuntu-21.04-64-virt-enabled:
                 image: ubuntu-2104-64-virt-enabled
-            - ubuntu-21.10-64-external:
-                image: ubuntu-os-cloud/ubuntu-2110
-            - ubuntu-21.10-64:
-                image: ubuntu-2110-64
             - ubuntu-22.04-64-external:
                 image: ubuntu-os-cloud/ubuntu-2204-lts
             - ubuntu-22.04-64:
@@ -84,14 +80,6 @@ backends:
             - debian-sid-64:
                 image: debian-sid-64
 
-            - fedora-33-64-base:
-                image: fedora-33-64-base
-            - fedora-33-64:
-                image: fedora-33-64
-            - fedora-34-64-base:
-                image: fedora-34-64-base
-            - fedora-34-64:
-                image: fedora-34-64
             - fedora-35-64-base:
                 image: fedora-35-64-base
             - fedora-35-64:
@@ -103,12 +91,6 @@ backends:
             - fedora-rawhide-64:
                 image: fedora-rawhide-64
 
-            - opensuse-15.2-64-external:
-                image: opensuse-cloud/opensuse-leap-15-2-v20200702
-            - opensuse-15.2-64-base:
-                image: opensuse-leap-15-2-64-base
-            - opensuse-15.2-64:
-                image: opensuse-leap-15-2-64
             - opensuse-15.3-64-external:
                 image: opensuse-cloud/opensuse-leap-15-3-v20220128
             - opensuse-15.3-64-base:
