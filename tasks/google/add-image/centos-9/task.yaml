@@ -1,0 +1,26 @@
+summary: Add new centos-9 64 bits image to google account
+
+systems: [centos-9-64-external]
+
+environment:
+    TARGET_SYSTEM: centos-9-64-base
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create the image in snapd-spread project
+    delete_image "$IMAGE" "$FAMILY"
+    create_image_from_disk "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"
+    delete_deprecated_images

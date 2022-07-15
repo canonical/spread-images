@@ -67,6 +67,12 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             RUN_SNAPD=false
             BACKUPS=0
             ;;
+        centos-9)
+            SOURCE_SYSTEM=centos-9-64-base
+            TARGET_SYSTEM=centos-9-64
+            RUN_SNAPD=false
+            BACKUPS=0
+            ;;
         debian-10)
             SOURCE_SYSTEM=debian-10-64-base
             TARGET_SYSTEM=debian-10-64
@@ -85,18 +91,6 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             RUN_SNAPD=false
             BACKUPS=1
             ;;
-        fedora-33-64)
-            SOURCE_SYSTEM=fedora-33-64-base
-            TARGET_SYSTEM=fedora-33-64
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
-        fedora-34-64)
-            SOURCE_SYSTEM=fedora-34-64-base
-            TARGET_SYSTEM=fedora-34-64
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
         fedora-35-64)
             SOURCE_SYSTEM=fedora-35-64-base
             TARGET_SYSTEM=fedora-35-64
@@ -114,12 +108,6 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             TARGET_SYSTEM=fedora-rawhide-64
             RUN_SNAPD=false
             BACKUPS=1
-            ;;
-        opensuse-15-2)
-            SOURCE_SYSTEM=opensuse-15.2-64-base
-            TARGET_SYSTEM=opensuse-15.2-64
-            RUN_SNAPD=false
-            BACKUPS=0
             ;;
         opensuse-15-3)
             SOURCE_SYSTEM=opensuse-15.3-64-base
@@ -166,12 +154,6 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         ubuntu-20.04-64)
             SOURCE_SYSTEM=ubuntu-20.04-64-base
             TARGET_SYSTEM=ubuntu-20.04-64
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
-        ubuntu-21.10-64)
-            SOURCE_SYSTEM=ubuntu-21.10-64-external
-            TARGET_SYSTEM=ubuntu-21.10-64
             RUN_SNAPD=false
             BACKUPS=0
             ;;
