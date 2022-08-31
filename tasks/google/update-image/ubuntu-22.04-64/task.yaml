@@ -35,6 +35,9 @@ execute: |
         snap remove lxd
     fi
 
+    # Disable the service because sometimes is failing
+    systemctl disable --now fwupd.service fwupd-refresh.service fwupd-refresh.timer
+
     # Clean disk before create the shapshot
     clean_machine
 
