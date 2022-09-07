@@ -163,6 +163,12 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             RUN_SNAPD=false
             BACKUPS=0
             ;;
+        ubuntu-22.10-64)
+            SOURCE_SYSTEM=ubuntu-22.10-64-external
+            TARGET_SYSTEM=ubuntu-22.10-64
+            RUN_SNAPD=false
+            BACKUPS=0
+            ;;
         *)
             echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
             exit 1

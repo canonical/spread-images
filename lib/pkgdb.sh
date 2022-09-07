@@ -8,7 +8,7 @@ distro_install_google_sdk() {
                 export CLOUD_SDK_REPO
                 echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
                 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-                apt-get update && apt-get install -y google-cloud-sdk
+                apt update && apt install -y google-cloud-sdk
             fi            
             ;;
         fedora-*)
@@ -247,7 +247,7 @@ distro_install_package() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
             # shellcheck disable=SC2086
-            apt-get install $APT_FLAGS -y "${pkg_names[@]}"
+            apt install $APT_FLAGS -y "${pkg_names[@]}"
             ;;
         fedora-*)
             # shellcheck disable=SC2086
@@ -275,7 +275,7 @@ distro_install_package() {
 distro_purge_package() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            apt-get remove -y --purge "$@" || true
+            apt remove -y --purge "$@" || true
             ;;
         fedora-*)
             dnf -y remove "$@" || true
@@ -301,7 +301,7 @@ distro_purge_package() {
 distro_update_package_db() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            apt-get update
+            apt update
             ;;
         fedora-*)
             # Delete google repository because it is not needed any more
@@ -334,7 +334,7 @@ distro_update_package_db() {
 distro_upgrade_packages() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            apt-get upgrade -y
+            apt upgrade -y
             ;;
         fedora-*)
             dnf upgrade --nogpgcheck -y
@@ -359,7 +359,7 @@ distro_upgrade_packages() {
 distro_clean_package_cache() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            apt-get clean
+            apt clean
             ;;
         fedora-*)
             dnf clean all
@@ -383,7 +383,7 @@ distro_clean_package_cache() {
 distro_auto_remove_packages() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            apt-get -y autoremove
+            apt -y autoremove
             ;;
         fedora-*)
             dnf -y autoremove

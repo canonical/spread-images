@@ -62,6 +62,11 @@ backends:
                 image: ubuntu-2204-64
             - ubuntu-22.04-64-virt-enabled:
                 image: ubuntu-2204-64-virt-enabled
+            - ubuntu-22.10-64-external:
+                image: ubuntu-os-cloud-devel/ubuntu-2210-amd64
+            - ubuntu-22.10-64:
+                image: ubuntu-2210-64
+
 
             - debian-10-64-external:
                 image: debian-cloud/debian-10

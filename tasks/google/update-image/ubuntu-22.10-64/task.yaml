@@ -1,9 +1,9 @@
-summary: Update Ubuntu 21.10 64 bits image with the latest updates and test dependencies
+summary: Update Ubuntu 22.10 64 bits image with the latest updates and test dependencies
 
-systems: [ubuntu-21.10-64-external]
+systems: [ubuntu-22.10-64-external]
 
 environment:
-    TARGET_SYSTEM: ubuntu-21.10-64
+    TARGET_SYSTEM: ubuntu-22.10-64
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -15,7 +15,15 @@ execute: |
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
+
+        REBOOT
+    fi
+
+    if [ "$SPREAD_REBOOT" = 1 ]; then
         install_test_dependencies "$TARGET_SYSTEM"
+        if [ dpkg -l libntfs-3g883 ]; then
+            distro_purge_package libntfs-3g883
+        fi
         remove_pkg_blacklist
 
         REBOOT
@@ -31,6 +39,9 @@ execute: |
     if snap list lxd; then
         snap remove lxd
     fi
+
+    # Disable the service because sometimes is failing
+    systemctl disable --now fwupd.service fwupd-refresh.service fwupd-refresh.timer
 
     # Clean disk before create the shapshot
     clean_machine
