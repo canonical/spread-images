@@ -24,13 +24,6 @@ execute: |
         distro_update_package_db
         distro_upgrade_packages
 
-        # Disable google-network-daemon service because it conflicts with spread ssh configuration during startup
-        systemctl disable --now google-network-daemon.service || true
-
-        # Disable cloud init because reset sshd config affecting spread metadata script
-        # Also in fedora 29 cloud-init fails on start
-        touch /etc/cloud/cloud-init.disabled
-
         REBOOT
     fi
 
