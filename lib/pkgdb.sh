@@ -359,7 +359,7 @@ distro_upgrade_packages() {
 distro_clean_package_cache() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            apt clean
+            apt-get clean
             ;;
         fedora-*)
             dnf clean all
