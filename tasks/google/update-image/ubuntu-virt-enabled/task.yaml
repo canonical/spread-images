@@ -1,6 +1,6 @@
 summary: Update Ubuntu xenial/bionic/focal/jammy 64 bits image with the latest updates and kvm enabled
 
-systems: [ubuntu-16.04-64-external, ubuntu-18.04-64-external, ubuntu-20.04-64-external, ubuntu-21.10-64-external, ubuntu-22.04-64-external]
+systems: [ubuntu-16.04-64-base, ubuntu-18.04-64-base, ubuntu-20.04-64-base, ubuntu-21.10-64-base, ubuntu-22.04-64-base]
 
 environment:
     LICENSES: https://www.googleapis.com/compute/v1/projects/vm-options/global/licenses/enable-vmx
@@ -48,21 +48,13 @@ execute: |
 
         # Install virtualization dependencies and configure them
         distro_install_package snapd qemu qemu-utils genisoimage sshpass qemu-kvm cloud-image-utils ovmf kpartx
- 
-        if [[ "$SPREAD_SYSTEM" =~ ubuntu-20.04* ]] || [[ "$SPREAD_SYSTEM" =~ ubuntu-22.04* ]]; then
-            if [[ "$SPREAD_SYSTEM" =~ ubuntu-20.04* ]]; then
-                apt remove -y linux-headers-5.11.0-1020-gcp
-                apt remove -y linux-image-5.11.0-1020-gcp
-            elif [[ "$SPREAD_SYSTEM" =~ ubuntu-22.04* ]]; then
-                apt remove -y linux-headers-5.15.0-1003-gcp
-                apt remove -y linux-image-5.15.0-1003-gcp
-            fi
 
-            wget http://security.ubuntu.com/ubuntu/pool/main/l/linux-gcp/linux-modules-4.15.0-1078-gcp_4.15.0-1078.88~16.04.1_amd64.deb
-            wget http://security.ubuntu.com/ubuntu/pool/main/l/linux-gcp/linux-gcp-headers-4.15.0-1078_4.15.0-1078.88~16.04.1_amd64.deb
-            wget http://security.ubuntu.com/ubuntu/pool/universe/l/linux-signed-gcp-4.15/linux-image-4.15.0-1078-gcp_4.15.0-1078.88_amd64.deb
-            wget http://security.ubuntu.com/ubuntu/pool/main/l/linux-gcp/linux-modules-4.15.0-1078-gcp_4.15.0-1078.88~16.04.1_amd64.deb
-            dpkg -i *.deb
+        if [[ "$SPREAD_SYSTEM" =~ ubuntu-20.04* ]]; then            
+            add-apt-repository ppa:jacob/virtualisation -y
+            apt update
+            apt install -y qemu qemu-utils qemu-kvm
+            apt-add-repository --remove ppa:canonical-kernel-team/proposed -y
+            apt update
         fi
 
         distro_upgrade_packages
