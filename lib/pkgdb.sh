@@ -438,7 +438,6 @@ pkg_dependencies_arch(){
         base-devel
         git
         jq
-        python2
         unzip
         wget
         "
