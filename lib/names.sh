@@ -62,6 +62,16 @@ else
             FAMILY="ubuntu-2004-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
             ;;
+        ubuntu-20.04-arm-64)
+            IMAGE="ubuntu-2004-arm-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-2004-arm-64"
+            DESCRIPTION="Ubuntu 20.04 ARM 64 bits"
+            ;;
+        ubuntu-20.04-arm-64-virt-enabled)
+            IMAGE="ubuntu-2004-arm-64-v$(date +'%Y%m%d')-virt-enabled"
+            FAMILY="ubuntu-2004-arm-64-virt-enabled"
+            DESCRIPTION="Image with virtualization enabled"
+            ;;
         ubuntu-22.04-64)
             IMAGE="ubuntu-2204-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-2204-64"
