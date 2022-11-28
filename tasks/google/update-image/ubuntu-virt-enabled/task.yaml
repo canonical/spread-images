@@ -1,6 +1,6 @@
 summary: Update Ubuntu xenial/bionic/focal/jammy 64 bits image with the latest updates and kvm enabled
 
-systems: [ubuntu-16.04-64-base, ubuntu-18.04-64-base, ubuntu-20.04-64-base, ubuntu-20.04-arm-64, ubuntu-21.10-64-base, ubuntu-22.04-64-base]
+systems: [ubuntu-16.04-64-base, ubuntu-18.04-64-base, ubuntu-20.04-64-base, ubuntu-20.04-arm-64, ubuntu-22.04-64-base, ubuntu-22.04-arm-64, ubuntu-22.10-64-base]
 
 environment:
     LICENSES: https://www.googleapis.com/compute/v1/projects/vm-options/global/licenses/enable-vmx
@@ -10,17 +10,8 @@ execute: |
         ubuntu-16.04-64*)
             TARGET_SYSTEM=ubuntu-16.04-64-virt-enabled
         ;;
-        ubuntu-18.04-64-uefi*)
-            TARGET_SYSTEM=ubuntu-18.04-64-virt-uefi-enabled
-        ;;
         ubuntu-18.04-64*)
             TARGET_SYSTEM=ubuntu-18.04-64-virt-enabled
-        ;;
-        ubuntu-19.10-64*)
-            TARGET_SYSTEM=ubuntu-19.10-64-virt-enabled
-        ;;
-        ubuntu-20.04-64-uefi*)
-            TARGET_SYSTEM=ubuntu-20.04-64-virt-uefi-enabled
         ;;
         ubuntu-20.04-64*)
             TARGET_SYSTEM=ubuntu-20.04-64-virt-enabled
@@ -28,11 +19,14 @@ execute: |
         ubuntu-20.04-arm-64*)
             TARGET_SYSTEM=ubuntu-20.04-arm-64-virt-enabled
         ;;
-        ubuntu-21.10-64*)
-            TARGET_SYSTEM=ubuntu-21.10-64-virt-enabled
-        ;;
         ubuntu-22.04-64*)
             TARGET_SYSTEM=ubuntu-22.04-64-virt-enabled
+        ;;
+        ubuntu-22.04-arm-64*)
+            TARGET_SYSTEM=ubuntu-22.04-arm-64-virt-enabled
+        ;;
+        ubuntu-22.10-64*)
+            TARGET_SYSTEM=ubuntu-22.10-64-virt-enabled
         ;;
         *)
             echo "System not supported"
@@ -79,17 +73,8 @@ restore: |
         ubuntu-16.04-64*)
             TARGET_SYSTEM=ubuntu-16.04-64-virt-enabled
         ;;
-        ubuntu-18.04-64-uefi*)
-            TARGET_SYSTEM=ubuntu-18.04-64-virt-uefi-enabled
-        ;;
         ubuntu-18.04-64*)
             TARGET_SYSTEM=ubuntu-18.04-64-virt-enabled
-        ;;
-        ubuntu-19.10-64*)
-            TARGET_SYSTEM=ubuntu-19.10-64-virt-enabled
-        ;;
-        ubuntu-20.04-64-uefi*)
-            TARGET_SYSTEM=ubuntu-20.04-64-virt-uefi-enabled
         ;;
         ubuntu-20.04-64*)
             TARGET_SYSTEM=ubuntu-20.04-64-virt-enabled
@@ -97,11 +82,14 @@ restore: |
         ubuntu-20.04-arm-64*)
             TARGET_SYSTEM=ubuntu-20.04-arm-64-virt-enabled
         ;;
-        ubuntu-21.10-64*)
-            TARGET_SYSTEM=ubuntu-21.10-64-virt-enabled
-        ;;
         ubuntu-22.04-64*)
             TARGET_SYSTEM=ubuntu-22.04-64-virt-enabled
+        ;;
+        ubuntu-22.04-arm-64*)
+            TARGET_SYSTEM=ubuntu-22.04-arm-64-virt-enabled
+        ;;
+        ubuntu-22.10-64*)
+            TARGET_SYSTEM=ubuntu-22.10-64-virt-enabled
         ;;
         *)
             echo "System not supported"

@@ -1,5 +1,12 @@
 #!/bin/bash
 
+_get_zone(){
+    if [ "$SPREAD_BACKEND" == "google-arm" ]; then
+        ZONE=us-central1-a
+    fi
+    echo "$ZONE"
+}
+
 create_image_from_snapshot(){
     local IMAGE=$1
     local FAMILY=$2
@@ -107,13 +114,15 @@ copy_image_to_bucket(){
 create_snapshot_from_disk(){
     local DISK=$1
     local TEMPORARY_PATH=$(mktemp -t -d spread.XXXXX)
+    local CURR_ZONE
     if [ -d $TEMPORARY_PATH ]; then
         rm -rf $TEMPORARY_PATH
     fi
 
     mv "$PROJECT_PATH" "$TEMPORARY_PATH"
     sync
-    gcloud compute disks snapshot "$DISK" --zone "$ZONE" --snapshot-names "$DISK"
+    CURR_ZONE="$(_get_zone)"
+    gcloud compute disks snapshot "$DISK" --zone "$CURR_ZONE" --snapshot-names "$DISK"
     mv "$TEMPORARY_PATH" "$PROJECT_PATH"
 }
 
