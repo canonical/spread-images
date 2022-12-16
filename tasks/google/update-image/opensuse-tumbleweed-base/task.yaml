@@ -20,7 +20,8 @@ execute: |
         REBOOT
     fi
 
-    # Make sure we have google-compute-engine installed
+    # Make sure /etc/environment exists
+    touch /etc/environment
 
     # Disable purge-kernels service which makes fail zypper purge-kernels with the current kernel configuration
     systemctl disable purge-kernels

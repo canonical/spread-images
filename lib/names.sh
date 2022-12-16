@@ -97,6 +97,11 @@ else
             FAMILY="ubuntu-2210-64"
             DESCRIPTION="Ubuntu 22.10 64 bits"
             ;;
+        ubuntu-23.04-64)
+            IMAGE="ubuntu-2304-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-2304-64"
+            DESCRIPTION="Ubuntu 23.04 64 bits"
+            ;;
 
         # Debian
        debian-10-64-base)

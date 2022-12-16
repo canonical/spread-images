@@ -15,14 +15,8 @@ backends:
         location: snapd-spread/us-east1-b
         halt-timeout: 2h
         systems:
-            - ubuntu-14.04-64-base:
-                image: ubuntu-os-cloud/ubuntu-1404-lts
             - ubuntu-14.04-64:
                 image: ubuntu-1404-64
-            - ubuntu-16.04-32-base:
-                image: ubuntu-1604-32-base
-            - ubuntu-16.04-32:
-                image: ubuntu-1604-32
             - ubuntu-16.04-64-base:
                 image: ubuntu-os-cloud/ubuntu-1604-lts
             - ubuntu-16.04-64:
@@ -45,16 +39,6 @@ backends:
                 image: ubuntu-2004-64
             - ubuntu-20.04-64-virt-enabled:
                 image: ubuntu-2004-64-virt-enabled
-            - ubuntu-20.10-64-base:
-                image: ubuntu-os-cloud/ubuntu-2010
-            - ubuntu-20.10-64:
-                image: ubuntu-2010-64
-            - ubuntu-20.10-64-virt-enabled:
-                image: ubuntu-2010-64-virt-enabled
-            - ubuntu-21.04-64-base:
-                image: ubuntu-os-cloud/ubuntu-2104
-            - ubuntu-21.04-64:
-                image: ubuntu-2104-64
             - ubuntu-22.04-64-external:
                 image: ubuntu-os-cloud/ubuntu-2204-lts
             - ubuntu-22.04-64:
@@ -65,7 +49,10 @@ backends:
                 image: ubuntu-os-cloud/ubuntu-2210-amd64
             - ubuntu-22.10-64:
                 image: ubuntu-2210-64
-
+            - ubuntu-23.04-64-external:
+                image: ubuntu-os-cloud-devel/ubuntu-2304-amd64
+            - ubuntu-23.04-64:
+                image: ubuntu-2304-amd64
 
             - debian-10-64-external:
                 image: debian-cloud/debian-10
@@ -198,7 +185,7 @@ backends:
 path: /root/spread
 
 
-kill-timeout: 50m
+kill-timeout: 20m
 
 suites:
     tasks/google/add-image/:

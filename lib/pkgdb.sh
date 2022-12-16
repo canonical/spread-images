@@ -49,7 +49,7 @@ EOM
                 wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip
                 unzip google-cloud-sdk.zip -d /usr/share/google
                 rm -f google-cloud-sdk.zip
-                echo "export CLOUDSDK_PYTHON=/usr/bin/python3" >> /etc/bash.bashrc
+                echo "export y=/usr/bin/python3" >> /etc/bash.bashrc
                 /usr/share/google/google-cloud-sdk/install.sh --usage-reporting false --bash-completion true --disable-installation-options --rc-path /etc/bash.bashrc --path-update true
                 ln -s /usr/share/google/google-cloud-sdk/bin/gcloud /usr/bin/gcloud
                 ln -s /usr/share/google/google-cloud-sdk/bin/gcutil /usr/bin/gcutil
@@ -315,8 +315,7 @@ distro_update_package_db() {
             zypper refresh
             ;;
         arch-*)
-            # Refresh keys first to account for expired keys
-            pacman -Sy --noconfirm archlinux-keyring
+            pacman -Syy
             ;;
         amazon-*|centos-*)
             # Delete google repository because it is not needed any more
@@ -390,8 +389,10 @@ distro_auto_remove_packages() {
             ;;
         opensuse-*)
             ;;
-        arch-*)
-            pacman -Rnsc --noconfirm "$(pacman -Qdtq)"
+        arch-*)            
+            if pacman -Qdtq; then
+                pacman -Rnsc --noconfirm "$(pacman -Qdtq)"
+            fi
             ;;
         amazon-*|centos-*)
             yum -y autoremove
@@ -437,6 +438,7 @@ pkg_dependencies_arch(){
     echo "
         base-devel
         git
+        grub
         jq
         unzip
         wget
@@ -549,12 +551,14 @@ install_test_dependencies(){
     local TARGET="$1"
     git clone https://github.com/snapcore/snapd.git snapd-master
     cp -r snapd-master/tests/lib/external/snapd-testing-tools/tools/* snapd-master/tests/lib/tools/
-    export TESTSLIB="$(pwd)"/snapd-master/tests/lib
-    export PATH=$PATH:"$(pwd)"/snapd-master/tests/bin
-    export SPREAD_SYSTEM="$TARGET"
+    (
+        export TESTSLIB="$(pwd)"/snapd-master/tests/lib
+        export PATH=$PATH:"$(pwd)"/snapd-master/tests/bin
+        export SPREAD_SYSTEM="$TARGET"
 
-    . snapd-master/tests/lib/pkgdb.sh
-    install_pkg_dependencies
+        . snapd-master/tests/lib/pkgdb.sh
+        install_pkg_dependencies
+    )
     rm -rf snapd-master
 }
 

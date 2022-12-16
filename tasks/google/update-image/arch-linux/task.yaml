@@ -16,7 +16,6 @@ execute: |
         distro_update_package_db
         distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
-        distro_install_package inetutils
         remove_pkg_blacklist
 
         # since 4.16, kernel crng init can take significant time, thus services
