@@ -357,8 +357,11 @@ distro_upgrade_packages() {
 
 distro_clean_package_cache() {
     case "$SPREAD_SYSTEM" in
-        ubuntu-*|debian-*)
+        ubuntu-14.04*)
             apt-get clean
+            ;;
+        ubuntu-*|debian-*)
+            apt clean
             ;;
         fedora-*)
             dnf clean all
@@ -381,6 +384,9 @@ distro_clean_package_cache() {
 
 distro_auto_remove_packages() {
     case "$SPREAD_SYSTEM" in
+        ubuntu-14.04*)
+            apt-get -y autoremove
+            ;;
         ubuntu-*|debian-*)
             apt -y autoremove
             ;;
