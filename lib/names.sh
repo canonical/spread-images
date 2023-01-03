@@ -135,26 +135,6 @@ else
             DESCRIPTION="Debian sid 64 bits"
             ;;
         # Fedora
-        fedora-33-64-base)
-            IMAGE="fedora-33-64-base-v$(date +'%Y%m%d')"
-            FAMILY="fedora-33-64-base"
-            DESCRIPTION="Base image"
-            ;;
-        fedora-33-64)
-            IMAGE="fedora-33-64-v$(date +'%Y%m%d')"
-            FAMILY="fedora-33-64"
-            DESCRIPTION="Fedora 33 64 bits with test dependencies"
-            ;;
-        fedora-34-64-base)
-            IMAGE="fedora-34-64-base-v$(date +'%Y%m%d')"
-            FAMILY="fedora-34-64-base"
-            DESCRIPTION="Base image"
-            ;;
-        fedora-34-64)
-            IMAGE="fedora-34-64-v$(date +'%Y%m%d')"
-            FAMILY="fedora-34-64"
-            DESCRIPTION="Fedora 34 64 bits with test dependencies"
-            ;;
         fedora-35-64-base)
             IMAGE="fedora-35-64-base-v$(date +'%Y%m%d')"
             FAMILY="fedora-35-64-base"
@@ -174,6 +154,16 @@ else
             IMAGE="fedora-36-64-v$(date +'%Y%m%d')"
             FAMILY="fedora-36-64"
             DESCRIPTION="Fedora 36 64 bits with test dependencies"
+            ;;
+        fedora-37-64-base)
+            IMAGE="fedora-37-64-base-v$(date +'%Y%m%d')"
+            FAMILY="fedora-37-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        fedora-37-64)
+            IMAGE="fedora-37-64-v$(date +'%Y%m%d')"
+            FAMILY="fedora-37-64"
+            DESCRIPTION="Fedora 37 64 bits with test dependencies"
             ;;
         fedora-rawhide-64)
             IMAGE="fedora-rawhide-64-v$(date +'%Y%m%d')"

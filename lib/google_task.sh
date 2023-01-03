@@ -91,15 +91,15 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             RUN_SNAPD=false
             BACKUPS=1
             ;;
-        fedora-35-64)
-            SOURCE_SYSTEM=fedora-35-64-base
-            TARGET_SYSTEM=fedora-35-64
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
         fedora-36-64)
             SOURCE_SYSTEM=fedora-36-64-base
             TARGET_SYSTEM=fedora-36-64
+            RUN_SNAPD=false
+            BACKUPS=0
+            ;;
+        fedora-37-64)
+            SOURCE_SYSTEM=fedora-37-64-base
+            TARGET_SYSTEM=fedora-37-64
             RUN_SNAPD=false
             BACKUPS=0
             ;;

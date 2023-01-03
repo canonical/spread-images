@@ -1,9 +1,9 @@
 summary: Update fedora image with the latest updates and test dependencies with selinux permissive
 
-systems: [fedora-33-64-base]
+systems: [fedora-37-64-base]
 
 environment:
-    TARGET_SYSTEM: fedora-33-64
+    TARGET_SYSTEM: fedora-37-64
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -22,29 +22,15 @@ execute: |
 
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
-        distro_install_package kernel-modules
+        distro_install_package "kernel-modules-$(uname -r)"
         distro_upgrade_packages
+
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
 
-        # Fedora 33 is using a non authselect setup by default now.
+        # Fedora 37 is using a non authselect setup by default now.
         dnf install authselect -y
         authselect select minimal --force
-
-        # Disable cloud init because 33 cloud-init fails on start making fail the services:
-        # 1. cloud-config.service
-        # 2. cloud-final.service
-        # 3. cloud-init-local.service
-        # 4. cloud-init.service
-        touch /etc/cloud/cloud-init.disabled
-
-        REBOOT
-    fi
-
-    if [ "$SPREAD_REBOOT" = 1 ]; then
-        # Purge old kernel-core package and install kernel modules
-        distro_clean_old_packages kernel-core 
-        distro_install_package kernel-modules
 
         REBOOT
     fi
