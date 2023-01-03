@@ -16,6 +16,7 @@ execute: |
         distro_update_package_db
         distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
+        distro_install_package inetutils
         remove_pkg_blacklist
 
         # since 4.16, kernel crng init can take significant time, thus services
@@ -31,6 +32,7 @@ execute: |
         distro_install_package apparmor
         systemctl enable apparmor
         sed -e 's/GRUB_CMDLINE_LINUX="/GRUB_CMDLINE_LINUX="apparmor=1 security=apparmor /g' -i /etc/default/grub
+        mkdir -p /boot/grub/
         grub-mkconfig -o /boot/grub/grub.cfg
     fi
 
