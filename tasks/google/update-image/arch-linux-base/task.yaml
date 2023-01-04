@@ -16,7 +16,16 @@ execute: |
         distro_update_package_db
         distro_upgrade_packages
 
-        distro_install_package inetutils
+        # Install reflector and enable it to improve the mirrors performance
+        distro_install_package reflector
+        sed '/--country /d' -i /etc/xdg/reflector/reflector.conf
+        echo '--country "United States"' >> /etc/xdg/reflector/reflector.conf
+        systemctl enable reflector
+        systemctl start reflector
+
+        
+
+        distro_install_package inetutils vim
 
         REBOOT
     fi
