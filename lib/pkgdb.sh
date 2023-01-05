@@ -444,7 +444,6 @@ pkg_dependencies_arch(){
     echo "
         base-devel
         git
-        grub
         jq
         unzip
         wget
