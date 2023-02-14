@@ -397,7 +397,7 @@ distro_auto_remove_packages() {
             ;;
         arch-*)            
             if pacman -Qdtq; then
-                pacman -Rnsc --noconfirm "$(pacman -Qdtq)"
+                pacman -Rnsc --noconfirm $(pacman -Qdtq | tr '\n' ' ')
             fi
             ;;
         amazon-*|centos-*)
