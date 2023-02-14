@@ -416,11 +416,18 @@ pkg_dependencies_ubuntu(){
         jq
         unzip
         "
-    if [[ "$SPREAD_SYSTEM" == ubuntu-16.04-64 ]]; then
-        echo "
-            qemu-utils
-            "
-    fi
+    case "$SPREAD_SYSTEM" in
+        ubuntu-16.04-64*)
+            echo "
+                qemu-utils
+                "
+            ;;
+        debian-sid-64*)
+            echo "
+                python3
+                "
+            ;;
+    esac
 }
 
 pkg_dependencies_fedora(){
