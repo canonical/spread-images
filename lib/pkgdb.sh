@@ -3,11 +3,9 @@
 distro_install_google_sdk() {
     case "$SPREAD_SYSTEM" in
         ubuntu-*|debian-*)
-            if [ $(find /etc/apt/sources.list.d/google-cloud*.list | wc -l) -eq 0 ]; then
-                CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-                export CLOUD_SDK_REPO
-                echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-                curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+            if ! command -v gcloud; then
+                echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+                curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
                 apt update && apt install -y google-cloud-sdk
             fi            
             ;;
@@ -420,11 +418,6 @@ pkg_dependencies_ubuntu(){
         ubuntu-16.04-64*)
             echo "
                 qemu-utils
-                "
-            ;;
-        debian-sid-64*)
-            echo "
-                python3
                 "
             ;;
     esac
