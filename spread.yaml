@@ -225,8 +225,8 @@ suites:
             fi
             distro_initial_repo_setup
             distro_update_package_db
-            apt remove -y python3.11
             install_pkg_dependencies
+
             gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
 
 
