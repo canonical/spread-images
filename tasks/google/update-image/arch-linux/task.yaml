@@ -24,6 +24,11 @@ execute: |
         distro_install_package haveged
         systemctl enable --now haveged
 
+        # Force systmed 252 to avoid error in the integration with dbus
+        pacman -U --noconfirm /var/cache/pacman/pkg/systemd-252.3-1-x86_64.pkg.tar.zst
+        mkinitcpio -p linux
+        sed -i -e 's/#IgnorePkg   =/IgnorePkg = systemd/g' /etc/pacman.conf
+
         REBOOT
     fi
 
