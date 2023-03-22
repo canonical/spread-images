@@ -6,6 +6,7 @@ clean_machine() {
     distro_clean_package_cache
 
     find /var/log -type f -exec rm -f {} \;
+    mkdir -p /var/log/journal
 
     rm -rf \
         /root/.bash_history \
