@@ -39,18 +39,18 @@ backends:
                 image: ubuntu-2004-64
             - ubuntu-20.04-64-virt-enabled:
                 image: ubuntu-2004-64-virt-enabled
-            - ubuntu-22.04-64-external:
+            - ubuntu-22.04-64-base:
                 image: ubuntu-os-cloud/ubuntu-2204-lts
             - ubuntu-22.04-64:
                 image: ubuntu-2204-64
             - ubuntu-22.04-64-virt-enabled:
                 image: ubuntu-2204-64-virt-enabled
-            - ubuntu-22.10-64-external:
+            - ubuntu-22.10-64-base:
                 image: ubuntu-os-cloud/ubuntu-2210-amd64
             - ubuntu-22.10-64:
                 image: ubuntu-2210-64
-            - ubuntu-23.04-64-external:
-                image: ubuntu-os-cloud-devel/ubuntu-2304-amd64
+            - ubuntu-23.04-64-base:
+                image: ubuntu-os-cloud/ubuntu-2304-amd64
             - ubuntu-23.04-64:
                 image: ubuntu-2304-64
 
@@ -155,10 +155,6 @@ backends:
                 workers: 1
             - ubuntu-20.04-64:
                 image: ubuntu-2004-64-virt-enabled
-                storage: 20G
-                workers: 1
-            - ubuntu-20.04-arm-64:
-                image: ubuntu-2004-arm-64-virt-enabled
                 storage: 20G
                 workers: 1
             - ubuntu-22.04-64:

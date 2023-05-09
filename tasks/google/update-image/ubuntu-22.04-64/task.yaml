@@ -1,6 +1,6 @@
 summary: Update Ubuntu 22.04 64 bits image with the latest updates and test dependencies
 
-systems: [ubuntu-22.04-64-external]
+systems: [ubuntu-22.04-64-base]
 
 environment:
     TARGET_SYSTEM: ubuntu-22.04-64
