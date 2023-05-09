@@ -158,14 +158,20 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             BACKUPS=0
             ;;
         ubuntu-22.04-64)
-            SOURCE_SYSTEM=ubuntu-22.04-64-external
+            SOURCE_SYSTEM=ubuntu-22.04-64-base
             TARGET_SYSTEM=ubuntu-22.04-64
             RUN_SNAPD=false
             BACKUPS=0
             ;;
         ubuntu-22.10-64)
-            SOURCE_SYSTEM=ubuntu-22.10-64-external
+            SOURCE_SYSTEM=ubuntu-22.10-64-base
             TARGET_SYSTEM=ubuntu-22.10-64
+            RUN_SNAPD=false
+            BACKUPS=0
+            ;;
+        ubuntu-23.04-64)
+            SOURCE_SYSTEM=ubuntu-23.04-64-base
+            TARGET_SYSTEM=ubuntu-23.04-64
             RUN_SNAPD=false
             BACKUPS=0
             ;;
