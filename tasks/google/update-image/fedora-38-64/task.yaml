@@ -1,9 +1,9 @@
 summary: Update fedora image with the latest updates and test dependencies with selinux permissive
 
-systems: [fedora-35-64-base]
+systems: [fedora-38-64-base]
 
 environment:
-    TARGET_SYSTEM: fedora-35-64
+    TARGET_SYSTEM: fedora-38-64
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -28,7 +28,7 @@ execute: |
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
 
-        # Fedora 35 is using a non authselect setup by default now.
+        # Fedora 38 is using a non authselect setup by default now.
         dnf install authselect -y
         authselect select minimal --force
 

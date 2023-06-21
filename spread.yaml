@@ -53,57 +53,47 @@ backends:
                 image: ubuntu-os-cloud/ubuntu-2304-amd64
             - ubuntu-23.04-64:
                 image: ubuntu-2304-64
+            - ubuntu-23.10-64-base:
+                image: ubuntu-os-cloud-devel/ubuntu-2310-amd64
+            - ubuntu-23.10-64:
+                image: ubuntu-2304-64
 
-            - debian-10-64-external:
-                image: debian-cloud/debian-10
-            - debian-10-64-base:
-                image: debian-10-64-base
-            - debian-10-64:
-                image: debian-10-64
-            - debian-11-64-external:
-                image: debian-cloud/debian-11
             - debian-11-64-base:
-                image: debian-11-64-base
+                image: debian-cloud/debian-11
             - debian-11-64:
                 image: debian-11-64
+            - debian-12-64-base:
+                image: debian-cloud/debian-12
+            - debian-12-64:
+                image: debian-12-64
             - debian-sid-64-base:
                 image: debian-sid-64-base
             - debian-sid-64:
                 image: debian-sid-64
 
-            - fedora-35-64-base:
-                image: fedora-35-64-base
-            - fedora-35-64:
-                image: fedora-35-64
-            - fedora-36-64-base:
-                image: fedora-36-64-base
-            - fedora-36-64:
-                image: fedora-36-64
             - fedora-37-64-base:
                 image: fedora-37-64-base
             - fedora-37-64:
                 image: fedora-37-64
+            - fedora-38-64-base:
+                image: fedora-cloud/fedora-cloud-38
+            - fedora-38-64:
+                image: fedora-38-64
             - fedora-rawhide-64:
                 image: fedora-rawhide-64
 
-            - opensuse-15.3-64-external:
-                image: opensuse-cloud/opensuse-leap-15-3-v20220128
-            - opensuse-15.3-64-base:
-                image: opensuse-leap-15-3-64-base
-            - opensuse-15.3-64:
-                image: opensuse-leap-15-3-64
-            - opensuse-15.4-64-external:
-                image: opensuse-cloud/opensuse-leap-15-4-v20220624-x86-64
             - opensuse-15.4-64-base:
-                image: opensuse-leap-15-4-64-base
+                image: opensuse-cloud/opensuse-leap-15-4-v20230603-x86-64
             - opensuse-15.4-64:
                 image: opensuse-leap-15-4-64
+            - opensuse-15.5-64-base:
+                image: opensuse-cloud/opensuse-leap-15-5-v20230607-x86-64
+            - opensuse-15.5-64:
+                image: opensuse-leap-15-5-64
             - opensuse-tumbleweed-64-base:
                 image: opensuse-tumbleweed-64-base
             - opensuse-tumbleweed-64:
                 image: opensuse-tumbleweed-64
-            - opensuse-tumbleweed-2-64-base:
-                image: opensuse-tumbleweed-2-64-base
 
             - arch-linux-64-external:
                 image: arch-linux-gce/arch
@@ -111,6 +101,7 @@ backends:
                 image: arch-linux-64-base
             - arch-linux-64:
                 image: arch-linux-64
+                storage: 20G
 
             - amazon-linux-2-64-base:
                 image: amazon-linux-2-64-base

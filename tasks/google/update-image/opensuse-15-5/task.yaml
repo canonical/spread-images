@@ -1,9 +1,9 @@
-summary: Update opensuse 15.3 64 bits image with the latest updates and test dependencies
+summary: Update opensuse 15.5 64 bits image with the latest updates and test dependencies
 
-systems: [opensuse-15.3-64-base]
+systems: [opensuse-15.5-64-base]
 
 environment:
-    TARGET_SYSTEM: opensuse-15.3-64
+    TARGET_SYSTEM: opensuse-15.5-64
 
 execute: |
     . "$TESTSLIB/google.sh"

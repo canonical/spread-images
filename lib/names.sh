@@ -12,16 +12,6 @@ else
             FAMILY="ubuntu-1404-64"
             DESCRIPTION="Ubuntu 14.04 64 bits"
             ;;
-        ubuntu-16.04-32-base)
-            IMAGE="ubuntu-1604-32-base-v$(date +'%Y%m%d')"
-            FAMILY="ubuntu-1604-32-base"
-            DESCRIPTION="Base image"
-            ;;
-        ubuntu-16.04-32)
-            IMAGE="ubuntu-1604-32-v$(date +'%Y%m%d')"
-            FAMILY="ubuntu-1604-32"
-            DESCRIPTION="Ubuntu 16.04 32 bits"
-            ;;
         ubuntu-16.04-64)
             IMAGE="ubuntu-1604-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-1604-64"
@@ -114,25 +104,15 @@ else
             ;;
 
         # Debian
-       debian-10-64-base)
-            IMAGE="debian-10-64-base-v$(date +'%Y%m%d')"
-            FAMILY="debian-10-64-base"
-            DESCRIPTION="Base image"
-            ;;
-        debian-10-64)
-            IMAGE="debian-10-64-v$(date +'%Y%m%d')"
-            FAMILY="debian-10-64"
-            DESCRIPTION="Debian 10 64 bits"
-            ;;
-       debian-11-64-base)
-            IMAGE="debian-11-64-base-v$(date +'%Y%m%d')"
-            FAMILY="debian-11-64-base"
-            DESCRIPTION="Base image"
-            ;;
         debian-11-64)
             IMAGE="debian-11-64-v$(date +'%Y%m%d')"
             FAMILY="debian-11-64"
             DESCRIPTION="Debian 11 64 bits"
+            ;;
+        debian-12-64)
+            IMAGE="debian-12-64-v$(date +'%Y%m%d')"
+            FAMILY="debian-12-64"
+            DESCRIPTION="Debian 12 64 bits"
             ;;
         debian-sid-64-base)
             IMAGE="debian-sid-64-base-v$(date +'%Y%m%d')"
@@ -145,35 +125,15 @@ else
             DESCRIPTION="Debian sid 64 bits"
             ;;
         # Fedora
-        fedora-35-64-base)
-            IMAGE="fedora-35-64-base-v$(date +'%Y%m%d')"
-            FAMILY="fedora-35-64-base"
-            DESCRIPTION="Base image"
-            ;;
-        fedora-35-64)
-            IMAGE="fedora-35-64-v$(date +'%Y%m%d')"
-            FAMILY="fedora-35-64"
-            DESCRIPTION="Fedora 35 64 bits with test dependencies"
-            ;;
-        fedora-36-64-base)
-            IMAGE="fedora-36-64-base-v$(date +'%Y%m%d')"
-            FAMILY="fedora-36-64-base"
-            DESCRIPTION="Base image"
-            ;;
-        fedora-36-64)
-            IMAGE="fedora-36-64-v$(date +'%Y%m%d')"
-            FAMILY="fedora-36-64"
-            DESCRIPTION="Fedora 36 64 bits with test dependencies"
-            ;;
-        fedora-37-64-base)
-            IMAGE="fedora-37-64-base-v$(date +'%Y%m%d')"
-            FAMILY="fedora-37-64-base"
-            DESCRIPTION="Base image"
-            ;;
         fedora-37-64)
             IMAGE="fedora-37-64-v$(date +'%Y%m%d')"
             FAMILY="fedora-37-64"
             DESCRIPTION="Fedora 37 64 bits with test dependencies"
+            ;;
+        fedora-38-64)
+            IMAGE="fedora-38-64-v$(date +'%Y%m%d')"
+            FAMILY="fedora-38-64"
+            DESCRIPTION="Fedora 38 64 bits with test dependencies"
             ;;
         fedora-rawhide-64)
             IMAGE="fedora-rawhide-64-v$(date +'%Y%m%d')"
@@ -193,35 +153,15 @@ else
             DESCRIPTION="Arch Linux 64 bits with test dependencies"
             ;;
         # Opensuse
-        opensuse-15.2-64-base)
-            IMAGE="opensuse-leap-15-2-64-base-v$(date +'%Y%m%d')"
-            FAMILY="opensuse-leap-15-2-64-base"
-            DESCRIPTION="Base image"
-            ;;
-        opensuse-15.2-64)
-            IMAGE="opensuse-leap-15-2-64-v$(date +'%Y%m%d')"
-            FAMILY="opensuse-leap-15-2-64"
-            DESCRIPTION="Opensuse leap 15.2 64 bits with test dependencies"
-            ;;
-        opensuse-15.3-64-base)
-            IMAGE="opensuse-leap-15-3-64-base-v$(date +'%Y%m%d')"
-            FAMILY="opensuse-leap-15-3-64-base"
-            DESCRIPTION="Base image"
-            ;;
-        opensuse-15.3-64)
-            IMAGE="opensuse-leap-15-3-64-v$(date +'%Y%m%d')"
-            FAMILY="opensuse-leap-15-3-64"
-            DESCRIPTION="Opensuse leap 15.3 64 bits with test dependencies"
-            ;;
-        opensuse-15.4-64-base)
-            IMAGE="opensuse-leap-15-4-64-base-v$(date +'%Y%m%d')"
-            FAMILY="opensuse-leap-15-4-64-base"
-            DESCRIPTION="Base image"
-            ;;
         opensuse-15.4-64)
             IMAGE="opensuse-leap-15-4-64-v$(date +'%Y%m%d')"
             FAMILY="opensuse-leap-15-4-64"
             DESCRIPTION="Opensuse leap 15.4 64 bits with test dependencies"
+            ;;
+        opensuse-15.5-64)
+            IMAGE="opensuse-leap-15-5-64-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-leap-15-5-64"
+            DESCRIPTION="Opensuse leap 15.5 64 bits with test dependencies"
             ;;
         opensuse-tumbleweed-64-base)
             IMAGE="opensuse-tumbleweed-64-base-v$(date +'%Y%m%d')"
@@ -245,33 +185,18 @@ else
             DESCRIPTION="Amazon Linux 2 64 bits"
             ;;
         # Centos 7
-        centos-7-64-base)
-            IMAGE="centos-7-64-base-v$(date +'%Y%m%d')"
-            FAMILY="centos-7-64-base"
-            DESCRIPTION="Base image"
-            ;;
         centos-7-64)
             IMAGE="centos-7-64-v$(date +'%Y%m%d')"
             FAMILY="centos-7-64"
             DESCRIPTION="Centos 7 64 bits"
             ;;
         # Centos 8
-        centos-8-64-base)
-            IMAGE="centos-8-64-base-v$(date +'%Y%m%d')"
-            FAMILY="centos-8-64-base"
-            DESCRIPTION="Base image"
-            ;;
         centos-8-64)
             IMAGE="centos-8-64-v$(date +'%Y%m%d')"
             FAMILY="centos-8-64"
             DESCRIPTION="Centos 8 64 bits"
             ;;
         # Centos 9
-        centos-9-64-base)
-            IMAGE="centos-9-64-base-v$(date +'%Y%m%d')"
-            FAMILY="centos-9-64-base"
-            DESCRIPTION="Base image"
-            ;;
         centos-9-64)
             IMAGE="centos-9-64-v$(date +'%Y%m%d')"
             FAMILY="centos-9-64"

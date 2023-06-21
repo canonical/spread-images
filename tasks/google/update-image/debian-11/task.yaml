@@ -11,6 +11,8 @@ execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
+    distro_install_package libpam-systemd dbus eatmydata
+
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
