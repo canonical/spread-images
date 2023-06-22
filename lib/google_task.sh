@@ -140,7 +140,7 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             BACKUPS=1
             ;;
         ubuntu-18.04-64)
-            SOURCE_SYSTEM=ubuntu-18.04-64-base
+            SOURCE_SYSTEM=ubuntu-18.04-64
             TARGET_SYSTEM=ubuntu-18.04-64
             RUN_SNAPD=false
             BACKUPS=0
