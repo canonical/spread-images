@@ -68,7 +68,7 @@ backends:
                 image: debian-sid-64
 
             - fedora-37-64-base:
-                image: fedora-37-64-base
+                image: fedora-cloud/fedora-cloud-37
             - fedora-37-64:
                 image: fedora-37-64
             - fedora-38-64-base:
