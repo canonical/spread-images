@@ -17,7 +17,7 @@ execute: |
 
         # The Fedora archive mirror seems to be unreliable.
         # Switch to the main archive by commenting out metaink and uncommenting baseurl
-        sed -i -s -E -e 's@^#?baseurl=http://download.fedoraproject.org/@baseurl=http://dl.fedoraproject.org/@g' -e 's@^metalink=@#metalink@g' /etc/yum.repos.d/fedora*.repo
+        sed -i -s -E -e 's@^#?baseurl=http://download.fedoraproject.org/@baseurl=http://dl.fedoraproject.org/@g' -e 's@^metalink=@#metalink=@g' /etc/yum.repos.d/fedora*.repo
         dnf --refresh -y makecache
 
         # Make the upgrade and install the dependencies needed to run snapd tests
@@ -28,15 +28,12 @@ execute: |
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
 
-        # Fedora 38 is using a non authselect setup by default now.
-        dnf install authselect -y
-        authselect select minimal --force
-
         REBOOT
     fi
 
     # Set selinux as permissive
     sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
+    setenforce Permissive
 
     # Clean disk before create the shapshot
     clean_machine
