@@ -67,6 +67,11 @@ else
             FAMILY="ubuntu-2204-64"
             DESCRIPTION="Ubuntu 22.04 64 bits"
             ;;
+        ubuntu-22.04-64-devstack)
+            IMAGE="ubuntu-jammy-devstack-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-jammy-devstack"
+            DESCRIPTION="Ubuntu 22.04 64 bits with devstack installed"
+            ;;
         ubuntu-22.04-64-virt-enabled)
             IMAGE="ubuntu-2204-64-v$(date +'%Y%m%d')-virt-enabled"
             FAMILY="ubuntu-2204-64-virt-enabled"

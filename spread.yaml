@@ -79,11 +79,11 @@ backends:
                 image: fedora-rawhide-64
 
             - opensuse-15.4-64-base:
-                image: opensuse-cloud/opensuse-leap-15-4-v20230603-x86-64
+                image: opensuse-cloud/opensuse-leap-15-4-v20230907-x86-64
             - opensuse-15.4-64:
                 image: opensuse-leap-15-4-64
             - opensuse-15.5-64-base:
-                image: opensuse-cloud/opensuse-leap-15-5-v20230607-x86-64
+                image: opensuse-cloud/opensuse-leap-15-5-v20230908-x86-64
             - opensuse-15.5-64:
                 image: opensuse-leap-15-5-64
             - opensuse-tumbleweed-64-base:
@@ -146,6 +146,10 @@ backends:
                 workers: 1
             - ubuntu-22.04-64:
                 image: ubuntu-2204-64-virt-enabled
+                storage: 20G
+                workers: 1
+            - ubuntu-22.04-64-devstack:
+                image: ubuntu-jammy-devstack
                 storage: 20G
                 workers: 1
             - ubuntu-22.04-arm-64:
