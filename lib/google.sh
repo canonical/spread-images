@@ -12,7 +12,7 @@ create_image_from_snapshot(){
     local FAMILY=$2
     local DESCRIPTION="$3"
     local SNAPSHOT=$4
-    gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT"
+    gcloud compute images create "$IMAGE" --project "$GCE_PROJECT" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT"
 }
 
 create_image_from_snapshot_with_licenses(){
@@ -21,7 +21,7 @@ create_image_from_snapshot_with_licenses(){
     local DESCRIPTION="$3"
     local SNAPSHOT=$4
     local LICENSES=$5
-    gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT" --licenses "$LICENSES"
+    gcloud compute images create "$IMAGE" --project "$GCE_PROJECT" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT" --licenses "$LICENSES"
 }
 
 create_image_from_snapshot_with_os_features(){
@@ -30,7 +30,7 @@ create_image_from_snapshot_with_os_features(){
     local DESCRIPTION="$3"
     local SNAPSHOT=$4
     local OS_FEATURES=$5
-    gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT" --guest-os-features="$OS_FEATURES"
+    gcloud compute images create "$IMAGE" --project "$GCE_PROJECT" --family "$FAMILY" --description "$DESCRIPTION" --source-snapshot "$SNAPSHOT" --guest-os-features="$OS_FEATURES"
 }
 
 create_image_from_bucket(){
@@ -38,7 +38,7 @@ create_image_from_bucket(){
     local FAMILY=$2
     local DESCRIPTION="$3"
     local IMAGE_FILE=$4
-    gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-uri "gs://$BUCKET_NAME/$IMAGE_FILE"
+    gcloud compute images create "$IMAGE" --project "$GCE_PROJECT" --family "$FAMILY" --description "$DESCRIPTION" --source-uri "gs://$BUCKET_NAME/$IMAGE_FILE"
 }
 
 delete_image(){
@@ -47,7 +47,7 @@ delete_image(){
     local image_name=$(gcloud compute images list --project "$GCE_PROJECT" --filter "family ~ ^$FAMILY$ AND name = $IMAGE" --format json | jq -r '.[]|.name')
 
     if ! [ -z "$image_name" ]; then
-        gcloud compute images delete "$IMAGE" --quiet
+        gcloud compute images delete "$IMAGE" --project "$GCE_PROJECT" --quiet
     fi
 }
 
@@ -122,7 +122,7 @@ create_snapshot_from_disk(){
     mv "$PROJECT_PATH" "$TEMPORARY_PATH"
     sync
     CURR_ZONE="$(_get_zone)"
-    gcloud compute disks snapshot "$DISK" --zone "$CURR_ZONE" --snapshot-names "$DISK"
+    gcloud compute disks snapshot "$DISK" --project "$GCE_PROJECT" --zone "$CURR_ZONE" --snapshot-names "$DISK"
     mv "$TEMPORARY_PATH" "$PROJECT_PATH"
 }
 
@@ -131,7 +131,7 @@ delete_snapshot(){
     local snapshot_name=$(gcloud compute snapshots list --project "$GCE_PROJECT" --filter "name = $SNAPSHOT" --format json | jq -r '.[]|.name')
 
     if ! [ -z "$snapshot_name" ]; then
-        gcloud compute snapshots delete "$SNAPSHOT" --quiet
+        gcloud compute snapshots delete "$SNAPSHOT" --project "$GCE_PROJECT" --quiet
     fi
 }
 
@@ -190,7 +190,7 @@ create_image_from_image(){
 
     local latest_image_name=$(get_latest_image_name "$FAMILY")
     delete_image "$IMAGE" "$FAMILY"
-    gcloud compute images create "$IMAGE" --family "$FAMILY" --description "$DESCRIPTION" --source-image "$SOURCE_IMAGE"
+    gcloud compute images create "$IMAGE" --family "$FAMILY" --project "$GCE_PROJECT" --description "$DESCRIPTION" --source-image "$SOURCE_IMAGE"
     if [ -n "$latest_image_name" ]; then
         deprecate_old_images "$FAMILY" "$latest_image_name"
     fi

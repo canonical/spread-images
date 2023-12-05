@@ -1,0 +1,118 @@
+summary: Add new Amazon linux 2023 image to google account
+
+systems: [ubuntu-*]
+
+kill-timeout: 30m
+
+environment:
+    TARGET_SYSTEM: amazon-linux-2023-64-base
+    IMAGE_FILE: amazon-linux-2023-64
+    IMAGE_URL: https://cdn.amazonlinux.com/al2023/os-images/2023.2.20231113.0/kvm/al2023-kvm-2023.2.20231113.0-kernel-6.1-x86_64.xfs.gpt.qcow2
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    # Install test depdencies
+    apt install -y qemu-utils
+
+    # Get the raw image
+    wget -O "${IMAGE_FILE}.qcow2" "$IMAGE_URL"
+    qemu-img convert -O raw "${IMAGE_FILE}.qcow2" disk.raw
+
+    # Get /dev/sda1 parition offset
+    OFFSET=$( sfdisk -J disk.raw | jq '.partitiontable.partitions[0].start * 512' )
+
+    if [ -z $OFFSET ]; then
+        echo "failed to calculate offset"
+        exit 1
+    fi
+
+    # Either become root and paste these line-by-line or the whole block at once
+    OFFSET="$OFFSET" sh -c '\
+    # Make mounting directory
+    mkdir -p /mnt/disk
+    # Mount the image and prepare the chroot
+    mount -o offset=$OFFSET disk.raw /mnt/disk
+    mount -t proc /proc /mnt/disk/proc
+    mount --rbind /sys /mnt/disk/sys
+    mount --make-rslave /mnt/disk/sys
+    mount --rbind /dev /mnt/disk/dev
+    mount --make-rslave /mnt/disk/dev'
+
+    # Copy nameservers
+    cp /etc/resolv.conf /mnt/disk/etc/
+
+    # Install dependencies
+    wget https://github.com/GoogleCloudPlatform/compute-image-packages/archive/refs/tags/20190124.zip 
+    mv 20190124.zip /mnt/disk/tmp/20190124.zip
+    ( cd /mnt/disk/tmp && unzip 20190124.zip )
+
+    chroot /mnt/disk /bin/bash -c "yum --nogpgcheck makecache"
+    chroot /mnt/disk /bin/bash -c "yum install -y python python3-devel python-pip"
+    chroot /mnt/disk /bin/bash -c "yum install -y python dbus"
+    chroot /mnt/disk /bin/bash -c "yum clean all"
+    chroot /mnt/disk /bin/bash -c "pip install boto"
+    chroot /mnt/disk /bin/bash -c "cd /tmp/compute-image-packages-20190124 && python setup.py install"
+    chroot /mnt/disk /bin/bash -c "cp /tmp/compute-image-packages-20190124/google_compute_engine_init/systemd/*.service /usr/lib/systemd/system/"
+    services="google-shutdown-scripts.service
+        google-startup-scripts.service"
+
+    # Update location for google binaries
+    cp /mnt/disk/usr/local/bin/google_* /mnt/disk/usr/bin/
+
+    # Make sure the we use the latest google_metadata_script_runner to retrieve 
+    # the init script 
+    wget https://storage.googleapis.com/snapd-spread-tests/dependencies/google_metadata_script_runner
+    chmod +x ./google_metadata_script_runner
+    mv ./google_metadata_script_runner /mnt/disk/usr/bin/google_metadata_script_runner
+    sed -e 's/ExecStart=.*/ExecStart=\/usr\/bin\/google_metadata_script_runner startup/g' -i /mnt/disk/usr/lib/systemd/system/google-startup-scripts.service
+
+    echo "$services" | while read s ; do
+        chroot /mnt/disk /bin/bash -c "/usr/bin/systemctl enable $s" || true
+    done
+
+    #configure xdelta3
+    wget https://repo.almalinux.org/almalinux/8/BaseOS/x86_64/os/Packages/xdelta-3.1.0-4.el8.x86_64.rpm
+    cp xdelta-3.1.0-4.el8.x86_64.rpm /mnt/disk/tmp
+    chroot /mnt/disk /bin/bash -c "yum install -y /tmp/xdelta-3.1.0-4.el8.x86_64.rpm"
+
+    wget https://dl.fedoraproject.org/pub/fedora/linux/releases/38/Everything/x86_64/os/Packages/s/ShellCheck-0.9.0-2.fc38.x86_64.rpm
+    cp ShellCheck-0.9.0-2.fc38.x86_64.rpm /mnt/disk/tmp
+    chroot /mnt/disk /bin/bash -c "yum install -y /tmp/ShellCheck-0.9.0-2.fc38.x86_64.rpm"
+
+    # The default dns server is not working properly in google
+    # so we force using also 8.8.8.8
+    echo "nameserver 8.8.8.8" | tee -a /mnt/disk/etc/resolv.conf
+
+    # Configure time
+    chroot /mnt/disk /bin/bash -c "ln -sf /usr/share/zoneinfo/UTC /etc/localtime"
+
+    # Configure ssh
+    mkdir -p /mnt/disk/etc/ssh/sshd_config.d
+    sed -i 's/^\s*#\?\s*\(PermitRootLogin\|PasswordAuthentication\)\>.*/\1 yes/' /mnt/disk/etc/ssh/sshd_config
+    echo 'PermitRootLogin=yes' > /mnt/disk/etc/ssh/sshd_config.d/00-spread.conf
+    echo 'PasswordAuthentication=yes' >> /mnt/disk/etc/ssh/sshd_config.d/00-spread.conf
+
+    # Update grub Config
+    chroot /mnt/disk /bin/bash -c "sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"console=ttyS0,115200n8\"/g' /etc/default/grub"
+    chroot /mnt/disk /bin/bash -c "grub2-mkconfig -o /boot/grub2/grub.cfg"
+
+    # Create the disk image
+    sleep 30
+    umount -AR /mnt/disk
+    sleep 30
+    tar caf "${IMAGE_FILE}.tar.gz" disk.raw || tar caf "${IMAGE_FILE}.tar.gz" disk.raw
+
+    # Upload amazon linux 2 image to spread-images bucket
+    gsutil cp "${IMAGE_FILE}.tar.gz" "gs://${BUCKET_NAME}/"
+
+    # Create the image in snapd-spread project
+    delete_image "$IMAGE" "$FAMILY"
+    create_image_from_bucket "$IMAGE" "$FAMILY" "$DESCRIPTION" "${IMAGE_FILE}.tar.gz"
+
+restore: |
+    rm -f disk.raw
+    rm -f "${IMAGE_FILE}.qcow2"
+    rm -f "${IMAGE_FILE}.tar.gz"
+    umount -AR /mnt/disk || true

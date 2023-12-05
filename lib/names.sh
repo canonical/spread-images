@@ -189,6 +189,17 @@ else
             FAMILY="amazon-linux-2-64"
             DESCRIPTION="Amazon Linux 2 64 bits"
             ;;
+        # Amazon linux 2023
+        amazon-linux-2023-64-base)
+            IMAGE="amazon-linux-2023-64-base-v$(date +'%Y%m%d')"
+            FAMILY="amazon-linux-2023-64-base"
+            DESCRIPTION="Base image"
+            ;;
+        amazon-linux-2023-64)
+            IMAGE="amazon-linux-2023-64-v$(date +'%Y%m%d')"
+            FAMILY="amazon-linux-2023-64"
+            DESCRIPTION="Amazon Linux 2023 64 bits"
+            ;;
         # Centos 7
         centos-7-64)
             IMAGE="centos-7-64-v$(date +'%Y%m%d')"
@@ -215,6 +226,10 @@ else
 fi
 
 DISK="$(curl http://metadata.google.internal/computeMetadata/v1/instance/hostname -H Metadata-Flavor:Google | cut -d . -f1)"
+# when it failed to retrieve the metadate, try using the metadata ip instead
+if [ -z "$DISK" ]; then
+    DISK="$(curl http://169.254.169.254/computeMetadata/v1/instance/hostname -H Metadata-Flavor:Google | cut -d . -f1)"
+fi
 
 export IMAGE
 export FAMILY

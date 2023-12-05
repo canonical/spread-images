@@ -105,6 +105,12 @@ backends:
             - amazon-linux-2-64:
                 image: amazon-linux-2-64
                 storage: preserve-size
+            - amazon-linux-2023-64-base:
+                image: amazon-linux-2023-64-base
+                storage: preserve-size
+            - amazon-linux-2023-64:
+                image: amazon-linux-2023-64
+                storage: preserve-size
 
             - centos-7-64-base:
                 image: centos-cloud/centos-7
