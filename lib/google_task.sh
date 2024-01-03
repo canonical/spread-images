@@ -49,6 +49,12 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             RUN_SNAPD=false
             BACKUPS=0
             ;;
+        amazon-linux-2023)
+            SOURCE_SYSTEM=amazon-linux-2023-64-base
+            TARGET_SYSTEM=amazon-linux-2023-64
+            RUN_SNAPD=false
+            BACKUPS=0
+            ;;
         arch-linux)
             SOURCE_SYSTEM=arch-linux-64-base
             TARGET_SYSTEM=arch-linux-64
@@ -91,21 +97,15 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             RUN_SNAPD=false
             BACKUPS=0
             ;;
-        fedora-37-64)
-            SOURCE_SYSTEM=fedora-37-64-base
-            TARGET_SYSTEM=fedora-37-64
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
         fedora-38-64)
             SOURCE_SYSTEM=fedora-38-64-base
             TARGET_SYSTEM=fedora-38-64
             RUN_SNAPD=false
             BACKUPS=0
             ;;
-        opensuse-15-4)
-            SOURCE_SYSTEM=opensuse-15.4-64-base
-            TARGET_SYSTEM=opensuse-15.4-64
+        fedora-39-64)
+            SOURCE_SYSTEM=fedora-39-64-base
+            TARGET_SYSTEM=fedora-39-64
             RUN_SNAPD=false
             BACKUPS=0
             ;;
@@ -166,6 +166,12 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         ubuntu-23.04-64)
             SOURCE_SYSTEM=ubuntu-23.04-64-base
             TARGET_SYSTEM=ubuntu-23.04-64
+            RUN_SNAPD=false
+            BACKUPS=0
+            ;;
+        ubuntu-23.10-64)
+            SOURCE_SYSTEM=ubuntu-23.10-64-base
+            TARGET_SYSTEM=ubuntu-23.10-64
             RUN_SNAPD=false
             BACKUPS=0
             ;;

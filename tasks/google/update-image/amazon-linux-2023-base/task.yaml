@@ -1,0 +1,36 @@
+summary: Update amazon linux 2 base image in google account
+
+systems: [amazon-linux-2023-64-base]
+
+environment:
+    TARGET_SYSTEM: amazon-linux-2023-64-base
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade
+        distro_update_package_db
+        distro_upgrade_packages
+
+        # This package is needed to allow pgp to create keys
+        yum install gnupg2-full -y --allowerasing
+        
+        remove_pkg_blacklist
+        REBOOT
+    fi
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+    # Create a new image based on the current disk
+    create_image_from_disk_with_os_features "$IMAGE" "$FAMILY" "$DESCRIPTION" "$DISK" "UEFI_COMPATIBLE"
+
+restore: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+
+    delete_snapshot "$DISK"
+    delete_deprecated_images

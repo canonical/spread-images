@@ -33,6 +33,7 @@ backends:
                 image: ubuntu-os-cloud/ubuntu-2004-lts
             - ubuntu-20.04-64:
                 image: ubuntu-2004-64
+                storage: 16G
             - ubuntu-20.04-64-virt-enabled:
                 image: ubuntu-2004-64-virt-enabled
             - ubuntu-22.04-64-base:
@@ -50,9 +51,13 @@ backends:
             - ubuntu-23.04-64:
                 image: ubuntu-2304-64
             - ubuntu-23.10-64-base:
-                image: ubuntu-os-cloud-devel/ubuntu-2310-amd64
+                image: ubuntu-os-cloud/ubuntu-2310-amd64
             - ubuntu-23.10-64:
                 image: ubuntu-2310-64
+            - ubuntu-24.04-64-base:
+                image: ubuntu-os-cloud-devel/ubuntu-2404-lts-amd64
+            - ubuntu-24.04-64:
+                image: ubuntu-2404-64
 
             - debian-11-64-base:
                 image: debian-cloud/debian-11
@@ -75,6 +80,10 @@ backends:
                 image: fedora-cloud/fedora-cloud-38
             - fedora-38-64:
                 image: fedora-38-64
+            - fedora-39-64-base:
+                image: fedora-cloud/fedora-cloud-39
+            - fedora-39-64:
+                image: fedora-39-64
             - fedora-rawhide-64:
                 image: fedora-rawhide-64
 
