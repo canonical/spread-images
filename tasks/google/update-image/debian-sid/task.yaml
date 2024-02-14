@@ -16,7 +16,7 @@ execute: |
         distro_update_package_db
 
         # Install/remove needed packages
-        distro_install_package eatmydata
+        distro_install_package eatmydata xdelta-3
         distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist

@@ -73,13 +73,13 @@ execute: |
     done
 
     #configure xdelta3
-    wget https://repo.almalinux.org/almalinux/8/BaseOS/x86_64/os/Packages/xdelta-3.1.0-4.el8.x86_64.rpm
-    cp xdelta-3.1.0-4.el8.x86_64.rpm /mnt/disk/tmp
-    chroot /mnt/disk /bin/bash -c "yum install -y /tmp/xdelta-3.1.0-4.el8.x86_64.rpm"
+    #wget https://repo.almalinux.org/almalinux/8/BaseOS/x86_64/os/Packages/xdelta-3.1.0-4.el8.x86_64.rpm
+    #cp xdelta-3.1.0-4.el8.x86_64.rpm /mnt/disk/tmp
+    #chroot /mnt/disk /bin/bash -c "yum install -y /tmp/xdelta-3.1.0-4.el8.x86_64.rpm"
 
-    wget https://dl.fedoraproject.org/pub/fedora/linux/releases/38/Everything/x86_64/os/Packages/s/ShellCheck-0.9.0-2.fc38.x86_64.rpm
-    cp ShellCheck-0.9.0-2.fc38.x86_64.rpm /mnt/disk/tmp
-    chroot /mnt/disk /bin/bash -c "yum install -y /tmp/ShellCheck-0.9.0-2.fc38.x86_64.rpm"
+    #wget https://dl.fedoraproject.org/pub/fedora/linux/releases/38/Everything/x86_64/os/Packages/s/ShellCheck-0.9.0-2.fc38.x86_64.rpm
+    #cp ShellCheck-0.9.0-2.fc38.x86_64.rpm /mnt/disk/tmp
+    #chroot /mnt/disk /bin/bash -c "yum install -y /tmp/ShellCheck-0.9.0-2.fc38.x86_64.rpm"
 
     # The default dns server is not working properly in google
     # so we force using also 8.8.8.8
