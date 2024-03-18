@@ -388,7 +388,10 @@ distro_auto_remove_packages() {
         ubuntu-*|debian-*)
             apt -y autoremove
             ;;
-        fedora-*)
+        amazon-*|centos-7-*)
+            yum -y autoremove
+            ;;
+        fedora-*|centos-*)
             dnf -y autoremove
             ;;
         opensuse-*)
@@ -397,9 +400,6 @@ distro_auto_remove_packages() {
             if pacman -Qdtq; then
                 pacman -Rnsc --noconfirm $(pacman -Qdtq | tr '\n' ' ')
             fi
-            ;;
-        amazon-*|centos-*)
-            yum -y autoremove
             ;;
         *)
             echo "ERROR: Unsupported distribution '$SPREAD_SYSTEM'"

@@ -3,6 +3,7 @@
 . "$TESTSLIB/pkgdb.sh"
 
 clean_machine() {
+    distro_auto_remove_packages
     distro_clean_package_cache
 
     find /var/log -type f -exec rm -f {} \;
