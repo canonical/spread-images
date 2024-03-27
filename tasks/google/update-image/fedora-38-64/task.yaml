@@ -23,7 +23,10 @@ execute: |
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_install_package "kernel-modules-$(uname -r)"
-        distro_upgrade_packages
+        # TODO: revert this
+        # We can't updade here becase google-compute-engine and google-compute-sdk are not working
+        # properly and the image won't boot properly next time
+        #distro_upgrade_packages
 
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
