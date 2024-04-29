@@ -426,6 +426,7 @@ pkg_dependencies_fedora(){
     echo "
         git
         jq
+        xdelta
         wget
         "
 }
