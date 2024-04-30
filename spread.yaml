@@ -58,6 +58,8 @@ backends:
                 image: ubuntu-os-cloud-devel/ubuntu-2404-lts-amd64
             - ubuntu-24.04-64:
                 image: ubuntu-2404-64
+            - ubuntu-24.04-64-virt-enabled:
+                image: ubuntu-2404-64-virt-enabled
 
             - debian-11-64-base:
                 image: debian-cloud/debian-11
@@ -106,7 +108,6 @@ backends:
                 image: arch-linux-64-base
             - arch-linux-64:
                 image: arch-linux-64
-                storage: 20G
 
             - amazon-linux-2-64-base:
                 image: amazon-linux-2-64-base
@@ -163,12 +164,12 @@ backends:
                 image: ubuntu-2204-64-virt-enabled
                 storage: 20G
                 workers: 1
-            - ubuntu-22.04-64-devstack:
-                image: ubuntu-jammy-devstack
-                storage: 20G
-                workers: 1
             - ubuntu-22.04-arm-64:
                 image: ubuntu-2204-arm-64-virt-enabled
+                storage: 20G
+                workers: 1
+            - ubuntu-24.04-64:
+                image: ubuntu-2204-64-virt-enabled
                 storage: 20G
                 workers: 1
 
