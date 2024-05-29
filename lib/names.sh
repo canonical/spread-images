@@ -92,16 +92,6 @@ else
             FAMILY="ubuntu-2210-64"
             DESCRIPTION="Ubuntu 22.10 64 bits"
             ;;
-        ubuntu-23.04-64)
-            IMAGE="ubuntu-2304-64-v$(date +'%Y%m%d')"
-            FAMILY="ubuntu-2304-64"
-            DESCRIPTION="Ubuntu 23.04 64 bits"
-            ;;
-        ubuntu-23.04-64-virt-enabled)
-            IMAGE="ubuntu-2304-64-v$(date +'%Y%m%d')-virt-enabled"
-            FAMILY="ubuntu-2304-64-virt-enabled"
-            DESCRIPTION="Image with virtualization enabled"
-            ;;
         ubuntu-23.10-64)
             IMAGE="ubuntu-2310-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-2310-64"
@@ -116,6 +106,11 @@ else
             IMAGE="ubuntu-2404-64-v$(date +'%Y%m%d')-virt-enabled"
             FAMILY="ubuntu-2404-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
+            ;;
+        ubuntu-24.10-64)
+            IMAGE="ubuntu-2410-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-2410-64"
+            DESCRIPTION="Ubuntu 24.10 64 bits"
             ;;
         # Debian
         debian-11-64)

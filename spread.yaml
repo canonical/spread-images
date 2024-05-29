@@ -7,6 +7,10 @@ environment:
     TESTSLIB: $PROJECT_PATH/lib
     TESTSFILES: $PROJECT_PATH/files
     TMP_IMAGE_ID: "$(HOST: echo ${SPREAD_TMP_IMAGE_ID})"
+    HTTP_PROXY: '$(HOST: echo "$SPREAD_HTTP_PROXY")'
+    HTTPS_PROXY: '$(HOST: echo "$SPREAD_HTTPS_PROXY")'
+    http_proxy: '$(HOST: echo "$SPREAD_HTTP_PROXY")'
+    https_proxy: '$(HOST: echo "$SPREAD_HTTPS_PROXY")'
 
 backends:
 
@@ -46,20 +50,20 @@ backends:
                 image: ubuntu-os-cloud/ubuntu-2210-amd64
             - ubuntu-22.10-64:
                 image: ubuntu-2210-64
-            - ubuntu-23.04-64-base:
-                image: ubuntu-os-cloud/ubuntu-2304-amd64
-            - ubuntu-23.04-64:
-                image: ubuntu-2304-64
             - ubuntu-23.10-64-base:
                 image: ubuntu-os-cloud/ubuntu-2310-amd64
             - ubuntu-23.10-64:
                 image: ubuntu-2310-64
             - ubuntu-24.04-64-base:
-                image: ubuntu-os-cloud-devel/ubuntu-2404-lts-amd64
+                image: ubuntu-os-cloud/ubuntu-2404-lts-amd64
             - ubuntu-24.04-64:
                 image: ubuntu-2404-64
             - ubuntu-24.04-64-virt-enabled:
                 image: ubuntu-2404-64-virt-enabled
+            - ubuntu-24.10-64-base:
+                image: ubuntu-os-cloud-devel/ubuntu-2410-amd64
+            - ubuntu-24.10-64:
+                image: ubuntu-2410-64
 
             - debian-11-64-base:
                 image: debian-cloud/debian-11
@@ -74,10 +78,6 @@ backends:
             - debian-sid-64:
                 image: debian-sid-64
 
-            - fedora-37-64-base:
-                image: fedora-cloud/fedora-cloud-37
-            - fedora-37-64:
-                image: fedora-37-64
             - fedora-38-64-base:
                 image: fedora-cloud/fedora-cloud-38
             - fedora-38-64:
@@ -86,6 +86,7 @@ backends:
                 image: fedora-cloud/fedora-cloud-39
             - fedora-39-64:
                 image: fedora-39-64
+                storage: 30G
             - fedora-rawhide-64:
                 image: fedora-rawhide-64
 
@@ -189,6 +190,41 @@ backends:
                   workers: 8
                   storage: 12G
 
+    openstack:
+        key: '$(HOST: echo "$SPREAD_OPENSTACK_ENV")'
+        plan: staging-cpu2-ram4-disk50
+        halt-timeout: 2h
+        groups: [default]
+        systems:
+            - ubuntu-18.04-64-base:
+                image: ubuntu-bionic-18.04-amd64
+                workers: 8
+            - ubuntu-20.04-64-base:
+                image: ubuntu-focal-20.04-amd64
+                workers: 8
+            - ubuntu-20.04-arm-64-base:
+                image: ubuntu-focal-20.04-arm64
+                workers: 1
+            - ubuntu-22.04-64-base:
+                image: ubuntu-jammy-22.04-amd64
+                workers: 8
+            - ubuntu-22.04-arm-64:
+                image: ubuntu-jammy-22.04-arm64
+                workers: 1
+            - fedora-38-64-base:
+                image: fedora-38-64-base-v20240522
+                workers: 1
+            - fedora-39-64-base:
+                image: fedora-39-64-base-v20240522
+                workers: 1
+            - fedora-40-64-base:
+                image: fedora-40-64-base-v20240521
+                workers: 1
+            - fedora-40-64:
+                image: fedora-40-64-v20240528
+                workers: 1
+
+
 path: /root/spread
 
 
@@ -251,3 +287,15 @@ suites:
             install_pkg_dependencies
             gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
 
+    tasks/openstack/common/:
+        summary: Commmon tasks for openstack backend
+        environment:
+            OS_USERNAME: '$(HOST: echo "${OS_USERNAME:-}")'
+            OS_PROJECT_NAME: '$(HOST: echo "${OS_PROJECT_NAME:-}")'
+            OS_PASSWORD: '$(HOST: echo "${OS_PASSWORD:-}")'
+            OS_AUTH_URL: '$(HOST: echo "${OS_AUTH_URL:-}")'
+            OS_PROJECT_DOMAIN_NAME: '$(HOST: echo "${OS_PROJECT_DOMAIN_NAME:-}")'
+            OS_REGION_NAME: '$(HOST: echo "${OS_REGION_NAME:-}")'
+            OS_USER_DOMAIN_NAME: '$(HOST: echo "${OS_USER_DOMAIN_NAME:-}")'
+            OS_IDENTITY_API_VERSION: '$(HOST: echo "${OS_IDENTITY_API_VERSION:-}")'
+            OS_INTERFACE: '$(HOST: echo "${OS_INTERFACE:-}")'

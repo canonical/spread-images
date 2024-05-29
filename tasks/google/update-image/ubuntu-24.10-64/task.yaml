@@ -1,9 +1,9 @@
-summary: Update Ubuntu 23.04 64 bits image with the latest updates and test dependencies
+summary: Update Ubuntu 24.10 64 bits image with the latest updates and test dependencies
 
-systems: [ubuntu-23.04-64-base]
+systems: [ubuntu-24.10-64-base]
 
 environment:
-    TARGET_SYSTEM: ubuntu-23.04-64
+    TARGET_SYSTEM: ubuntu-24.10-64
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -26,11 +26,6 @@ execute: |
 
     # Disable daily checks for updates to avoid apt locks
     sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
-
-    # Remove lxd snap
-    if snap list lxd; then
-        snap remove lxd
-    fi
 
     # Clean disk before create the shapshot
     clean_machine
