@@ -1,7 +1,5 @@
 summary: Update fedora image with the latest updates and test dependencies with selinux permissive
 
-backends: [openstack]
-
 systems: [fedora-40-64-base]
 
 execute: |
