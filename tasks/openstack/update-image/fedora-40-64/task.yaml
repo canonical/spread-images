@@ -17,7 +17,6 @@ execute: |
         distro_install_package kernel-modules
         distro_upgrade_packages
 
-        #install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
 
         REBOOT

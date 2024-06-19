@@ -1,0 +1,28 @@
+summary: Update centos-9 64 bits image with the latest updates and test dependencies
+
+systems: [centos-9-64-base]
+
+execute: |
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Normalize fedora base url among fedora versions
+        sed -i -e 's,metalink=.*,baseurl=https://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os,g' /etc/yum.repos.d/centos*.repo
+  
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        distro_upgrade_packages
+
+        remove_pkg_blacklist
+
+        REBOOT
+    fi
+
+    # Clean disk before create the snapshot
+    clean_machine
+
+restore: |
+    # Remove the project path content
+    rm -rf "$PROJECT_PATH"
+
