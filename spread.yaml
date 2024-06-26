@@ -202,21 +202,25 @@ backends:
         halt-timeout: 2h
         groups: [default]
         systems:
-            - ubuntu-18.04-64-base:
-                image: ubuntu-bionic-18.04-amd64
-                workers: 8
             - ubuntu-20.04-64-base:
-                image: ubuntu-focal-20.04-amd64
-                workers: 8
-            - ubuntu-20.04-arm-64-base:
-                image: ubuntu-focal-20.04-arm64
+                image: auto-sync/ubuntu-focal-20.04-amd64-server-20240612-disk1.img
+                workers: 1
+            - ubuntu-20.04-64:
+                image: ubuntu-20.04-64
                 workers: 1
             - ubuntu-22.04-64-base:
-                image: ubuntu-jammy-22.04-amd64
-                workers: 8
-            - ubuntu-22.04-arm-64:
-                image: ubuntu-jammy-22.04-arm64
+                image: auto-sync/ubuntu-jammy-22.04-amd64-server-20240614-disk1.img
                 workers: 1
+            - ubuntu-22.04-64:
+                image: ubuntu-22.04-64
+                workers: 1
+            - ubuntu-24.04-64-base:
+                image: auto-sync/ubuntu-noble-24.04-amd64-server-20240622-disk1.img
+                workers: 1
+            - ubuntu-24.04-64:
+                image: ubuntu-24.04-64
+                workers: 1
+
             - fedora-38-64-base:
                 image: fedora-38-64-base
                 workers: 1

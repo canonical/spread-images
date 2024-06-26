@@ -1,16 +1,48 @@
-#!/bin/bash -x
+#!/bin/bash
 
 show_help() {
-    echo "usage: openstack.sh update-image <task-name> <source-system> <target-image-name>"
+    echo "usage: openstack.sh update-image --task <task-name> --source-system <source-system> --target-image <target-image-name>"
     echo ""
     echo "Create and update images for openstack"
 }
 
 update_image(){
-    task=$1
-    source_system=$2
-    target_image=$3
-    
+    if [ $# -eq 0 ]; then
+        show_help
+        exit 0
+    fi
+
+    task=""
+    source_system=""
+    target_image=""
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            -h|--help)
+                show_help
+                exit 0
+                ;;
+            --task)
+                task="$2"
+                shift 2
+                ;;
+            --source-system)
+                source_system="$2"
+                shift 2
+                ;;
+            --target-image)
+                target_image="$2"
+                shift 2
+                ;;
+            *)
+                echo "parameter non supported: $1"
+                show_help
+                exit 1
+                ;;
+        esac
+    done
+
+    set -ex
+
     # Run the update image task with reuse to keep the instance after the update is completed
     rm -f .spread-reuse*
     spread -reuse openstack:"$source_system":tasks/openstack/update-image/"$task" | tee spread.log
@@ -43,6 +75,8 @@ update_image(){
     # delete the instance
     openstack server delete "$instance_name"
     rm -f spread.log
+
+    set +ex
 }
 
 main() {

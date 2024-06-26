@@ -26,7 +26,7 @@ execute: |
     sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
     setenforce Permissive
 
-    # Clean disk before create the shapshot
+    # Clean the disk
     clean_machine
 
 restore: |

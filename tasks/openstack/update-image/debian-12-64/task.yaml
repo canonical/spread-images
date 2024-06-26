@@ -16,7 +16,7 @@ execute: |
         REBOOT
     fi
 
-    # Clean disk before create the snapshot
+    # Clean the disk
     clean_machine
 
 restore: |
