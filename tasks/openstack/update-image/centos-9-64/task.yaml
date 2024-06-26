@@ -8,8 +8,9 @@ execute: |
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Normalize fedora base url among fedora versions
-        sed -i -e 's,metalink=.*,baseurl=https://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os,g' /etc/yum.repos.d/centos*.repo
-  
+        mv /etc/yum.repos.d/centos.repo /etc/yum.repos.d/centos.repo.old
+        cp "$PWD"/centos.repo /etc/yum.repos.d/centos.repo
+
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
