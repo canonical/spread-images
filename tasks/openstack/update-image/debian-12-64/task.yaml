@@ -16,6 +16,13 @@ execute: |
         REBOOT
     fi
 
+    # Configure ntp to ntp.ubuntu.com
+    sed -i 's/#NTP=/NTP=ntp.ubuntu.com/g' /etc/systemd/timesyncd.conf
+    systemctl restart systemd-timesyncd
+    timedatectl set-ntp yes
+    timedatectl | MATCH "System clock synchronized: yes"
+    timedatectl | MATCH "NTP service: active"
+
     # Clean the disk
     clean_machine
 

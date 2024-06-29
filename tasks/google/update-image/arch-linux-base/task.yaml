@@ -23,8 +23,6 @@ execute: |
         systemctl enable reflector
         systemctl start reflector
 
-        
-
         distro_install_package inetutils vim
 
         REBOOT

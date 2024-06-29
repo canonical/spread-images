@@ -20,6 +20,15 @@ execute: |
         REBOOT
     fi
 
+    # Configure ntp to ntp.ubuntu.com
+    sed -i -e 's/^pool.*/pool ntp.ubuntu.com iburst/g' /etc/chrony.conf
+    sed -i -e 's/^#pool.*/pool ntp.ubuntu.com iburst/g' /etc/chrony.conf
+    systemctl restart chronyd
+    sleep 5
+    timedatectl set-ntp yes
+    timedatectl | MATCH "System clock synchronized: yes"
+    timedatectl | MATCH "NTP service: active"
+
     # Clean the disk
     clean_machine
 
