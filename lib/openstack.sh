@@ -45,7 +45,11 @@ update_image(){
 
     # Run the update image task with reuse to keep the instance after the update is completed
     rm -f .spread-reuse*
-    spread -reuse openstack:"$source_system":tasks/openstack/update-image/"$task" | tee spread.log
+    spread_failed=false
+    (set -o pipefail; spread -reuse openstack:"$source_system":tasks/openstack/update-image/"$task" | tee spread.log)
+    if [ ! $? -eq 0 ]; then
+        spread_failed=true
+    fi
 
     # Get the instance name
     instance_name="$(grep -E ".*Keeping.*(.*).*" < spread.log | awk -F'[()]' '{print $2}')"
@@ -62,15 +66,17 @@ update_image(){
         sleep 5
     done
 
-    # create the snapshot
-    openstack server image create --name "$target_image" "$instance_name"
-    for _ in $(seq 10); do
-        if openstack image list | grep "$target_image .*|.*active"; then
-            break
-        fi
-        sleep 10
-    done
-    
+    # Create the snapshot just when the spread task didn't fail
+    if [ "$spread_failed" = false ]; then
+        # create the snapshot
+        openstack server image create --name "$target_image" "$instance_name"
+        for _ in $(seq 10); do
+            if openstack image list | grep "$target_image .*|.*active"; then
+                break
+            fi
+            sleep 10
+        done
+    fi    
     
     # delete the instance
     openstack server delete "$instance_name"

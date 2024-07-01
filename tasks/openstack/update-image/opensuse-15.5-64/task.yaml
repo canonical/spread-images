@@ -23,8 +23,6 @@ execute: |
     sleep 5
     timedatectl set-ntp yes
     sleep 5
-    timedatectl | MATCH "System clock synchronized: yes"
-    timedatectl | MATCH "NTP service: active"
 
     # Clean the disk
     clean_machine

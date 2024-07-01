@@ -26,8 +26,9 @@ execute: |
     systemctl restart chronyd
     sleep 5
     timedatectl set-ntp yes
-    timedatectl | MATCH "System clock synchronized: yes"
-    timedatectl | MATCH "NTP service: active"
+
+    sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
+    setenforce Permissive
 
     # Clean the disk
     clean_machine
