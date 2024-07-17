@@ -6,8 +6,6 @@ environment:
     TARGET_SYSTEM: ubuntu-24.04-64
 
 execute: |
-    . "$TESTSLIB/google.sh"
-    . "$TESTSLIB/names.sh"
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 

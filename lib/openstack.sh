@@ -4,6 +4,15 @@ show_help() {
     echo "usage: openstack.sh update-image --task <task-name> --source-system <source-system> --target-image <target-image-name>"
     echo ""
     echo "Create and update images for openstack"
+    echo ""
+    echo "examples:"
+    echo './lib/openstack.sh update-image --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-image snapd-spread/ubuntu-20.04-64-v$(date +'%Y%m%d')'
+    echo './lib/openstack.sh update-image --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-image snapd-spread/ubuntu-22.04-64-v$(date +'%Y%m%d')'
+    echo './lib/openstack.sh update-image --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-image snapd-spread/ubuntu-24.04-64-v$(date +'%Y%m%d')'
+    echo './lib/openstack.sh update-image --task fedora-40-64 --source-system fedora-40-64-base --target-image snapd-spread/fedora-40-64-v$(date +'%Y%m%d')'
+    echo './lib/openstack.sh update-image --task opensuse-15.5-64 --source-system opensuse-15.5-64-base --target-image snapd-spread/opensuse-15.5-64-v$(date +'%Y%m%d')'
+    echo './lib/openstack.sh update-image --task debian-12-64 --source-system debian-12-64-base --target-image snapd-spread/debian-12-64-v$(date +'%Y%m%d')'
+    echo './lib/openstack.sh update-image --task centos-9-64 --source-system centos-9-64-base --target-image snapd-spread/centos-9-64-v$(date +'%Y%m%d')'
 }
 
 update_image(){
