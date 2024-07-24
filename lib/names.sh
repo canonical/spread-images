@@ -177,6 +177,11 @@ else
             FAMILY="opensuse-leap-15-5-64"
             DESCRIPTION="Opensuse leap 15.5 64 bits with test dependencies"
             ;;
+        opensuse-15.6-64)
+            IMAGE="opensuse-leap-15-6-64-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-leap-15-6-64"
+            DESCRIPTION="Opensuse leap 15.6 64 bits with test dependencies"
+            ;;
         opensuse-tumbleweed-64-base)
             IMAGE="opensuse-tumbleweed-64-base-v$(date +'%Y%m%d')"
             FAMILY="opensuse-tumbleweed-64-base"

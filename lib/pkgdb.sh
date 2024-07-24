@@ -441,6 +441,7 @@ pkg_dependencies_opensuse(){
     echo "
         git
         jq
+        python311
         rpm-build
         unzip
         "
@@ -527,7 +528,6 @@ distro_initial_repo_setup(){
             zypper mr -d repo-debug-update || true
             zypper mr -d repo-sle-update || true
             zypper mr -d Cloud_Tools || true
-
             ;;
         arch-*)
             # Delete the key wich is failing checking packages integrity
