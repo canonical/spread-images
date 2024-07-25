@@ -11,6 +11,16 @@ execute: |
         mv /etc/yum.repos.d/centos.repo /etc/yum.repos.d/centos.repo.old
         cp "$PWD"/centos.repo /etc/yum.repos.d/centos.repo
 
+        # Configure the epel and epel-next repos
+        dnf config-manager --set-enabled crb
+        dnf install -y epel-release epel-next-release || true
+        
+        mv /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.old        
+        cp "$PWD"/epel.repo /etc/yum.repos.d/epel.repo
+
+        mv /etc/yum.repos.d/epel-next.repo /etc/yum.repos.d/epel-next.repo.old
+        cp "$PWD"/epel-next.repo /etc/yum.repos.d/epel-next.repo
+
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages

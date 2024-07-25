@@ -1,0 +1,9 @@
+[epel-next]
+name=Extra Packages for Enterprise Linux $releasever - Next - $basearch
+# It is much more secure to use the metalink, but if you wish to use a local mirror
+# place its address here.
+baseurl=https://dl.fedoraproject.org/pub/epel/next/$releasever/Everything/$basearch/
+enabled=1
+gpgcheck=1
+countme=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever
