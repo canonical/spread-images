@@ -38,9 +38,14 @@ backends:
             - ubuntu-20.04-64:
                 image: ubuntu-2004-64
                 storage: 16G
-            - ubuntu-20.04-64-pro-fips:
-                image: ubuntu-os-pro-cloud/ubuntu-pro-fips-2004-focal-v20240610
+            - ubuntu-20.04-64-pro-fips-base:
+                image: ubuntu-os-pro-cloud/ubuntu-pro-fips-2004-focal-v20240701
                 storage: 16G
+                attach-service-account: true
+            - ubuntu-20.04-64-pro-fips-enabled:
+                image: ubuntu-2004-64-pro-fips-enabled
+                storage: 16G
+                attach-service-account: true
             - ubuntu-20.04-64-virt-enabled:
                 image: ubuntu-2004-64-virt-enabled
             - ubuntu-22.04-64-base:
@@ -48,9 +53,14 @@ backends:
             - ubuntu-22.04-64:
                 image: ubuntu-2204-64
                 storage: 20G
-            - ubuntu-22.04-64-pro:
-                image: ubuntu-os-pro-cloud/ubuntu-pro-2204-jammy-v20240519
+            - ubuntu-22.04-64-pro-base:
+                image: ubuntu-os-pro-cloud/ubuntu-pro-2204-jammy-v20240801
                 storage: 16G
+                attach-service-account: true
+            - ubuntu-22.04-64-pro-fips-enabled:
+                image: ubuntu-2204-64-pro-fips-enabled
+                storage: 16G
+                attach-service-account: true
             - ubuntu-22.04-64-virt-enabled:
                 image: ubuntu-2204-64-virt-enabled
             - ubuntu-22.10-64-base:
