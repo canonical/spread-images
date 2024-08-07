@@ -28,7 +28,7 @@ execute: |
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
         
-        pro enable fips --assume-yes || true
+        pro enable fips-updates --assume-yes || true
         pro status | MATCH "Subscription: snapd-spread"
 
         REBOOT
