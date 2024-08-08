@@ -21,6 +21,30 @@ execute: |
         REBOOT
     fi
 
+    # Create systemd unit to restart the failing service
+    tee /usr/lib/systemd/system/systemd-vconsole-setup-rexec.service << EOF
+    [Unit]
+    Description=Setup Virtual Console Reexecution
+    After=local-fs.target network-online.target network.target rsyslog.service
+    After=google-instance-setup.service
+    Wants=local-fs.target network-online.target network.target
+    Requires=network.target
+    PartOf=network.service
+    ConditionPathExists=/dev/tty0
+
+    [Service]
+    Type=simple
+    Restart=on-failure
+    RestartSec=5
+    ExecStart=/usr/bin/systemctl restart systemd-vconsole-setup.service
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+
+    systemctl daemon-reload
+    systemctl enable systemd-vconsole-setup-rexec.service
+
     # Clean disk before create the snapshot
     clean_machine
 
