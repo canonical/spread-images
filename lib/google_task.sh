@@ -115,6 +115,12 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             RUN_SNAPD=false
             BACKUPS=0
             ;;
+        opensuse-15-6)
+            SOURCE_SYSTEM=opensuse-15.6-64-base
+            TARGET_SYSTEM=opensuse-15.6-64
+            RUN_SNAPD=false
+            BACKUPS=0
+            ;;
         opensuse-tumbleweed)
             SOURCE_SYSTEM=opensuse-tumbleweed-64-base
             TARGET_SYSTEM=opensuse-tumbleweed-64
