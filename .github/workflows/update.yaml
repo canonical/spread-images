@@ -13,6 +13,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - group: ubuntu-20.04-64
+            source: ubuntu-20.04-64-base
+            target: ubuntu-20.04-64
+            cloud: google
+          - group: ubuntu-22.04-64
+            source: ubuntu-22.04-64-base
+            target: ubuntu-22.04-64
+            cloud: google
           - group: ubuntu-24.04-64
             source: ubuntu-24.04-64-base
             target: ubuntu-24.04-64

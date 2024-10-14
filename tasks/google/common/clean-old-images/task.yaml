@@ -6,10 +6,10 @@ environment:
 
 execute: |
     if [ "$SYSTEM_BACKUPS" -lt 0 ]; then
-        SYSTEM_BACKUPS = 0
+        SYSTEM_BACKUPS=0
     fi
     if [ -z "$TARGET_SYSTEM" ]; then
-        TARGET_SYSTEM = "$SPREAD_SYSTEM"
+        TARGET_SYSTEM="$SPREAD_SYSTEM"
     fi
 
     . "$TESTSLIB/names.sh"
