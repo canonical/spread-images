@@ -82,6 +82,18 @@ jobs:
             target: centos-9-64
             cloud: google
 
+          - group: opensuse 15.5 (google)
+            task: opensuse-15-5
+            source: opensuse-15.5-64-base
+            target: opensuse-15.5-64
+            cloud: google
+          - group: opensuse 15.6 (google)
+            task: opensuse-15-6
+            source: opensuse-15.6-64-base
+            target: opensuse-15.6-64
+            cloud: google
+
+
     steps:
     - name: Ensure the workspace is clean
       run: |
