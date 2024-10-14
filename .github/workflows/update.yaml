@@ -13,43 +13,54 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - group: ubuntu-14.04-64
+          - group: ubuntu 14.04 (google)
+            task: ubuntu-14.04-64
             source: ubuntu-14.04-64
             target: ubuntu-14.04-64
             cloud: google
-          - group: ubuntu-16.04-64
+          - group: ubuntu 16.04 (google)
+            task: ubuntu-16.04-64
             source: ubuntu-16.04-64
             target: ubuntu-16.04-64
             cloud: google
-          - group: ubuntu-18.04-64
+          - group: ubuntu 18.04 (google)
+            task: ubuntu-18.04-64
             source: ubuntu-18.04-64
             target: ubuntu-18.04-64
             cloud: google
-          - group: ubuntu-20.04-64
+          - group: ubuntu 20.04 (google)
+            task: ubuntu-20.04-64
             source: ubuntu-20.04-64-base
             target: ubuntu-20.04-64
             cloud: google
-          - group: ubuntu-22.04-64
+          - group: ubuntu 22.04 (google)
+            task: ubuntu-22.04-64
             source: ubuntu-22.04-64-base
             target: ubuntu-22.04-64
             cloud: google
-          - group: ubuntu-24.04-64
+          - group: ubuntu 24.04 (google)
+            task: ubuntu-24.04-64
             source: ubuntu-24.04-64-base
             target: ubuntu-24.04-64
             cloud: google
-          - group: ubuntu-24.10-64
+          - group: ubuntu 24.10 (google)
+            task: ubuntu-24.10-64
             source: ubuntu-24.10-64-base
             target: ubuntu-24.10-64
             cloud: google
-          - group: debian-11-64
+
+          - group: debian 11 (google)
+            task: debian-11-64
             source: debian-11-64-base
             target: debian-11-64
             cloud: google
-          - group: debian-12-64
+          - group: debian 12 (google)
+            task: debian-12
             source: debian-12-64-base
             target: debian-12-64
             cloud: google
-          - group: debian-sid-64
+          - group: debian sid (google)
+            task: debian-sid
             source: debian-sid-64-base
             target: debian-sid-64
             cloud: google
@@ -69,14 +80,14 @@ jobs:
       env:
           IMAGE_BAKER_SA: ${{ secrets.IMAGE_BAKER_SA }}
       run: |
-          if [ ${{ matrix.cloud }} == google ]; then
+          if [ "${{ matrix.cloud }}" == google ]; then
             echo "$IMAGE_BAKER_SA" > sa.json
-            if ! spread "${{ matrix.cloud }}:${{ matrix.source }}:tasks/${{ matrix.cloud }}/update-image/${{ matrix.group }}"; then
+            if ! spread "${{ matrix.cloud }}:${{ matrix.source }}:tasks/${{ matrix.cloud }}/update-image/${{ matrix.task }}"; then
               echo "Spread images task failed, exiting..."
               exit 1
             fi
             spread "${{ matrix.cloud }}:${{ matrix.target }}:tasks/${{ matrix.cloud }}/common/clean-old-images"
-          elif [ ${{ matrix.cloud }} == openstack ]; then
+          elif [ "${{ matrix.cloud }}" == openstack ]; then
               echo "Openstack updates not supported yet, exiting..."
               exit 1
           else
