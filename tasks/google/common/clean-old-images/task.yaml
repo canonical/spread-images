@@ -1,11 +1,16 @@
 summary: Remove old images for a specific images family
 
 environment:
-    TARGET_SYSTEM: "$(HOST: echo ${SPREAD_TARGET_SYSTEM:-SPREAD_SYSTEM})"
+    TARGET_SYSTEM: "$(HOST: echo ${SPREAD_TARGET_SYSTEM:-})"
     SYSTEM_BACKUPS: "$(HOST: echo ${SPREAD_SYSTEM_BACKUPS:-0})"
 
 execute: |
-    test "$SYSTEM_BACKUPS" -ge 0
+    if [ "$SYSTEM_BACKUPS" -lt 0 ]; then
+        SYSTEM_BACKUPS = 0
+    fi
+    if [ -z "$TARGET_SYSTEM" ]; then
+        TARGET_SYSTEM = "$SPREAD_SYSTEM"
+    fi
 
     . "$TESTSLIB/names.sh"
     . "$TESTSLIB/google.sh"
