@@ -78,7 +78,7 @@ backends:
             - ubuntu-24.04-64-virt-enabled:
                 image: ubuntu-2404-64-virt-enabled
             - ubuntu-24.10-64-base:
-                image: ubuntu-os-cloud-devel/ubuntu-2410-amd64
+                image: ubuntu-os-cloud/ubuntu-2410-amd64
             - ubuntu-24.10-64:
                 image: ubuntu-2410-64
 
