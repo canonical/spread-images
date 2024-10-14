@@ -1,0 +1,64 @@
+name: Weekly images update
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 2 * * 0'
+
+jobs:
+  update-image:
+    name: ${{ matrix.task }}
+    runs-on: [self-hosted, spread-enabled]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - task: ubuntu-24.04-64
+            source: ubuntu-24.04-64-base
+            target: ubuntu-24.04-64
+            cloud: google
+          - task: ubuntu-24.10-64
+            source: ubuntu-24.10-64-base
+            target: ubuntu-24.10-64
+            cloud: google
+
+    steps:
+    - name: Ensure the workspace is clean
+      run: |
+          rm -rf "${{ github.workspace }}"
+          mkdir "${{ github.workspace }}"
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+          ref: master
+
+    - name: Run test
+      env:
+          IMAGE_BAKER_SA: ${{ secrets.IMAGE_BAKER_SA }}
+      run: |
+          echo "$IMAGE_BAKER_SA" > sa.json
+
+          if [ ${{ matrix.cloud }} == google ]; then
+            if ! spread "${{ matrix.cloud }}:${SOURCE_SYSTEM}:tasks/${{ matrix.cloud }}/update-image/${{ matrix.task }}"; then
+              echo "Spread images task failed, exiting..."
+              exit 1
+            fi
+            spread "${{ matrix.cloud }}:${{ matrix.target }}:tasks/${{ matrix.cloud }}/common/clean-old-images"
+          fi
+  
+    - name: Discard spread workers
+      if: always()
+      run: |
+        shopt -s nullglob;
+        for r in .spread-reuse.*.yaml; do
+          spread -discard -reuse-pid="$(echo "$r" | grep -o -E '[0-9]+')";
+        done
+          
+
+
+    - name: Cleanup job workspace after run tests
+      if: always()
+      run: |
+          rm -rf "${{ github.workspace }}"
+          mkdir "${{ github.workspace }}"

@@ -1,18 +1,15 @@
 summary: Remove old images for a specific images family
 
 environment:
-    TARGET_SYSTEM: "$(HOST: echo ${SPREAD_TARGET_SYSTEM})"
+    TARGET_SYSTEM: "$(HOST: echo ${SPREAD_TARGET_SYSTEM:-$SPREAD_SYSTEM})"
     SYSTEM_BACKUPS: "$(HOST: echo ${SPREAD_SYSTEM_BACKUPS:-0})"
 
 execute: |
-    if [ -z "$TARGET_SYSTEM" ]; then
-        echo "The variable TARGET_SYSTEM is not set, exiting..."
-        exit 1
-    fi
     test "$SYSTEM_BACKUPS" -ge 0
 
     . "$TESTSLIB/names.sh"
     . "$TESTSLIB/google.sh"
+
     # We get the images for that family ordered by creation timestamp descendent, and then
     # get the images from the list leaving the initial $SYSTEM_BACKUPS + 1
     # We leave the +1 to keep the last image which is not the backup
