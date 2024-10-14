@@ -13,6 +13,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - group: ubuntu-14.04-64
+            source: ubuntu-14.04-64
+            target: ubuntu-14.04-64
+            cloud: google
+          - group: ubuntu-16.04-64
+            source: ubuntu-16.04-64
+            target: ubuntu-16.04-64
+            cloud: google
+          - group: ubuntu-18.04-64
+            source: ubuntu-18.04-64
+            target: ubuntu-18.04-64
+            cloud: google
           - group: ubuntu-20.04-64
             source: ubuntu-20.04-64-base
             target: ubuntu-20.04-64
@@ -30,6 +42,19 @@ jobs:
             target: ubuntu-24.10-64
             cloud: google
 
+          - group: debian-11-64
+            source: debian-11-64-base
+            target: debian-11-64
+            cloud: google
+          - group: debian-12-64
+            source: debian-12-64-base
+            target: debian-12-64
+            cloud: google
+          - group: debian-sid-64
+            source: debian-sid-64-base
+            target: debian-sid-64
+            cloud: google
+            
     steps:
     - name: Ensure the workspace is clean
       run: |
@@ -67,8 +92,6 @@ jobs:
         for r in .spread-reuse.*.yaml; do
           spread -discard -reuse-pid="$(echo "$r" | grep -o -E '[0-9]+')";
         done
-          
-
 
     - name: Cleanup job workspace after run tests
       if: always()
