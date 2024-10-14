@@ -50,7 +50,7 @@ jobs:
             cloud: google
 
           - group: debian 11 (google)
-            task: debian-11-64
+            task: debian-11
             source: debian-11-64-base
             target: debian-11-64
             cloud: google
