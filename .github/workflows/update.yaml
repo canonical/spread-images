@@ -13,11 +13,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - task: ubuntu-24.04-64
+          - group: ubuntu-24.04-64
             source: ubuntu-24.04-64-base
             target: ubuntu-24.04-64
             cloud: google
-          - task: ubuntu-24.10-64
+          - group: ubuntu-24.10-64
             source: ubuntu-24.10-64-base
             target: ubuntu-24.10-64
             cloud: google
@@ -37,14 +37,19 @@ jobs:
       env:
           IMAGE_BAKER_SA: ${{ secrets.IMAGE_BAKER_SA }}
       run: |
-          echo "$IMAGE_BAKER_SA" > sa.json
-
           if [ ${{ matrix.cloud }} == google ]; then
-            if ! spread "${{ matrix.cloud }}:${SOURCE_SYSTEM}:tasks/${{ matrix.cloud }}/update-image/${{ matrix.task }}"; then
+            echo "$IMAGE_BAKER_SA" > sa.json
+            if ! spread "${{ matrix.cloud }}:${{ matrix.source }}:tasks/${{ matrix.cloud }}/update-image/${{ matrix.group }}"; then
               echo "Spread images task failed, exiting..."
               exit 1
             fi
             spread "${{ matrix.cloud }}:${{ matrix.target }}:tasks/${{ matrix.cloud }}/common/clean-old-images"
+          elif [ ${{ matrix.cloud }} == openstack ]; then
+              echo "Openstack updates not supported yet, exiting..."
+              exit 1
+          else
+              echo "${{ matrix.cloud }} updates not supported, exiting..."
+              exit 1
           fi
   
     - name: Discard spread workers
