@@ -23,6 +23,7 @@ execute: |
 
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
+        distro_install_package wget
         distro_upgrade_packages
 
         remove_pkg_blacklist

@@ -64,7 +64,24 @@ jobs:
             source: debian-sid-64-base
             target: debian-sid-64
             cloud: google
-            
+
+          - group: amazon linux 2 (google)
+            task: amazon-linux-2
+            source: amazon-linux-2-64-base
+            target: amazon-linux-2-64
+            cloud: google
+          - group: amazon linux 2023 (google)
+            task: amazon-linux-2023
+            source: amazon-linux-2023-64-base
+            target: amazon-linux-2023-64
+            cloud: google
+
+          - group: centos 9 (google)
+            task: centos-9
+            source: centos-9-64-base
+            target: centos-9-64
+            cloud: google
+
     steps:
     - name: Ensure the workspace is clean
       run: |
