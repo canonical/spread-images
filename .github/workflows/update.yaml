@@ -41,7 +41,6 @@ jobs:
             source: ubuntu-24.10-64-base
             target: ubuntu-24.10-64
             cloud: google
-
           - group: debian-11-64
             source: debian-11-64-base
             target: debian-11-64
