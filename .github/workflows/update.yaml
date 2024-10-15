@@ -92,7 +92,23 @@ jobs:
             source: opensuse-15.6-64-base
             target: opensuse-15.6-64
             cloud: google
+          - group: opensuse tumbleweed (google)
+            task: opensuse-tumbleweed
+            source: opensuse-tumbleweed-64-base
+            target: opensuse-tumbleweed-64
+            cloud: google
 
+          - group: arch linux (google)
+            task: arch-linux
+            source: arch-linux-64-base
+            target: arch-linux-64
+            cloud: google
+
+          - group: fedora 39 (google)
+            task: fedora-39-64
+            source: fedora-39-64-base
+            target: fedora-39-64
+            cloud: google
 
     steps:
     - name: Ensure the workspace is clean

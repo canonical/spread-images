@@ -140,18 +140,6 @@ backends:
                 image: amazon-linux-2023-64
                 storage: preserve-size
 
-            - centos-7-64-base:
-                image: centos-cloud/centos-7
-                storage: preserve-size
-            - centos-7-64:
-                image: centos-7-64
-                storage: preserve-size
-            - centos-8-64-base:
-                image: centos-cloud/centos-stream-8
-                storage: preserve-size
-            - centos-8-64:
-                image: centos-8-64
-                storage: preserve-size
             - centos-9-64-base:
                 image: centos-cloud/centos-stream-9
                 storage: preserve-size
