@@ -39,38 +39,15 @@ EOM
             dnf install -y google-cloud-cli
             rm -f /etc/yum.repos.d/google-cloud-sdk.repo
             ;;
-        opensuse-*)
-            if [ ! -d /usr/share/google ]; then
-                zypper remove -y google-cloud-sdk || true
-                mkdir -p /usr/share/google
-                wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip
-                unzip google-cloud-sdk.zip -d /usr/share/google
-                rm -f google-cloud-sdk.zip
-                echo "export y=/usr/bin/python3" >> /etc/bash.bashrc
-                /usr/share/google/google-cloud-sdk/install.sh --usage-reporting false --bash-completion true --disable-installation-options --rc-path /etc/bash.bashrc --path-update true
-                ln -s /usr/share/google/google-cloud-sdk/bin/gcloud /usr/bin/gcloud
-                ln -s /usr/share/google/google-cloud-sdk/bin/gcutil /usr/bin/gcutil
-                ln -s /usr/share/google/google-cloud-sdk/bin/gsutil /usr/bin/gsutil
-            fi
-            ;;
-        arch-*)
+        arch-*|opensuse-*|amazon-*)
                 rm -rf /usr/share/google/google-cloud-sdk
                 mkdir -p /usr/share/google
-                wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip
-                unzip google-cloud-sdk.zip -d /usr/share/google
-                rm -f google-cloud-sdk.zip
-                echo "export y=/usr/bin/python3" >> /etc/bash.bashrc
-                /usr/share/google/google-cloud-sdk/install.sh --usage-reporting false --bash-completion true --disable-installation-options --rc-path /etc/bash.bashrc --path-update true
-                ln -s /usr/share/google/google-cloud-sdk/bin/gcloud /usr/bin/gcloud
-                ln -s /usr/share/google/google-cloud-sdk/bin/gcutil /usr/bin/gcutil
-                ln -s /usr/share/google/google-cloud-sdk/bin/gsutil /usr/bin/gsutil
-            ;;
-        amazon-*)
-            if ! [ -d /usr/share/google/google-cloud-sdk ]; then
-                curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-482.0.0-linux-x86_64.tar.gz
-                tar -xf google-cloud-cli-482.0.0-linux-x86_64.tar.gz
-                ./google-cloud-sdk/install.sh -q
-            fi
+                curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-x86_64.tar.gz
+                tar -xf google-cloud-cli-linux-x86_64.tar.gz                
+                rm -f google-cloud-cli-linux-x86_64.tar.gz
+                mv google-cloud-sdk /usr/share/google/
+                /usr/share/google/google-cloud-sdk/install.sh -q                
+
             ;;
         centos-*)
             rm -rf /etc/yum.repos.d/google-cloud*.repo
@@ -440,11 +417,17 @@ pkg_dependencies_fedora(){
 pkg_dependencies_opensuse(){
     echo "
         git
-        jq
-        python311
+        jq        
         rpm-build
         unzip
         "
+    case "$SPREAD_SYSTEM" in
+        opensuse-1*)
+            echo "
+                python311
+                "
+            ;;
+    esac
 }
 
 pkg_dependencies_arch(){
@@ -501,6 +484,7 @@ pkg_blacklist(){
         ubuntu-*|debian-*)
             echo "
                 lxd
+                retry
             "
             ;;
         fedora-*)
@@ -550,9 +534,7 @@ install_pkg_dependencies(){
         distro_install_package "$pkgs"
     fi
     if [ "$SPREAD_BACKEND" = google ]; then
-        if ! command -v gcloud >/dev/null; then
-            distro_install_google_sdk
-        fi
+        distro_install_google_sdk
     fi
 }
 
