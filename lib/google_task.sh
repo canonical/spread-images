@@ -30,12 +30,6 @@ if [ "$GOOGLE_ACTION" = "add-image" ]; then
             RUN_SNAPD=false
             BACKUPS=0
             ;;
-        ubuntu-16.04-32)
-            SOURCE_SYSTEM=ubuntu-16.04-64
-            TARGET_SYSTEM=ubuntu-16.04-32-base
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
         *)
         echo "ERROR: Unsupported distribution $SPREAD_SYSTEM"
         exit 1
@@ -61,18 +55,6 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             RUN_SNAPD=false
             BACKUPS=0
             ;;
-        centos-7)
-            SOURCE_SYSTEM=centos-7-64-base
-            TARGET_SYSTEM=centos-7-64
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
-        centos-8)
-            SOURCE_SYSTEM=centos-8-64-base
-            TARGET_SYSTEM=centos-8-64
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
         centos-9)
             SOURCE_SYSTEM=centos-9-64-base
             TARGET_SYSTEM=centos-9-64
@@ -94,12 +76,6 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         debian-sid)
             SOURCE_SYSTEM=debian-sid-64-base
             TARGET_SYSTEM=debian-sid-64
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
-        fedora-38-64)
-            SOURCE_SYSTEM=fedora-38-64-base
-            TARGET_SYSTEM=fedora-38-64
             RUN_SNAPD=false
             BACKUPS=0
             ;;
@@ -139,12 +115,6 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
             RUN_SNAPD=false
             BACKUPS=1
             ;;
-        ubuntu-18.04-32)
-            SOURCE_SYSTEM=ubuntu-18.04-32-base
-            TARGET_SYSTEM=ubuntu-18.04-32
-            RUN_SNAPD=false
-            BACKUPS=1
-            ;;
         ubuntu-18.04-64)
             SOURCE_SYSTEM=ubuntu-18.04-64
             TARGET_SYSTEM=ubuntu-18.04-64
@@ -160,12 +130,6 @@ elif [ "$GOOGLE_ACTION" = "update-image" ]; then
         ubuntu-22.04-64)
             SOURCE_SYSTEM=ubuntu-22.04-64-base
             TARGET_SYSTEM=ubuntu-22.04-64
-            RUN_SNAPD=false
-            BACKUPS=0
-            ;;
-        ubuntu-23.10-64)
-            SOURCE_SYSTEM=ubuntu-23.10-64-base
-            TARGET_SYSTEM=ubuntu-23.10-64
             RUN_SNAPD=false
             BACKUPS=0
             ;;

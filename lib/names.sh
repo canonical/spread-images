@@ -22,16 +22,6 @@ else
             FAMILY="ubuntu-1604-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
             ;;
-        ubuntu-18.04-32-base)
-            IMAGE="ubuntu-1804-32-base-v$(date +'%Y%m%d')"
-            FAMILY="ubuntu-1804-32-base"
-            DESCRIPTION="Base image"
-            ;;
-        ubuntu-18.04-32)
-            IMAGE="ubuntu-1804-32-v$(date +'%Y%m%d')"
-            FAMILY="ubuntu-1804-32"
-            DESCRIPTION="Ubuntu 18.04 32 bits"
-            ;;
         ubuntu-18.04-64)
             IMAGE="ubuntu-1804-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-1804-64"
@@ -97,16 +87,6 @@ else
             FAMILY="ubuntu-2204-arm-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
             ;;
-        ubuntu-22.10-64)
-            IMAGE="ubuntu-2210-64-v$(date +'%Y%m%d')"
-            FAMILY="ubuntu-2210-64"
-            DESCRIPTION="Ubuntu 22.10 64 bits"
-            ;;
-        ubuntu-23.10-64)
-            IMAGE="ubuntu-2310-64-v$(date +'%Y%m%d')"
-            FAMILY="ubuntu-2310-64"
-            DESCRIPTION="Ubuntu 23.10 64 bits"
-            ;;
         ubuntu-24.04-64)
             IMAGE="ubuntu-2404-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-2404-64"
@@ -144,16 +124,6 @@ else
             DESCRIPTION="Debian sid 64 bits"
             ;;
         # Fedora
-        fedora-37-64)
-            IMAGE="fedora-37-64-v$(date +'%Y%m%d')"
-            FAMILY="fedora-37-64"
-            DESCRIPTION="Fedora 37 64 bits with test dependencies"
-            ;;
-        fedora-38-64)
-            IMAGE="fedora-38-64-v$(date +'%Y%m%d')"
-            FAMILY="fedora-38-64"
-            DESCRIPTION="Fedora 38 64 bits with test dependencies"
-            ;;
         fedora-39-64)
             IMAGE="fedora-39-64-v$(date +'%Y%m%d')"
             FAMILY="fedora-39-64"
@@ -177,11 +147,6 @@ else
             DESCRIPTION="Arch Linux 64 bits with test dependencies"
             ;;
         # Opensuse
-        opensuse-15.4-64)
-            IMAGE="opensuse-leap-15-4-64-v$(date +'%Y%m%d')"
-            FAMILY="opensuse-leap-15-4-64"
-            DESCRIPTION="Opensuse leap 15.4 64 bits with test dependencies"
-            ;;
         opensuse-15.5-64)
             IMAGE="opensuse-leap-15-5-64-v$(date +'%Y%m%d')"
             FAMILY="opensuse-leap-15-5-64"
@@ -223,18 +188,6 @@ else
             IMAGE="amazon-linux-2023-64-v$(date +'%Y%m%d')"
             FAMILY="amazon-linux-2023-64"
             DESCRIPTION="Amazon Linux 2023 64 bits"
-            ;;
-        # Centos 7
-        centos-7-64)
-            IMAGE="centos-7-64-v$(date +'%Y%m%d')"
-            FAMILY="centos-7-64"
-            DESCRIPTION="Centos 7 64 bits"
-            ;;
-        # Centos 8
-        centos-8-64)
-            IMAGE="centos-8-64-v$(date +'%Y%m%d')"
-            FAMILY="centos-8-64"
-            DESCRIPTION="Centos 8 64 bits"
             ;;
         # Centos 9
         centos-9-64)

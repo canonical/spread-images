@@ -25,10 +25,6 @@ backends:
                 image: ubuntu-1604-64
             - ubuntu-16.04-64-virt-enabled:
                 image: ubuntu-1604-64-virt-enabled
-            - ubuntu-18.04-32-base:
-                image: ubuntu-1804-32-base
-            - ubuntu-18.04-32:
-                image: ubuntu-1804-32
             - ubuntu-18.04-64:
                 image: ubuntu-1804-64
             - ubuntu-18.04-64-virt-enabled:
@@ -63,14 +59,6 @@ backends:
                 attach-service-account: true
             - ubuntu-22.04-64-virt-enabled:
                 image: ubuntu-2204-64-virt-enabled
-            - ubuntu-22.10-64-base:
-                image: ubuntu-os-cloud/ubuntu-2210-amd64
-            - ubuntu-22.10-64:
-                image: ubuntu-2210-64
-            - ubuntu-23.10-64-base:
-                image: ubuntu-os-cloud/ubuntu-2310-amd64
-            - ubuntu-23.10-64:
-                image: ubuntu-2310-64
             - ubuntu-24.04-64-base:
                 image: ubuntu-os-cloud/ubuntu-2404-lts-amd64
             - ubuntu-24.04-64:
@@ -95,10 +83,6 @@ backends:
             - debian-sid-64:
                 image: debian-sid-64
 
-            - fedora-38-64-base:
-                image: fedora-cloud/fedora-cloud-38
-            - fedora-38-64:
-                image: fedora-38-64
             - fedora-39-64-base:
                 image: fedora-cloud/fedora-cloud-39
             - fedora-39-64:
@@ -120,8 +104,6 @@ backends:
             - opensuse-tumbleweed-64:
                 image: opensuse-tumbleweed-64
 
-            - arch-linux-64-external:
-                image: arch-linux-gce/arch
             - arch-linux-64-base:
                 image: arch-linux-64-base
             - arch-linux-64:
