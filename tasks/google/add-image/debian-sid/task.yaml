@@ -2,7 +2,7 @@ summary: Add new debian sid image to google account
 
 description: This task is used to create/update new debian sid images. Update script is not needed. 
 
-systems: [debian-11-64-external]
+systems: [debian-12-64-base]
 
 environment:
     TARGET_SYSTEM: debian-sid-64-base
@@ -10,22 +10,22 @@ environment:
 execute: |
     . "$TESTSLIB/google.sh"
     . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
-    if ! dpkg -l | grep ntp; then
-        apt-get install -y ntp
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        apt-get update
+        apt-get remove -y --purge unattended-upgrades
+
+        cp sources.list /tmp/sources.list
+        install -m 644 -o root -g root /tmp/sources.list /etc/apt/sources.list
+
+        apt-get update
+        apt-get dist-upgrade -y --no-install-recommends --auto-remove --purge
+        apt-get install -y google-compute-engine
+    
+        REBOOT
     fi
-    cp -a /etc/ntp.conf /var/tmp/ntp.conf.google
-    apt-get update
-    apt-get remove -y --purge ntp unattended-upgrades
-
-    cp sources.list /tmp/sources.list
-
-    install -m 644 -o root -g root /tmp/sources.list /etc/apt/sources.list
-    apt-get update
-    apt-get dist-upgrade -y --no-install-recommends --auto-remove --purge
-    apt-get install -y ntp google-compute-engine
-    cp -a /var/tmp/ntp.conf.google /etc/ntp.conf
     
     # Clean disk before create the shapshot
     apt autoremove -y
