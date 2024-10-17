@@ -17,7 +17,6 @@ execute: |
         distro_upgrade_packages
 
         # Install other dependencies
-        zypper remove -y kernel-default-base
         zypper install -y rpm-build kernel-default
 
         install_test_dependencies "$TARGET_SYSTEM"
@@ -49,9 +48,6 @@ execute: |
 
     systemctl daemon-reload
     systemctl enable systemd-vconsole-setup-rexec.service
-
-    # Disable purge-kernels service which makes fail zypper purge-kernels with the current kernel configuration
-    systemctl disable purge-kernels
 
     # Clean disk before create the shapshot
     clean_machine
