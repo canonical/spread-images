@@ -46,8 +46,10 @@ EOM
                 tar -xf google-cloud-cli-linux-x86_64.tar.gz                
                 rm -f google-cloud-cli-linux-x86_64.tar.gz
                 mv google-cloud-sdk /usr/share/google/
-                /usr/share/google/google-cloud-sdk/install.sh -q                
-
+                /usr/share/google/google-cloud-sdk/install.sh -q
+                ln -s /usr/share/google/google-cloud-sdk/bin/gcloud /usr/bin/gcloud
+                ln -s /usr/share/google/google-cloud-sdk/bin/gcutil /usr/bin/gcutil
+                ln -s /usr/share/google/google-cloud-sdk/bin/gsutil /usr/bin/gsutil        
             ;;
         centos-*)
             rm -rf /etc/yum.repos.d/google-cloud*.repo
