@@ -534,7 +534,9 @@ install_pkg_dependencies(){
         distro_install_package "$pkgs"
     fi
     if [ "$SPREAD_BACKEND" = google ]; then
-        distro_install_google_sdk
+        if ! command -v gcloud >/dev/null; then
+            distro_install_google_sdk
+        fi
     fi
 }
 
