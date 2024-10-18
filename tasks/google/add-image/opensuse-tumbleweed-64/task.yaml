@@ -26,6 +26,9 @@ execute: |
 
         REBOOT
     fi
+    
+    # Make sure we have the /etc/environment file with the PATH
+    echo PATH="\"$PATH\"" > /etc/environment
 
     # Clean disk before create the snapshot
     clean_machine

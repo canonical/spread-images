@@ -21,10 +21,7 @@ execute: |
     fi
 
     # Make sure /etc/environment exists
-    touch /etc/environment
-
-    # Disable purge-kernels service which makes fail zypper purge-kernels with the current kernel configuration
-    systemctl disable purge-kernels
+    echo PATH="\"$PATH\"" > /etc/environment
 
     # Clean disk before create the shapshot
     clean_machine
