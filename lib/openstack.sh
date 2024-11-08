@@ -6,8 +6,8 @@ show_help() {
     echo "Create and update images for openstack"
     echo ""
     echo "examples:"
-    echo "./lib/openstack.sh add-image --task fedora-40-64 --image-url <URL> --target-image snapd-spread/fedora-40-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --task fedora-41-64 --image-url <URL> --target-image snapd-spread/fedora-41-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task fedora-40-64 [--image-url <URL>] --target-image snapd-spread/fedora-40-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task fedora-41-64 [--image-url <URL>] --target-image snapd-spread/fedora-41-64-base-v$(date +'%Y%m%d')"
     echo ""
     echo "./lib/openstack.sh update-image --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-image snapd-spread/ubuntu-20.04-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-image snapd-spread/ubuntu-22.04-64-v$(date +'%Y%m%d')"
@@ -135,17 +135,21 @@ add_image() {
     set -ex
 
     if [ -z "$task" ]; then
-        echo "a task needs to be defined"
+        echo "A task needs to be defined"
         exit 1
     fi
     if [ -z "$target_image" ]; then
-        echo "a target image needs to be defined"
+        echo "A target image needs to be defined"
         exit 1
     fi
     if ! [ -d tasks/openstack/add-image/"$task" ]; then
-        echo "there is not task tasks/openstack/add-image/$task"
-        echo "make sure the script is executed from the project root dir"
-        exis 1
+        echo "There is not task tasks/openstack/add-image/$task"
+        echo "Make sure the script is executed from the project root dir"
+        exit 1
+    fi
+    if ! [ -f ./sa.json ]; then
+        echo "The sa.json files needs to be in the project root dir"
+        exit 1
     fi
 
     # export variables
@@ -154,7 +158,7 @@ add_image() {
         export SPREAD_IMAGE_URL="$image_url"
     fi
     export SPREAD_IMAGE_NAME="${task}-base.qcow2"
-    
+    export SPREAD_GOOGLE_KEY="./sa.json"
     spread google:ubuntu-22.04-64:tasks/openstack/add-image/"$task"
     
     # Get the image and register it in openstack
@@ -165,6 +169,7 @@ add_image() {
     rm "$SPREAD_IMAGE_NAME"
     unset SPREAD_IMAGE_URL
     unset SPREAD_IMAGE_NAME
+    unset SPREAD_GOOGLE_KEY
 }
 
 main() {
