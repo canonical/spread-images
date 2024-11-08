@@ -191,19 +191,19 @@ backends:
             NO_PROXY: '127.0.0.1,ubuntu.com'
         systems:
             - ubuntu-20.04-64-base:
-                image: auto-sync/ubuntu-focal-20.04-amd64-server-20240710-disk1.img
+                image: auto-sync/ubuntu-focal-20.04-amd64-server
                 workers: 1
             - ubuntu-20.04-64:
                 image: snapd-spread/ubuntu-20.04-64
                 workers: 1
             - ubuntu-22.04-64-base:
-                image: auto-sync/ubuntu-jammy-22.04-amd64-server-20240701-disk1.img
+                image: auto-sync/ubuntu-jammy-22.04-amd64-server
                 workers: 1
             - ubuntu-22.04-64:
                 image: snapd-spread/ubuntu-22.04-64
                 workers: 1
             - ubuntu-24.04-64-base:
-                image: auto-sync/ubuntu-noble-24.04-amd64-server-20240710-disk1.img
+                image: auto-sync/ubuntu-noble-24.04-amd64-server
                 workers: 1
             - ubuntu-24.04-64:
                 image: snapd-spread/ubuntu-24.04-64
@@ -301,6 +301,7 @@ suites:
             GCE_PROJECT: snapd-spread
             ZONE: us-east1-b
             BUCKET_NAME: snapd-spread-images
+
     tasks/openstack/common/:
         summary: Commmon tasks for openstack backend
         backends: [openstack]
@@ -314,6 +315,14 @@ suites:
             OS_USER_DOMAIN_NAME: '$(HOST: echo "${OS_USER_DOMAIN_NAME:-}")'
             OS_IDENTITY_API_VERSION: '$(HOST: echo "${OS_IDENTITY_API_VERSION:-}")'
             OS_INTERFACE: '$(HOST: echo "${OS_INTERFACE:-}")'
+
+    tasks/openstack/add-image/:
+        summary: add images for openstack backend
+        backends: [google]
+        systems: [ubuntu-*]
+        environment:
+        prepare: |
+            gcloud auth activate-service-account --key-file="$PROJECT_PATH/sa.json"
 
     tasks/openstack/update-image/:
         summary: Update images for openstack backend
