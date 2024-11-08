@@ -1,0 +1,17 @@
+summary: Add new fedora 41 image with selinux permissive
+
+systems: [ubuntu-*]
+
+environment:
+    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://download.fedoraproject.org/pub/fedora/linux/releases/41/Cloud/x86_64/images/Fedora-Cloud-Base-Generic-41-1.4.x86_64.qcow2}")'
+    IMAGE_NAME: '$(HOST: echo "${SPREAD_IMAGE_NAME:-fedora-41-64-base.qcow2}")'
+
+execute: |
+    source_image_name="$(basename $IMAGE_URL)"
+    wget -q -O "$IMAGE_NAME" "$IMAGE_URL"
+    gsutil cp "$IMAGE_NAME" gs://snapd-spread-tests/images/openstack/"$IMAGE_NAME"
+
+restore: |
+    # Remove the project path content
+    rm -rf "$PROJECT_PATH"
+

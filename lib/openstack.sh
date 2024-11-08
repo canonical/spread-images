@@ -6,13 +6,16 @@ show_help() {
     echo "Create and update images for openstack"
     echo ""
     echo "examples:"
-    echo './lib/openstack.sh update-image --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-image snapd-spread/ubuntu-20.04-64-v$(date +'%Y%m%d')'
-    echo './lib/openstack.sh update-image --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-image snapd-spread/ubuntu-22.04-64-v$(date +'%Y%m%d')'
-    echo './lib/openstack.sh update-image --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-image snapd-spread/ubuntu-24.04-64-v$(date +'%Y%m%d')'
-    echo './lib/openstack.sh update-image --task fedora-40-64 --source-system fedora-40-64-base --target-image snapd-spread/fedora-40-64-v$(date +'%Y%m%d')'
-    echo './lib/openstack.sh update-image --task opensuse-15.5-64 --source-system opensuse-15.5-64-base --target-image snapd-spread/opensuse-15.5-64-v$(date +'%Y%m%d')'
-    echo './lib/openstack.sh update-image --task debian-12-64 --source-system debian-12-64-base --target-image snapd-spread/debian-12-64-v$(date +'%Y%m%d')'
-    echo './lib/openstack.sh update-image --task centos-9-64 --source-system centos-9-64-base --target-image snapd-spread/centos-9-64-v$(date +'%Y%m%d')'
+    echo "./lib/openstack.sh add-image --task fedora-40-64 --image-url <URL> --target-image snapd-spread/fedora-40-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task fedora-41-64 --image-url <URL> --target-image snapd-spread/fedora-41-64-base-v$(date +'%Y%m%d')"
+    echo ""
+    echo "./lib/openstack.sh update-image --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-image snapd-spread/ubuntu-20.04-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-image snapd-spread/ubuntu-22.04-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-image snapd-spread/ubuntu-24.04-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task fedora-40-64 --source-system fedora-40-64-base --target-image snapd-spread/fedora-40-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task opensuse-15.5-64 --source-system opensuse-15.5-64-base --target-image snapd-spread/opensuse-15.5-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task debian-12-64 --source-system debian-12-64-base --target-image snapd-spread/debian-12-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task centos-9-64 --source-system centos-9-64-base --target-image snapd-spread/centos-9-64-v$(date +'%Y%m%d')"
 }
 
 update_image(){
@@ -92,6 +95,76 @@ update_image(){
     rm -f spread.log
 
     set +ex
+}
+
+add_image() {
+    if [ $# -eq 0 ]; then
+        show_help
+        exit 0
+    fi
+    
+    task=""
+    image_url=""
+    target_image=""
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            -h|--help)
+                show_help
+                exit 0
+                ;;
+            --task)
+                task="$2"
+                shift 2
+                ;;
+            --image-url)
+                image_url="$2"
+                shift 2
+                ;;
+            --target-image)
+                target_image="$2"
+                shift 2
+                ;;
+            *)
+                echo "parameter non supported: $1"
+                show_help
+                exit 1
+                ;;
+        esac
+    done
+
+    set -ex
+
+    if [ -z "$task" ]; then
+        echo "a task needs to be defined"
+        exit 1
+    fi
+    if [ -z "$target_image" ]; then
+        echo "a target image needs to be defined"
+        exit 1
+    fi
+    if ! [ -d tasks/openstack/add-image/"$task" ]; then
+        echo "there is not task tasks/openstack/add-image/$task"
+        echo "make sure the script is executed from the project root dir"
+        exis 1
+    fi
+
+    # export variables
+    export SPREAD_IMAGE_URL=
+    if [ -n "$image_url" ]; then
+        export SPREAD_IMAGE_URL="$image_url"
+    fi
+    export SPREAD_IMAGE_NAME="${task}-base.qcow2"
+    
+    spread google:ubuntu-22.04-64:tasks/openstack/add-image/"$task"
+    
+    # Get the image and register it in openstack
+    wget -q https://storage.googleapis.com/snapd-spread-tests/images/openstack/"$SPREAD_IMAGE_NAME"
+    openstack image create --file "$SPREAD_IMAGE_NAME" "$target_image"
+
+    # clean up
+    rm "$SPREAD_IMAGE_NAME"
+    unset SPREAD_IMAGE_URL
+    unset SPREAD_IMAGE_NAME
 }
 
 main() {
