@@ -152,6 +152,9 @@ add_image() {
         exit 1
     fi
 
+    # Clean any image that could remain in the current dir
+    rm ./*.qcow2*
+
     # export variables
     export SPREAD_IMAGE_URL=
     if [ -n "$image_url" ]; then
