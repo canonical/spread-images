@@ -209,19 +209,20 @@ backends:
                 image: snapd-spread/ubuntu-24.04-64
                 workers: 1
 
-            - fedora-38-64-base:
-                image: fedora-38-64-base
-                workers: 1
-            - fedora-39-64-base:
-                image: fedora-39-64-base
-                workers: 1
             - fedora-40-64-base:
                 image: fedora-40-64-base
                 workers: 1
             - fedora-40-64:
                 image: snapd-spread/fedora-40-64
                 workers: 1
-    
+            - fedora-41-64-base:
+                image: fedora-41-64-base
+                workers: 1
+            - fedora-41-64:
+                image: snapd-spread/fedora-41-64
+                workers: 1
+
+
             - opensuse-15.5-64-base:
                 image: opensuse-15.5-64-base
                 workers: 1
