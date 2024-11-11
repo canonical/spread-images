@@ -22,6 +22,8 @@ execute: |
 
     # Make sure /etc/environment exists
     echo PATH="\"$PATH\"" > /etc/environment
+    
+    cp "$PWD"/sudoers /etc/sudoers
 
     # Clean disk before create the shapshot
     clean_machine
