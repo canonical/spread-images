@@ -3,8 +3,8 @@ summary: Add new fedora 40 image
 systems: [ubuntu-*]
 
 environment:
-    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://download.fedoraproject.org/pub/fedora/linux/releases/40/Cloud/x86_64/images/Fedora-Cloud-Base-Generic.x86_64-40-1.14.qcow2}")'
-    IMAGE_NAME: '$(HOST: echo "${SPREAD_IMAGE_NAME:-fedora-40-64-base.qcow2}")'
+    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://cloud.centos.org/centos/9-stream/x86_64/images/CentOS-Stream-GenericCloud-9-latest.x86_64.qcow2}")'
+    IMAGE_NAME: '$(HOST: echo "${SPREAD_IMAGE_NAME:-centos-9-64-base.qcow2}")'
 
 execute: |
     source_image_name="$(basename $IMAGE_URL)"

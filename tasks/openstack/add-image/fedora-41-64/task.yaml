@@ -1,4 +1,4 @@
-summary: Add new fedora 41 image with selinux permissive
+summary: Add new fedora 41 image
 
 systems: [ubuntu-*]
 

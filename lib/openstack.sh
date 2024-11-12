@@ -1,6 +1,13 @@
 #!/bin/bash
 
 show_help() {
+    echo "usage: openstack.sh add-image <PARAMS>"
+    echo "       openstack.sh update-image <PARAMS>"
+    echo ""
+    echo "For more details in specific commands"
+}
+
+show_help_add() {
     echo "usage: openstack.sh update-image --task <task-name> --source-system <source-system> --target-image <target-image-name>"
     echo ""
     echo "Create and update images for openstack"
@@ -8,7 +15,15 @@ show_help() {
     echo "examples:"
     echo "./lib/openstack.sh add-image --task fedora-40-64 [--image-url <URL>] --target-image fedora-40-64-base-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh add-image --task fedora-41-64 [--image-url <URL>] --target-image fedora-41-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task centos-9-64 [--image-url <URL>] --target-image centos-9-64-base-v$(date +'%Y%m%d')"
+}
+
+show_help_update() {
+    echo "usage: openstack.sh update-image --task <task-name> --source-system <source-system> --target-image <target-image-name>"
     echo ""
+    echo "Create and update images for openstack"
+    echo ""
+    echo "examples:"
     echo "./lib/openstack.sh update-image --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-image snapd-spread/ubuntu-20.04-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-image snapd-spread/ubuntu-22.04-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-image snapd-spread/ubuntu-24.04-64-v$(date +'%Y%m%d')"
@@ -21,7 +36,7 @@ show_help() {
 
 update_image(){
     if [ $# -eq 0 ]; then
-        show_help
+        show_help_update
         exit 0
     fi
 
@@ -31,7 +46,7 @@ update_image(){
     while [ $# -gt 0 ]; do
         case "$1" in
             -h|--help)
-                show_help
+                show_help_update
                 exit 0
                 ;;
             --task)
@@ -48,7 +63,7 @@ update_image(){
                 ;;
             *)
                 echo "parameter non supported: $1"
-                show_help
+                show_help_update
                 exit 1
                 ;;
         esac
@@ -100,7 +115,7 @@ update_image(){
 
 add_image() {
     if [ $# -eq 0 ]; then
-        show_help
+        show_help_add
         exit 0
     fi
     
@@ -110,7 +125,7 @@ add_image() {
     while [ $# -gt 0 ]; do
         case "$1" in
             -h|--help)
-                show_help
+                show_help_add
                 exit 0
                 ;;
             --task)
@@ -127,7 +142,7 @@ add_image() {
                 ;;
             *)
                 echo "parameter non supported: $1"
-                show_help
+                show_help_add
                 exit 1
                 ;;
         esac

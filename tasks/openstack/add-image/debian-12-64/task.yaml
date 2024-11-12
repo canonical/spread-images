@@ -1,0 +1,16 @@
+summary: Add new debian 12 image
+
+systems: [ubuntu-*]
+
+environment:
+    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://cdimage.debian.org/images/cloud/bookworm/20241110-1927/debian-12-generic-amd64-20241110-1927.qcow2}")'
+    IMAGE_NAME: '$(HOST: echo "${SPREAD_IMAGE_NAME:-debian-12-64-base.qcow2}")'
+
+execute: |
+    source_image_name="$(basename $IMAGE_URL)"
+    wget -q -O "$IMAGE_NAME" "$IMAGE_URL"
+    gsutil cp "$IMAGE_NAME" gs://snapd-spread-tests/images/openstack/"$IMAGE_NAME"
+
+restore: |
+    # Remove the project path content
+    rm -rf "$PROJECT_PATH"
