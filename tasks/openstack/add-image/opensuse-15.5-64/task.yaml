@@ -3,7 +3,7 @@ summary: Add new opensuse 15.5 image
 systems: [ubuntu-*]
 
 environment:
-    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://download.opensuse.org/repositories/Cloud:/Images:/Leap_15.5/images/openSUSE-Leap-15.5.x86_64-1.0.1-NoCloud-Build6.73.qcow2}")'
+    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://download.opensuse.org/repositories/Cloud:/Images:/Leap_15.5/images/openSUSE-Leap-15.5.x86_64-NoCloud.qcow2}")'
     IMAGE_NAME: '$(HOST: echo "${SPREAD_IMAGE_NAME:-opensuse-15.5-64-base.qcow2}")'
 
 execute: |
