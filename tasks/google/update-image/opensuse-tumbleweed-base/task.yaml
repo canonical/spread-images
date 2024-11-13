@@ -21,7 +21,7 @@ execute: |
     fi
 
     # Make sure /etc/environment exists
-    echo PATH="\"$PATH\"" > /etc/environment
+    touch /etc/environment
     
     cp "$PWD"/sudoers /etc/sudoers
 
