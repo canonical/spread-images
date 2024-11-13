@@ -180,13 +180,15 @@ add_image() {
     if [ -n "$image_url" ]; then
         export SPREAD_IMAGE_URL="$image_url"
     fi
-    export SPREAD_IMAGE_NAME="${task}-base.qcow2"
+
+    image_format=qcow2
+    export SPREAD_IMAGE_NAME="${task}-base.${image_format}"
     export SPREAD_GOOGLE_KEY="./sa.json"
     spread google:ubuntu-22.04-64:tasks/openstack/add-image/"$task"
     
     # Get the image and register it in openstack
     wget -q https://storage.googleapis.com/snapd-spread-tests/images/openstack/"$SPREAD_IMAGE_NAME"
-    openstack image create --file "$SPREAD_IMAGE_NAME" "$target_image"
+    openstack image create --file "$SPREAD_IMAGE_NAME" --disk-format "$image_format" "$target_image"
 
     # clean up
     rm "$SPREAD_IMAGE_NAME"
