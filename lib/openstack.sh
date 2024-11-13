@@ -13,12 +13,12 @@ show_help_add() {
     echo "Create and update images for openstack"
     echo ""
     echo "examples:"
-    echo "./lib/openstack.sh add-image --task centos-9-64 [--image-url <URL>] --target-image snapd-spread-base/centos-9-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --task debian-12-64 [--image-url <URL>] --target-image snapd-spread-base/debian-12-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --task fedora-40-64 [--image-url <URL>] --target-image snapd-spread-base/fedora-40-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --task fedora-41-64 [--image-url <URL>] --target-image snapd-spread-base/fedora-41-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --task opensuse-15.5-64 [--image-url <URL>] --target-image snapd-spread-base/opensuse-15.5-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --task opensuse-15.6-64 [--image-url <URL>] --target-image snapd-spread-base/opensuse-15.6-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task centos-9-64 [--image-url <URL>] --target-image snapd-base/centos-9-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task debian-12-64 [--image-url <URL>] --target-image snapd-base/debian-12-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task fedora-40-64 [--image-url <URL>] --target-image snapd-base/fedora-40-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task fedora-41-64 [--image-url <URL>] --target-image snapd-base/fedora-41-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task opensuse-15.5-64 [--image-url <URL>] --target-image snapd-base/opensuse-15.5-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task opensuse-15.6-64 [--image-url <URL>] --target-image snapd-base/opensuse-15.6-64-base-v$(date +'%Y%m%d')"
 }
 
 show_help_update() {

@@ -210,13 +210,13 @@ backends:
                 workers: 1
 
             - fedora-40-64-base:
-                image: snapd-spread-base/fedora-40-64-base
+                image: snapd-base/fedora-40-64-base
                 workers: 1
             - fedora-40-64:
                 image: snapd-spread/fedora-40-64
                 workers: 1
             - fedora-41-64-base:
-                image: snapd-spread-base/fedora-41-64-base
+                image: snapd-base/fedora-41-64-base
                 workers: 1
             - fedora-41-64:
                 image: snapd-spread/fedora-41-64
@@ -224,34 +224,34 @@ backends:
 
 
             - opensuse-15.5-64-base:
-                image: snapd-spread-base/opensuse-15.5-64-base
+                image: snapd-base/opensuse-15.5-64-base
                 workers: 1
             - opensuse-15.5-64:
                 image: snapd-spread/opensuse-15.5-64
                 workers: 1
             - opensuse-15.6-64-base:
-                image: snapd-spread-base/opensuse-15.6-64-base
+                image: snapd-base/opensuse-15.6-64-base
                 workers: 1
             - opensuse-15.6-64:
                 image: snapd-spread/opensuse-15.6-64
                 workers: 1
 
             - centos-9-64-base:
-                image: snapd-spread-base/centos-9-64-base
+                image: snapd-base/centos-9-64-base
                 workers: 1
             - centos-9-64:
                 image: snapd-spread/centos-9-64
                 workers: 1
 
             - debian-12-64-base:
-                image: snapd-spread-base/debian-12-64-base
+                image: snapd-base/debian-12-64-base
                 workers: 1
             - debian-12-64:
                 image: snapd-spread/debian-12-64
                 workers: 1
 
             - arch-linux-64-base:
-                image: snapd-spread-base/arch-Linux-64-base
+                image: snapd-base/arch-Linux-64-base
                 workers: 1
             - arch-linux-64:
                 image: snapd-spread/arch-Linux-64
