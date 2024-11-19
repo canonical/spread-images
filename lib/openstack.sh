@@ -3,6 +3,7 @@
 show_help() {
     echo "usage: openstack.sh add-image <PARAMS>"
     echo "       openstack.sh update-image <PARAMS>"
+    echo "       openstack.sh clean-images"
     echo ""
     echo "For more details in specific commands"
 }
@@ -33,6 +34,7 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --task fedora-41-64 --source-system fedora-41-64-base --target-image snapd-spread/fedora-41-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task opensuse-15.5-64 --source-system opensuse-15.5-64-base --target-image snapd-spread/opensuse-15.5-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task opensuse-15.6-64 --source-system opensuse-15.6-64-base --target-image snapd-spread/opensuse-15.6-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task opensuse-tumbleweed-64 --source-system opensuse-tumbleweed-64-base --target-image snapd-spread/opensuse-tumbleweed-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-image snapd-spread/ubuntu-20.04-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-image snapd-spread/ubuntu-22.04-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-image snapd-spread/ubuntu-24.04-64-v$(date +'%Y%m%d')"
@@ -78,8 +80,8 @@ update_image(){
     # Run the update image task with reuse to keep the instance after the update is completed
     rm -f .spread-reuse*
     spread_failed=false
-    (set -o pipefail; spread -reuse openstack:"$source_system":tasks/openstack/update-image/"$task" | tee spread.log)
-    if [ ! $? -eq 0 ]; then
+    os_failed=false
+    if ! (set -o pipefail; spread -reuse openstack:"$source_system":tasks/openstack/update-image/"$task" | tee spread.log); then
         spread_failed=true
     fi
 
@@ -92,7 +94,7 @@ update_image(){
     # stop the instance before creating the snapshot
     openstack server stop "$instance_name"
     for _ in $(seq 10); do
-        if openstack server show "$instance_name" | grep 'OS-EXT-STS:vm_state.*stopped'; then
+        if openstack server show -c OS-EXT-STS:vm_state -f value "$instance_name" | grep 'stopped'; then
             break
         fi
         sleep 5
@@ -101,20 +103,70 @@ update_image(){
     # Create the snapshot just when the spread task didn't fail
     if [ "$spread_failed" = false ]; then
         # create the snapshot
-        openstack server image create --name "$target_image" "$instance_name"
+        target_id="$(openstack server image create --name "$target_image" --property "family=$task" -f value -c id "$instance_name")"
+        if [ -z "$target_id" ]; then
+            echo "Error: Image ID empty"
+            os_failed=true
+        fi
+
+        if openstack image show "$target_id" | grep "No Image found"; then
+            echo "Error: Image not found"
+            os_failed=true
+        fi
+
         for _ in $(seq 10); do
-            if openstack image list | grep "$target_image .*|.*active"; then
+            if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
+                openstack image set --tag "family=$task" "$target_id"
+                openstack image set --tag "test-image" "$target_id"
+                openstack image set --private "$target_id"
                 break
             fi
             sleep 10
         done
     fi    
-    
+
+    # clean old images
+    if [ "$os_failed" = false ]; then
+        _deactivate_old_images "$target_id" "$task" "test-image"
+    fi
+
     # delete the instance
     openstack server delete "$instance_name"
     rm -f spread.log
 
     set +ex
+}
+
+clean_images(){
+    deactivated_images="$(openstack image list --status deactivated --private -f value --column ID)"
+    if [ -z "$deactivated_images" ]; then
+        echo "No deactivated images found"
+        return
+    fi
+
+    for image_id in $deactivated_images; do
+        echo "Found deactivated image: $image_id"
+        openstack image delete "$image_id"
+        echo "Image deleted"
+    done
+}
+
+_deactivate_old_images(){
+    image_id=$1
+    family=$2
+    type=$3
+
+    if [ -z "$image_id" ] || [ -z "$family" ] || [ -z "$type" ]; then
+        echo "Error: image_id, family and type cannot be empty, exiting..."
+        exit 1
+    fi
+
+    old_images="$(openstack image list --private -f value --tag "family=$family" --tag "$type" --column ID | grep -v "$image_id")"
+    for image_id in $old_images; do
+        echo "Found old image: $image_id"
+        openstack image set --deactivate "$image_id"
+        echo "Image deactivated"
+    done
 }
 
 add_image() {
@@ -188,7 +240,7 @@ add_image() {
     
     # Get the image and register it in openstack
     wget -q https://storage.googleapis.com/snapd-spread-tests/images/openstack/"$SPREAD_IMAGE_NAME"
-    openstack image create --file "$SPREAD_IMAGE_NAME" --disk-format "$image_format" "$target_image"
+    openstack image create --file "$SPREAD_IMAGE_NAME" --disk-format "$image_format" --property "family=$task" --private --tag "family=$task" --tag "base-image" "$target_image"
 
     # clean up
     rm "$SPREAD_IMAGE_NAME"
