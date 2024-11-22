@@ -4,6 +4,7 @@ show_help() {
     echo "usage: openstack.sh add-image <PARAMS>"
     echo "       openstack.sh update-image <PARAMS>"
     echo "       openstack.sh clean-images"
+    echo "       openstack.sh clean-volumes"
     echo ""
     echo "For more details in specific commands"
 }
@@ -135,6 +136,29 @@ update_image(){
     rm -f spread.log
 
     set +ex
+}
+
+clean_volumes(){
+    error_volumes="$(openstack volume list --status error -f value --column ID)"
+    if [ -z "$error_volumes" ]; then
+        echo "No volumes in error status"
+    fi
+    for volume_id in $error_volumes; do
+        openstack volume delete "$volume_id"
+        echo "volume $volume_id deleted (error status)"
+    done
+
+    available_volumes="$(openstack volume list --status available -f value --column ID)"
+    if [ -z "$available_volumes" ]; then
+        echo "No volumes in available status"
+    fi
+    for volume_id in $available_volumes; do
+        attachments="$(openstack volume show -f value -c attachments $volume_id)"
+        if [ "$attachments" = "[]" ]; then
+            openstack volume delete "$volume_id"
+            echo "volume $volume_id deleted (available status)"
+        fi
+    done
 }
 
 clean_images(){

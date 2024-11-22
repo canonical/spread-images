@@ -1,0 +1,51 @@
+name: Weekly Openstack images update
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 3 * * 0'
+
+jobs:
+  clean-images:
+    steps:
+    - name: Ensure the workspace is clean
+      run: |
+          rm -rf "${{ github.workspace }}"
+          mkdir "${{ github.workspace }}"
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+          ref: master
+
+    - name: Delete old images
+      run: |
+          ./lib/openstack.sh clean-images
+  
+    - name: Cleanup job workspace after run tests
+      if: always()
+      run: |
+          rm -rf "${{ github.workspace }}"
+          mkdir "${{ github.workspace }}"
+
+  clean-volumes:
+    steps:
+    - name: Ensure the workspace is clean
+      run: |
+          rm -rf "${{ github.workspace }}"
+          mkdir "${{ github.workspace }}"
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+          ref: master
+
+    - name: Delete orphan volumes
+      run: |
+          ./lib/openstack.sh clean-volumes
+  
+    - name: Cleanup job workspace after run tests
+      if: always()
+      run: |
+          rm -rf "${{ github.workspace }}"
+          mkdir "${{ github.workspace }}"

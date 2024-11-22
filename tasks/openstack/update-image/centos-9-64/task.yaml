@@ -26,6 +26,9 @@ execute: |
         distro_install_package wget
         distro_upgrade_packages
 
+        # The test dependencies need to be updated 
+        install_test_dependencies "$TARGET_SYSTEM"
+
         remove_pkg_blacklist
 
         REBOOT

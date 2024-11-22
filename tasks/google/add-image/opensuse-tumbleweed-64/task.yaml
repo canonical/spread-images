@@ -28,7 +28,7 @@ execute: |
     fi
     
     # Make sure we have the /etc/environment file with the PATH
-    echo PATH="\"$PATH\"" > /etc/environment
+    touch /etc/environment
 
     # Clean disk before create the snapshot
     clean_machine

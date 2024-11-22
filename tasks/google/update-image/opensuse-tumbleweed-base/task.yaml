@@ -23,6 +23,7 @@ execute: |
     # Make sure /etc/environment exists
     touch /etc/environment
     
+    # Make sure root is in sudoers file
     cp "$PWD"/sudoers /etc/sudoers
 
     # Clean disk before create the shapshot

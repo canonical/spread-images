@@ -1,0 +1,79 @@
+name: Weekly Openstack images update
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 4 * * 0'
+
+jobs:
+  update-image:
+    name: ${{ matrix.group }}
+    runs-on: [self-hosted, spread-enabled]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - group: ubuntu 20.04
+            task: ubuntu-20.04-64
+            source: ubuntu-20.04-64-base
+            target: ubuntu-20.04-64
+          - group: ubuntu 22.04
+            task: ubuntu-22.04-64
+            source: ubuntu-22.04-64-base
+            target: ubuntu-22.04-64
+          - group: ubuntu 24.04
+            task: ubuntu-24.04-64
+            source: ubuntu-24.04-64-base
+            target: ubuntu-24.04-64
+
+          - group: debian 12
+            task: debian-12-64
+            source: debian-12-64-base
+            target: debian-12-64
+
+          - group: centos 9
+            task: centos-9-64
+            source: centos-9-64-base
+            target: centos-9-64
+
+          - group: opensuse 15.5
+            task: opensuse-15.5-64
+            source: opensuse-15.5-64-base
+            target: opensuse-15.5-64
+          - group: opensuse 15.6
+            task: opensuse-15.6-64
+            source: opensuse-15.6-64-base
+            target: opensuse-15.6-64
+          - group: opensuse tumbleweed
+            task: opensuse-tumbleweed-64
+            source: opensuse-tumbleweed-64-base
+            target: opensuse-tumbleweed-64
+
+    steps:
+    - name: Ensure the workspace is clean
+      run: |
+          rm -rf "${{ github.workspace }}"
+          mkdir "${{ github.workspace }}"
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+          ref: master
+
+    - name: Run test
+      run: |
+          ./lib/openstack.sh update-image --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-image snapd-spread/"${{ matrix.targe }}"-v"$(date +'%Y%m%d')"
+  
+    - name: Discard spread workers
+      if: always()
+      run: |
+        shopt -s nullglob;
+        for r in .spread-reuse.*.yaml; do
+          spread -discard -reuse-pid="$(echo "$r" | grep -o -E '[0-9]+')";
+        done
+
+    - name: Cleanup job workspace after run tests
+      if: always()
+      run: |
+          rm -rf "${{ github.workspace }}"
+          mkdir "${{ github.workspace }}"

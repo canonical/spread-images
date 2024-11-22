@@ -22,7 +22,7 @@ execute: |
         dnf --enablerepo=crb install -y python3-docutils
 
         # The test dependencies need to be updated 
-        #install_test_dependencies "$TARGET_SYSTEM"
+        install_test_dependencies "$TARGET_SYSTEM"
 
         remove_pkg_blacklist
         REBOOT
