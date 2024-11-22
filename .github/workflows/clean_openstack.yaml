@@ -14,12 +14,17 @@ jobs:
           rm -rf "${{ github.workspace }}"
           mkdir "${{ github.workspace }}"
 
-    - name: Checkout code
+    - name: Checkout code 
       uses: actions/checkout@v4
       with:
           ref: master
 
     - name: Delete old images
+      env:
+          OS_USERNAME: ${{ secrets.OS_USERNAME }}
+          OS_PASSWORD: ${{ secrets.OS_PASSWORD }}
+          OS_TENANT_NAME: ${{ secrets.OS_TENANT_NAME }}
+          OS_AUTH_URL: ${{ secrets.OS_AUTH_URL }}
       run: |
           ./lib/openstack.sh clean-images
   
@@ -43,6 +48,11 @@ jobs:
           ref: master
 
     - name: Delete orphan volumes
+      env:
+          OS_USERNAME: ${{ secrets.OS_USERNAME }}
+          OS_PASSWORD: ${{ secrets.OS_PASSWORD }}
+          OS_TENANT_NAME: ${{ secrets.OS_TENANT_NAME }}
+          OS_AUTH_URL: ${{ secrets.OS_AUTH_URL }}
       run: |
           ./lib/openstack.sh clean-volumes
   
