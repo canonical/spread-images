@@ -210,11 +210,15 @@ _deactivate_old_images(){
         exit 1
     fi
 
-    old_images="$(openstack image list --private -f value --tag "family=$family" --tag "$type" --column ID | grep -v "$image_id")"
-    for image_id in $old_images; do
-        echo "Found old image: $image_id"
-        openstack image set --deactivate "$image_id"
-        echo "Image deactivated"
+    active_images="$(openstack image list -f value --private --status active --tag "family=$family" --tag "$type" --column ID)"
+    for active_image in $active_images; do
+        if [ "$active_image" != "$image_id" ]; then
+            echo "Found old image: $active_image"
+            openstack image set --deactivate "$active_image"
+            echo "Image deactivated"
+        else
+            echo "Skipping current image"
+        fi
     done
 }
 
