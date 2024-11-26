@@ -186,7 +186,6 @@ clean_volumes(){
             echo "volume $volume_id deleted (available status)"
         fi
     done
-
 }
 
 clean_images(){
@@ -216,9 +215,13 @@ _deactivate_old_images(){
     active_images="$(openstack image list -f value --private --status active --tag "family=$family" --tag "$type" --column ID)"
     for active_image in $active_images; do
         if [ "$active_image" != "$image_id" ]; then
-            echo "Found old image: $active_image"
-            openstack image set --deactivate "$active_image"
-            echo "Image deactivated"
+            if openstack image show -c tags -f value "$active_image" | grep "$family"; then
+                echo "Found old image: $active_image"
+                openstack image set --deactivate "$active_image"
+                echo "Image deactivated"
+            else
+                echo "Image does not match family"
+            fi
         else
             echo "Skipping current image"
         fi
