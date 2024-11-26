@@ -136,6 +136,9 @@ update_image(){
     rm -f spread.log
 
     set +ex
+
+    # check spread and os commands didn't fail
+    [ "$spread_failed" = false ] && [ "$os_failed" = false ]
 }
 
 clean_volumes(){
