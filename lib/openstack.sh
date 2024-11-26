@@ -127,7 +127,7 @@ update_image(){
     fi    
 
     # clean old images
-    if [ "$os_failed" = false ]; then
+    if [ "$spread_failed" = false ] && [ "$os_failed" = false ]; then
         _deactivate_old_images "$target_id" "$task" "test-image"
     fi
 
@@ -144,8 +144,19 @@ clean_volumes(){
         echo "No volumes in error status"
     fi
     for volume_id in $error_volumes; do
-        openstack volume delete "$volume_id"
-        echo "volume $volume_id deleted (error status)"
+        if openstack volume delete "$volume_id"; then
+            echo "volume $volume_id deleted (error status)"
+        fi
+    done
+
+    available_snapshots="$(openstack volume snapshot list --status available -f value --column ID)"
+    if [ -z "$available_snapshots" ]; then
+        echo "No snapshots in available status"
+    fi
+    for snapshot_id in $available_snapshots; do
+        if openstack volume snapshot delete "$snapshot_id"; then
+            echo "snapshot $snapshot_id deleted (available status)"
+        fi
     done
 
     available_volumes="$(openstack volume list --status available -f value --column ID)"
@@ -155,10 +166,24 @@ clean_volumes(){
     for volume_id in $available_volumes; do
         attachments="$(openstack volume show -f value -c attachments $volume_id)"
         if [ "$attachments" = "[]" ]; then
+            if openstack volume delete "$volume_id"; then
+                echo "volume $volume_id deleted (available status)"
+            fi
+        fi
+    done
+
+    creating_volumes="$(openstack volume list --status creating -f value --column ID)"
+    if [ -z "$creating_volumes" ]; then
+        echo "No volumes in available status"
+    fi
+    for volume_id in $creating_volumes; do
+        attachments="$(openstack volume show -f value -c attachments $volume_id)"
+        if [ "$attachments" = "[]" ]; then
             openstack volume delete "$volume_id"
             echo "volume $volume_id deleted (available status)"
         fi
     done
+
 }
 
 clean_images(){

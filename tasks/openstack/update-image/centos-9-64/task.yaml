@@ -2,6 +2,9 @@ summary: Update centos-9 64 bits image with the latest updates and test dependen
 
 systems: [centos-9-64-base]
 
+environment:
+    TARGET_SYSTEM: centos-9-64
+
 execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
@@ -26,7 +29,7 @@ execute: |
         distro_install_package wget
         distro_upgrade_packages
 
-        # The test dependencies need to be updated 
+        install_pkg_dependencies
         install_test_dependencies "$TARGET_SYSTEM"
 
         remove_pkg_blacklist

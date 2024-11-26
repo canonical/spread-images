@@ -2,6 +2,9 @@ summary: Update fedora image with the latest updates and test dependencies with 
 
 systems: [fedora-41-64-base]
 
+environment:
+    TARGET_SYSTEM: fedora-41-64
+
 execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
@@ -16,6 +19,9 @@ execute: |
         distro_update_package_db
         distro_install_package kernel-modules wget
         distro_upgrade_packages
+
+        install_pkg_dependencies
+        install_test_dependencies "$TARGET_SYSTEM"
 
         remove_pkg_blacklist
 

@@ -2,6 +2,9 @@ summary: Update opensuse 15.5 64 bits image with the latest updates and test dep
 
 systems: [opensuse-15.5-64-base]
 
+environment:
+    TARGET_SYSTEM: opensuse-15.5-64
+
 execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
@@ -11,9 +14,15 @@ execute: |
         rm /etc/zypp/repos.d/repo-sle-*.repo
         rm /etc/zypp/repos.d/*-debug*.repo
 
+        # Use mirrorcache avoids errors trying to access the repo metadata
+        sed -i -s -E -e 's@^baseurl=http://download.opensuse.org/@baseurl=http://mirrorcache.opensuse.org/@g' /etc/zypp/repos.d/repo*.repo
+
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
+
+        install_pkg_dependencies
+        install_test_dependencies "$TARGET_SYSTEM"
 
         remove_pkg_blacklist
 

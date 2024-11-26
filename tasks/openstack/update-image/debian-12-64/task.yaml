@@ -2,6 +2,9 @@ summary: Update debian-12 64 bits image with the latest updates and test depende
 
 systems: [debian-12-64-base]
 
+environment:
+    TARGET_SYSTEM: debian-12-64
+
 execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
@@ -10,6 +13,9 @@ execute: |
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
+
+        install_pkg_dependencies
+        install_test_dependencies "$TARGET_SYSTEM"
 
         remove_pkg_blacklist
 

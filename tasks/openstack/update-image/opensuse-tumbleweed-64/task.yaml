@@ -2,6 +2,9 @@ summary: Update opensuse 15.6 64 bits image with the latest updates and test dep
 
 systems: [opensuse-tumbleweed-64-base]
 
+environment:
+    TARGET_SYSTEM: opensuse-tumbleweed-64
+
 execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
@@ -10,9 +13,15 @@ execute: |
         # Cleanup non required repos
         rm -f /etc/zypp/repos.d/*-debug*.repo
 
+        # Use mirrorcache avoids errors trying to access the repo metadata
+        sed -i -s -E -e 's@^baseurl=http://download.opensuse.org/@baseurl=http://mirrorcache.opensuse.org/@g' /etc/zypp/repos.d/repo*.repo
+
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
+
+        install_pkg_dependencies
+        install_test_dependencies "$TARGET_SYSTEM"
 
         remove_pkg_blacklist
 
@@ -26,7 +35,7 @@ execute: |
     cp "$PWD"/sudoers /etc/sudoers
 
     # Configure ntp to ntp.ubuntu.com
-    sed -i -e 's/^pool.*/pool ntp.ubuntu.com iburst/g' /etc/chrony.conf
+    sed -i -e 's/^! pool.*/pool ntp.ubuntu.com iburst/g' /etc/chrony.conf
     sed -i -e 's/^#pool.*/pool ntp.ubuntu.com iburst/g' /etc/chrony.conf
     systemctl restart chronyd
     sleep 5

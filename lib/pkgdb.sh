@@ -321,8 +321,7 @@ distro_upgrade_packages() {
             dnf upgrade --nogpgcheck -y
             ;;
         opensuse-*)
-            zypper dup -y --force-resolution --no-recommends --replacefiles
-            zypper dist-upgrade -y
+            zypper update -y --force-resolution --no-recommends --replacefiles
             ;;
         arch-*)
             pacman --needed --noconfirm -Syu
