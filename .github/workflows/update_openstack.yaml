@@ -36,6 +36,15 @@ jobs:
             source: centos-9-64-base
             target: centos-9-64
 
+          - group: fedora 40
+            task: fedora-40-64
+            source: fedora-40-64-base
+            target: fedora-40-64
+          - group: fedora 41
+            task: fedora-41-64
+            source: fedora-41-64-base
+            target: fedora-41-64
+
           - group: opensuse 15.5
             task: opensuse-15.5-64
             source: opensuse-15.5-64-base
