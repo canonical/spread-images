@@ -72,13 +72,13 @@ jobs:
     - name: Run test
       env:
           OS_AUTH_URL: ${{ secrets.OS_AUTH_URL }}
-          OS_IDENTITY_API_VERSION: ${{ secrets.OS_IDENTITY_API_VERSION }}
-          OS_INTERFACE: ${{ secrets.OS_INTERFACE }}
+          OS_IDENTITY_API_VERSION: ${{ vars.OS_IDENTITY_API_VERSION }}
+          OS_INTERFACE: ${{ vars.OS_INTERFACE }}
           OS_PASSWORD: ${{ secrets.OS_PASSWORD }}
+          OS_PROJECT_DOMAIN_NAME: ${{ vars.OS_PROJECT_DOMAIN_NAME }}
           OS_PROJECT_NAME: ${{ secrets.OS_PROJECT_NAME }}
           OS_REGION_NAME: ${{ secrets.OS_REGION_NAME }}
-          OS_TENANT_NAME: ${{ secrets.OS_TENANT_NAME }}
-          OS_USER_DOMAIN_NAME: ${{ secrets.OS_USER_DOMAIN_NAME }}
+          OS_USER_DOMAIN_NAME: ${{ vars.OS_USER_DOMAIN_NAME }}
           OS_USERNAME: ${{ secrets.OS_USERNAME }}
       shell: bash
       run: |
