@@ -101,6 +101,7 @@ jobs:
     - name: Run test
       env:
           IMAGE_BAKER_SA: ${{ secrets.IMAGE_BAKER_SA }}
+      shell: bash
       run: |
           echo "$IMAGE_BAKER_SA" > sa.json
           if ! spread "google:${{ matrix.source }}:tasks/google/update-image/${{ matrix.task }}"; then
