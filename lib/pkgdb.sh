@@ -403,6 +403,11 @@ pkg_dependencies_ubuntu(){
                 qemu-utils
                 "
             ;;
+        debian-*)
+            echo "
+                eatmydata
+                "
+            ;;
     esac
 }
 
