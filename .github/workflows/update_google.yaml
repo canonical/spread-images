@@ -103,11 +103,11 @@ jobs:
           IMAGE_BAKER_SA: ${{ secrets.IMAGE_BAKER_SA }}
       run: |
           echo "$IMAGE_BAKER_SA" > sa.json
-          if ! spread "${{ matrix.cloud }}:${{ matrix.source }}:tasks/${{ matrix.cloud }}/update-image/${{ matrix.task }}"; then
+          if ! spread "google:${{ matrix.source }}:tasks/google/update-image/${{ matrix.task }}"; then
             echo "Spread images task failed, exiting..."
             exit 1
           fi
-          spread "${{ matrix.cloud }}:${{ matrix.target }}:tasks/${{ matrix.cloud }}/common/clean-old-images"
+          spread "google:${{ matrix.target }}:tasks/google/common/clean-old-images"
   
     - name: Discard spread workers
       if: always()
