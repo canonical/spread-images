@@ -19,7 +19,8 @@ execute: |
         sed -i -s -E -e 's@^baseurl=http://download.opensuse.org/@baseurl=http://mirrorcache.opensuse.org/@g' /etc/zypp/repos.d/repo*.repo
 
         # Make the upgrade and install the dependencies needed to run snapd tests
-        distro_update_package_db
+        # In case some repo cannot be updated due to proxy restriction
+        distro_update_package_db || true
         distro_upgrade_packages
 
         install_pkg_dependencies
