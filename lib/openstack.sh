@@ -163,7 +163,7 @@ clean_volumes(){
         echo "No volumes in available status"
     fi
     for volume_id in $available_volumes; do
-        attachments="$(openstack volume show -f value -c attachments $volume_id)"
+        attachments="$(openstack volume show -f value -c attachments "$volume_id")"
         if [ "$attachments" = "[]" ]; then
             if openstack volume delete "$volume_id"; then
                 echo "volume $volume_id deleted (available status)"
@@ -176,7 +176,7 @@ clean_volumes(){
         echo "No volumes in available status"
     fi
     for volume_id in $creating_volumes; do
-        attachments="$(openstack volume show -f value -c attachments $volume_id)"
+        attachments="$(openstack volume show -f value -c attachments "$volume_id")"
         if [ "$attachments" = "[]" ]; then
             openstack volume delete "$volume_id"
             echo "volume $volume_id deleted (available status)"
@@ -216,10 +216,10 @@ _deactivate_old_images(){
                 openstack image set --deactivate "$active_image"
                 echo "Image deactivated"
             else
-                echo "Image does not match family"
+                echo "Image $active_image does not match family"
             fi
         else
-            echo "Skipping current image"
+            echo "Skipping current image: $image_id"
         fi
     done
 }
