@@ -76,8 +76,6 @@ update_image(){
         esac
     done
 
-    set -ex
-
     # Run the update image task with reuse to keep the instance after the update is completed
     rm -f .spread-reuse*
     spread_failed=false
@@ -134,8 +132,6 @@ update_image(){
     # delete the instance
     openstack server delete "$instance_name"
     rm -f spread.log
-
-    set +ex
 
     # check spread and os commands didn't fail
     [ "$spread_failed" = false ] && [ "$os_failed" = false ]
@@ -262,8 +258,6 @@ add_image() {
                 ;;
         esac
     done
-
-    set -ex
 
     if [ -z "$task" ]; then
         echo "A task needs to be defined"
