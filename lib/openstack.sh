@@ -29,16 +29,16 @@ show_help_update() {
     echo "Create and update images for openstack"
     echo ""
     echo "examples:"
-    echo "./lib/openstack.sh update-image --task centos-9-64 --source-system centos-9-64-base --target-image snapd-spread/centos-9-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --task debian-12-64 --source-system debian-12-64-base --target-image snapd-spread/debian-12-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --task fedora-40-64 --source-system fedora-40-64-base --target-image snapd-spread/fedora-40-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --task fedora-41-64 --source-system fedora-41-64-base --target-image snapd-spread/fedora-41-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --task opensuse-15.5-64 --source-system opensuse-15.5-64-base --target-image snapd-spread/opensuse-15.5-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --task opensuse-15.6-64 --source-system opensuse-15.6-64-base --target-image snapd-spread/opensuse-15.6-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --task opensuse-tumbleweed-64 --source-system opensuse-tumbleweed-64-base --target-image snapd-spread/opensuse-tumbleweed-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-image snapd-spread/ubuntu-20.04-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-image snapd-spread/ubuntu-22.04-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-image snapd-spread/ubuntu-24.04-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task centos-9-64 --source-system centos-9-64-base --target-system centos-9-64 --target-image snapd-spread/centos-9-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task debian-12-64 --source-system debian-12-64-base --target-system debian-12-64 --target-image snapd-spread/debian-12-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task fedora-40-64 --source-system fedora-40-64-base --target-system fedora-40-64 --target-image snapd-spread/fedora-40-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task fedora-41-64 --source-system fedora-41-64-base --target-system fedora-41-64 --target-image snapd-spread/fedora-41-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task opensuse-15.5-64 --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64 --target-image snapd-spread/opensuse-15.5-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task opensuse-15.6-64 --source-system opensuse-15.6-64-base --target-system opensuse-15.6-64 --target-image snapd-spread/opensuse-15.6-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task opensuse-tumbleweed-64 --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64 --target-image snapd-spread/opensuse-tumbleweed-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64 --target-image snapd-spread/ubuntu-20.04-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64 --target-image snapd-spread/ubuntu-22.04-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64 --target-image snapd-spread/ubuntu-24.04-64-v$(date +'%Y%m%d')"
 }
 
 update_image(){
@@ -49,6 +49,7 @@ update_image(){
 
     task=""
     source_system=""
+    target_system=""
     target_image=""
     while [ $# -gt 0 ]; do
         case "$1" in
@@ -64,6 +65,10 @@ update_image(){
                 source_system="$2"
                 shift 2
                 ;;
+            --target-system)
+                target_system="$2"
+                shift 2
+                ;;
             --target-image)
                 target_image="$2"
                 shift 2
@@ -76,9 +81,17 @@ update_image(){
         esac
     done
 
+    set -x
+
+    if [ -z "$source_system" ] || [ -z "$target_system" ] || [ -z "$target_image" ]; then
+        echo "Required parametes: source-system, target-system and target-image"
+        exit 1
+    fi
+
     # Run the update image task with reuse to keep the instance after the update is completed
     rm -f .spread-reuse*
     spread_failed=false
+    start_failed=false
     os_failed=false
     if ! (set -o pipefail; spread -reuse openstack:"$source_system":tasks/openstack/update-image/"$task" | tee spread.log); then
         spread_failed=true
@@ -122,10 +135,15 @@ update_image(){
             fi
             sleep 10
         done
-    fi    
+    fi
+
+    echo "Cheching the new image boots properly"
+    if ! spread openstack:"$target_system":tasks/openstack/common/start-image; then
+        start_failed=true
+    fi
 
     # clean old images
-    if [ "$spread_failed" = false ] && [ "$os_failed" = false ]; then
+    if [ "$spread_failed" = false ] && [ "$os_failed" = false ] && [ "$start_failed" = false ]; then
         _deactivate_old_images "$target_id" "$task" "test-image"
     fi
 
@@ -133,11 +151,21 @@ update_image(){
     openstack server delete "$instance_name"
     rm -f spread.log
 
+    # delete the image is failed to start
+    if [ "$start_failed" = true ]; then
+        echo "Deleting image that failed to start after the update"
+        openstack image delete "$target_id"
+    fi
+
     # check spread and os commands didn't fail
-    [ "$spread_failed" = false ] && [ "$os_failed" = false ]
+    [ "$spread_failed" = false ] && [ "$os_failed" = false ] && [ "$start_failed" = false ]
+
+    set +x
 }
 
 clean_volumes(){
+    set -x
+
     error_volumes="$(openstack volume list --status error -f value --column ID)"
     if [ -z "$error_volumes" ]; then
         echo "No volumes in error status"
@@ -148,15 +176,15 @@ clean_volumes(){
         fi
     done
 
-    available_snapshots="$(openstack volume snapshot list --status available -f value --column ID)"
-    if [ -z "$available_snapshots" ]; then
-        echo "No snapshots in available status"
-    fi
-    for snapshot_id in $available_snapshots; do
-        if openstack volume snapshot delete "$snapshot_id"; then
-            echo "snapshot $snapshot_id deleted (available status)"
-        fi
-    done
+    #available_snapshots="$(openstack volume snapshot list --status available -f value --column ID)"
+    #if [ -z "$available_snapshots" ]; then
+    #    echo "No snapshots in available status"
+    #fi
+    #for snapshot_id in $available_snapshots; do
+    #    if openstack volume snapshot delete "$snapshot_id"; then
+    #        echo "snapshot $snapshot_id deleted (available status)"
+    #    fi
+    #done
 
     available_volumes="$(openstack volume list --status available -f value --column ID)"
     if [ -z "$available_volumes" ]; then
@@ -182,9 +210,13 @@ clean_volumes(){
             echo "volume $volume_id deleted (available status)"
         fi
     done
+
+    set +x
 }
 
 clean_images(){
+    set -x
+
     deactivated_images="$(openstack image list --status deactivated --private -f value --column ID)"
     if [ -z "$deactivated_images" ]; then
         echo "No deactivated images found"
@@ -196,6 +228,8 @@ clean_images(){
         openstack image delete "$image_id"
         echo "Image deleted"
     done
+
+    set +x
 }
 
 _deactivate_old_images(){
@@ -208,15 +242,17 @@ _deactivate_old_images(){
         exit 1
     fi
 
-    active_images="$(openstack image list -f value --private --status active --tag "family=$family" --tag "$type" --column ID)"
+    active_images="$(openstack image list -f value --private --status active --tag "family=$family" --column ID)"
     for active_image in $active_images; do
         if [ "$active_image" != "$image_id" ]; then
-            if openstack image show -c tags -f value "$active_image" | grep "$family"; then
-                echo "Found old image: $active_image"
-                openstack image set --deactivate "$active_image"
-                echo "Image deactivated"
+            tags="$(openstack image show -c tags -f value "$active_image")"
+            if grep -vq "$type" <<< "$tags"; then
+                echo "Skipping image with different type"
+            elif grep -vq "family=$family" <<< "$tags"; then
+                echo "Skipping image with different family"
             else
-                echo "Image $active_image does not match family"
+                echo "Deactivating old image: $active_image"
+                openstack image set --deactivate "$active_image"
             fi
         else
             echo "Skipping current image: $image_id"
@@ -259,6 +295,8 @@ add_image() {
         esac
     done
 
+    set -x
+
     if [ -z "$task" ]; then
         echo "A task needs to be defined"
         exit 1
@@ -300,6 +338,8 @@ add_image() {
     unset SPREAD_IMAGE_URL
     unset SPREAD_IMAGE_NAME
     unset SPREAD_GOOGLE_KEY
+
+    set +x
 }
 
 main() {
