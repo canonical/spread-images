@@ -98,7 +98,12 @@ update_image(){
     fi
 
     # Get the instance name
-    instance_name="$(grep -E ".*Keeping.*(.*).*" < spread.log | awk -F'[()]' '{print $2}')"
+    if [ -f spread.log ]; then
+        instance_name="$(grep -E ".*Keeping.*(.*).*" < spread.log | awk -F'[()]' '{print $2}')"
+    else
+        echo "Spread log not found, exiting..."
+        exit 1
+    fi
 
     #check the instance name is correct
     test -n "$instance_name"
@@ -138,7 +143,7 @@ update_image(){
     fi
 
     echo "Cheching the new image boots properly"
-    if ! spread openstack:"$target_system":tasks/openstack/common/start-image; then
+    if ! spread openstack:"$target_system":tasks/openstack/common/start-instance; then
         start_failed=true
     fi
 
@@ -176,13 +181,23 @@ clean_volumes(){
         fi
     done
 
+    # Some snapshots have not attachments and those are used by images created by snapshots
+    # So if those are deleted, the images cannot boot anymore
+    # TODO: implement a cross check to validate there are not images using the snapshot
+
     #available_snapshots="$(openstack volume snapshot list --status available -f value --column ID)"
     #if [ -z "$available_snapshots" ]; then
     #    echo "No snapshots in available status"
     #fi
     #for snapshot_id in $available_snapshots; do
-    #    if openstack volume snapshot delete "$snapshot_id"; then
-    #        echo "snapshot $snapshot_id deleted (available status)"
+    #    volume_id="$(openstack volume snapshot show -c volume_id -f value $snapshot_id)"
+    #    if [ -n "$volume_id" ]; then
+    #        attachments="$(openstack volume show -f value -c attachments "$volume_id")"
+    #    fi
+    #    if [ -z "$volume_id" ] || [ "$attachments" = "[]" ]; then
+    #        if openstack volume snapshot delete "$snapshot_id"; then
+    #            echo "snapshot $snapshot_id deleted (available status)"
+    #        fi
     #    fi
     #done
 
