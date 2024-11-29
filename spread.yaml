@@ -255,6 +255,12 @@ backends:
             - debian-12-64:
                 image: snapd-spread/debian-12-64
                 workers: 1
+            - debian-sid-64-base:
+                image: snapd-base/debian-sid-64-base
+                workers: 1
+            - debian-sid-64:
+                image: snapd-spread/debian-sid-64
+                workers: 1
 
             - arch-linux-64-base:
                 image: snapd-base/arch-Linux-64-base

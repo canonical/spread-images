@@ -30,6 +30,10 @@ jobs:
             task: debian-12-64
             source: debian-12-64-base
             target: debian-12-64
+          - group: debian sid
+            task: debian-sid-64
+            source: debian-sid-64-base
+            target: debian-sid-64
 
           - group: centos 9
             task: centos-9-64

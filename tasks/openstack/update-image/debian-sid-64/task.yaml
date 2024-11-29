@@ -1,0 +1,36 @@
+summary: Update debian-sid 64 bits image with the latest updates and test dependencies
+
+systems: [debian-sid-64-base]
+
+environment:
+    TARGET_SYSTEM: debian-sid-64
+
+execute: |
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        distro_upgrade_packages
+
+        install_pkg_dependencies
+        install_test_dependencies "$TARGET_SYSTEM"
+
+        remove_pkg_blacklist
+
+        REBOOT
+    fi
+
+    # Configure ntp to ntp.ubuntu.com
+    sed -i 's/#NTP=/NTP=ntp.ubuntu.com/g' /etc/systemd/timesyncd.conf
+    systemctl restart systemd-timesyncd
+    timedatectl set-ntp yes
+
+    # Clean the disk
+    clean_machine
+
+restore: |
+    # Remove the project path content
+    rm -rf "$PROJECT_PATH"
+
