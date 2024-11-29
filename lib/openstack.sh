@@ -17,6 +17,7 @@ show_help_add() {
     echo "examples:"
     echo "./lib/openstack.sh add-image --task centos-9-64 --target-image snapd-base/centos-9-64-base-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh add-image --task debian-12-64 --target-image snapd-base/debian-12-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task debian-sid-64 --target-image snapd-base/debian-sid-64-base-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh add-image --task fedora-40-64 --target-image snapd-base/fedora-40-64-base-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh add-image --task fedora-41-64 --target-image snapd-base/fedora-41-64-base-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh add-image --task opensuse-15.5-64 --target-image snapd-base/opensuse-15.5-64-base-v$(date +'%Y%m%d')"
