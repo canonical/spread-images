@@ -95,20 +95,25 @@ update_image(){
     spread_failed=false
     start_failed=false
     os_failed=false
-    if ! (set -o pipefail; spread -reuse openstack:"$source_system":tasks/openstack/update-image/"$task" | tee spread.log); then
+
+    rm -f .spread-reuse.yaml*
+    if ! spread -reuse openstack:"$source_system":tasks/openstack/update-image/"$task"; then
         spread_failed=true
     fi
 
     # Get the instance name
-    if [ -f spread.log ]; then
-        instance_name="$(grep -E ".*Keeping.*(.*).*" < spread.log | awk -F'[()]' '{print $2}')"
+    if [ -f .spread-reuse.yaml ]; then
+        instance_name="$(cat .spread-reuse.yaml | grep "name:" | cut -d: -f2 | sed 's/ //g')"
     else
-        echo "Spread log not found, exiting..."
+        echo "Spread instance info not found, exiting..."
         exit 1
     fi
 
     #check the instance name is correct
-    test -n "$instance_name"
+    if [ -z "$instance_name" ]; then
+        echo "Instance name not detected in spread-reuse file, exiting..."
+        exit 1
+    fi
 
     # stop the instance before creating the snapshot
     openstack server stop "$instance_name"
@@ -133,20 +138,24 @@ update_image(){
             os_failed=true
         fi
 
-        for _ in $(seq 10); do
-            if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
-                openstack image set --tag "family=$task" "$target_id"
-                openstack image set --tag "test-image" "$target_id"
-                openstack image set --private "$target_id"
-                break
-            fi
-            sleep 10
-        done
+        if [ "$os_failed" = false ]; then
+            for _ in $(seq 10); do
+                if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
+                    openstack image set --tag "family=$task" "$target_id"
+                    openstack image set --tag "test-image" "$target_id"
+                    openstack image set --private "$target_id"
+                    break
+                fi
+                sleep 10
+            done
+        fi
     fi
 
-    echo "Cheching the new image boots properly"
-    if ! spread openstack:"$target_system":tasks/openstack/common/start-instance; then
-        start_failed=true
+    if [ "$spread_failed" = false ] && [ "$os_failed" = false ]; then
+        echo "Cheching the new image boots properly"
+        if ! spread openstack:"$target_system":tasks/openstack/common/start-instance; then
+            start_failed=true
+        fi
     fi
 
     # clean old images
