@@ -16,7 +16,7 @@ execute: |
         rm -f /etc/zypp/repos.d/*-backports*.repo
 
         # Use mirrorcache avoids errors trying to access the repo metadata
-        sed -i -s -E -e 's@^baseurl=http://download.opensuse.org/@baseurl=http://mirrorcache.opensuse.org/@g' /etc/zypp/repos.d/repo*.repo
+        sed -i -s -E -e 's@^baseurl=http://download.opensuse.org/@baseurl=http://mirror.rackspace.co.uk/@g' /etc/zypp/repos.d/repo*.repo
 
         # Make the upgrade and install the dependencies needed to run snapd tests
         # In case some repo cannot be updated due to proxy restriction
