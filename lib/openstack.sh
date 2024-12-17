@@ -5,6 +5,7 @@ show_help() {
     echo "       openstack.sh update-image <PARAMS>"
     echo "       openstack.sh clean-images"
     echo "       openstack.sh clean-volumes"
+    echo "       openstack.sh list-orphan-volumes"
     echo ""
     echo "For more details in specific commands"
 }
@@ -126,7 +127,7 @@ update_image(){
 
     # Create the snapshot just when the spread task didn't fail
     if [ "$spread_failed" = false ]; then
-        # create the snapshot
+       # create the snapshot
         target_id="$(openstack server image create --name "$target_image" --property "family=$task" -f value -c id "$instance_name")"
         if [ -z "$target_id" ]; then
             echo "Error: Image ID empty"
@@ -134,8 +135,8 @@ update_image(){
         fi
 
         if openstack image show "$target_id" | grep "No Image found"; then
-            echo "Error: Image not found"
-            os_failed=true
+           echo "Error: Image not found"
+           os_failed=true
         fi
 
         if [ "$os_failed" = false ]; then
@@ -146,10 +147,10 @@ update_image(){
                     openstack image set --private "$target_id"
                     break
                 fi
-                sleep 10
-            done
-        fi
-    fi
+                 sleep 10
+             done
+         fi
+     fi
 
     if [ "$spread_failed" = false ] && [ "$os_failed" = false ]; then
         echo "Cheching the new image boots properly"
@@ -179,6 +180,63 @@ update_image(){
     set +x
 }
 
+_snapshot_for_image(){
+    openstack image show "$1" -c properties -f json | jq -r '.properties.block_device_mapping' | jq '.[].snapshot_id' | tr -d '"'
+}
+
+_volume_for_snapshot(){
+    openstack volume snapshot show "$1" -c volume_id -f value
+}
+
+_volume_for_server(){
+    openstack server show "$1" -c volumes_attached -f json | jq -r '.volumes_attached[0].id' | tr -d '"'
+}
+
+_snapshot_for_volume(){
+    openstack volume show "$1" -c snapshot_id -f value
+}
+
+
+list_orphan_volumes(){
+    echo "ERROR STATUS"
+    error_volumes="$(openstack volume list --status error -f value --column ID)"
+    for volume_id in $error_volumes; do
+        echo "$volume_id"
+    done
+    echo ""
+
+    echo "IN-USE STATUS"
+    in_use_volumes="$(openstack volume list --status in-use -f value --column ID)"
+    in_use_servers="$(openstack server list -c ID -f value)"
+    for volume_id in $in_use_volumes; do
+        server_id="$(openstack volume show $volume_id -c attachments -f json | jq -r '.attachments[0].server_id')"
+        if [ -z "$server_id" ] || [ "$server_id" == null ]; then
+            echo "$volume_id"
+        else
+            if ! grep -q "$server_id" <<< "$in_use_servers"; then
+                echo "$volume_id"
+            fi
+        fi
+    done
+    echo ""
+
+    echo "ATTACHING STATUS"
+    attaching_volumes="$(openstack volume list --status attaching -f value --column ID)"
+    for volume_id in $attaching_volumes; do
+        echo "$volume_id"
+    done
+    echo ""    
+
+    echo "CREATING STATUS"
+    creating_volumes="$(openstack volume list --status creating -f value --column ID)"
+    for volume_id in $creating_volumes; do
+        attachments="$(openstack volume show -f value -c attachments "$volume_id")"
+        if [ "$attachments" = "[]" ]; then
+            echo "$volume_id"
+        fi
+    done
+}
+
 clean_volumes(){
     set -x
 
@@ -192,25 +250,23 @@ clean_volumes(){
         fi
     done
 
-    # Some snapshots have not attachments and those are used by images created by snapshots
-    # So if those are deleted, the images cannot boot anymore
-    # TODO: implement a cross check to validate there are not images using the snapshot
-
-    #available_snapshots="$(openstack volume snapshot list --status available -f value --column ID)"
-    #if [ -z "$available_snapshots" ]; then
-    #    echo "No snapshots in available status"
-    #fi
-    #for snapshot_id in $available_snapshots; do
-    #    volume_id="$(openstack volume snapshot show -c volume_id -f value $snapshot_id)"
-    #    if [ -n "$volume_id" ]; then
-    #        attachments="$(openstack volume show -f value -c attachments "$volume_id")"
-    #    fi
-    #    if [ -z "$volume_id" ] || [ "$attachments" = "[]" ]; then
-    #        if openstack volume snapshot delete "$snapshot_id"; then
-    #            echo "snapshot $snapshot_id deleted (available status)"
-    #        fi
-    #    fi
-    #done
+    in_use_volumes="$(openstack volume list --status in-use -f value --column ID)"
+    in_use_servers="$(openstack server list -c ID -f value)"
+    for volume_id in $in_use_volumes; do
+        server_id="$(openstack volume show $volume_id -c attachments -f json | jq -r '.attachments[0].server_id')"
+        if [ -z "$server_id" ] || [ "$server_id" == null ]; then
+            echo "No server id attached to the volume $volume_id"
+        else
+            echo "Server found $server_id"
+            if grep -q "$server_id" <<< "$in_use_servers"; then
+                echo "Server is being used"
+            else
+                echo "Server is not being used, deleting volume"
+                #openstack volume set --detached "$volume_id"
+                #openstack volume delete "$volume_id"
+            fi
+        fi
+    done
 
     available_volumes="$(openstack volume list --status available -f value --column ID)"
     if [ -z "$available_volumes" ]; then
@@ -251,8 +307,14 @@ clean_images(){
 
     for image_id in $deactivated_images; do
         echo "Found deactivated image: $image_id"
+        snapshot_id="$(_snapshot_for_image "$image_id")"
         openstack image delete "$image_id"
         echo "Image deleted"
+
+        if [ -n "$snapshot_id" ]; then
+            echo "Found snapshot associated to the image: $snapshot_id"
+            openstack volume snapshot delete "$snapshot_id"
+        fi        
     done
 
     set +x
