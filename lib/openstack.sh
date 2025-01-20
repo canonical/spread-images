@@ -93,13 +93,13 @@ update_image(){
 
     # Run the update image task with reuse to keep the instance after the update is completed
     rm -f .spread-reuse*
-    spread_failed=false
-    start_failed=false
-    os_failed=false
+    spread_failed="false"
+    start_failed="false"
+    os_failed="false"
 
     rm -f .spread-reuse.yaml*
     if ! spread -reuse openstack:"$source_system":tasks/openstack/update-image/"$task"; then
-        spread_failed=true
+        spread_failed="true"
     fi
 
     # Get the instance name
@@ -119,17 +119,15 @@ update_image(){
     volume_id="$(_volume_for_server "$instance_name")"
     if [ -z "$volume_id" ]; then
         echo "Error: Volume ID empty"
-        os_failed=true
+        os_failed="true"
     fi
 
     # delete the instance before creating the image
     openstack server delete "$instance_name"
 
     # wait until the volume status is available
-    available_status=false
     for _ in $(seq 20); do
         if [ "$(openstack volume show -f value -c status "$volume_id")" == "available" ]; then
-            available_status=true
             break
         else
             sleep 3
@@ -137,19 +135,19 @@ update_image(){
     done
 
     # Create the snapshot just when the spread task didn't fail
-    if [ "$spread_failed" = false ]; then
+    if [ "$spread_failed" == "false" ]; then
        # create the image
         target_id="$(cat /proc/sys/kernel/random/uuid)"
         # Openstack code (openstack image create) checks tty status: it needs a tty (even if you create from a volume),
         # that the ci runners may not provide. So it is needed to "fake" a tty to execute the command.
-        _fake_tty openstack image create --id "$target_id" --volume "$volume_id" -f value -c image_id "$target_image"
+        _fake_tty openstack image create --id "$target_id" --volume "$volume_id" "$target_image"
 
         if openstack image show "$target_id" | grep "No Image found"; then
            echo "Error: Image not found"
            os_failed=true
         fi
 
-        if [ "$os_failed" = false ]; then
+        if [ "$os_failed" == "false" ]; then
             for _ in $(seq 20); do
                 if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
                     openstack image set --property "family=$task" "$target_id"
@@ -163,15 +161,15 @@ update_image(){
          fi
      fi
 
-    if [ "$spread_failed" = false ] && [ "$os_failed" = false ]; then
-        echo "Cheching the new image boots properly"
+    if [ "$spread_failed" == "false" ] && [ "$os_failed" == "false" ]; then
+        echo "Checking the new image boots properly"
         if ! spread openstack:"$target_system":tasks/openstack/common/start-instance; then
             start_failed=true
         fi
     fi
 
     # clean old images
-    if [ "$spread_failed" = false ] && [ "$os_failed" = false ] && [ "$start_failed" = false ]; then
+    if [ "$spread_failed" == "false" ] && [ "$os_failed" == "false" ] && [ "$start_failed" == "false" ]; then
         _deactivate_old_images "$target_id" "$task" "test-image"
         openstack volume delete "$volume_id"
     fi
@@ -181,13 +179,13 @@ update_image(){
     rm -f spread.log
 
     # delete the image is failed to start
-    if [ "$start_failed" = true ]; then
+    if [ "$start_failed" == "true" ]; then
         echo "Deleting image that failed to start after the update"
         openstack image delete "$target_id"
     fi
 
     # check spread and os commands didn't fail
-    [ "$spread_failed" = false ] && [ "$os_failed" = false ] && [ "$start_failed" = false ]
+    [ "$spread_failed" == "false" ] && [ "$os_failed" == "false" ] && [ "$start_failed" == "false" ]
 
     set +x
 }
