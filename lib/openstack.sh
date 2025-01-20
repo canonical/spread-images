@@ -4,7 +4,7 @@ show_help() {
     echo "usage: openstack.sh add-image <PARAMS>"
     echo "       openstack.sh update-image <PARAMS>"
     echo "       openstack.sh clean-images"
-    echo "       openstack.sh clean-volumes"
+    echo "       openstack.sh clean-volumes [STATE]"
     echo "       openstack.sh list-orphan-volumes"
     echo ""
     echo "For more details in specific commands"
@@ -116,19 +116,30 @@ update_image(){
         exit 1
     fi
 
-    # stop the instance before creating the snapshot
-    openstack server stop "$instance_name"
-    for _ in $(seq 10); do
-        if openstack server show -c OS-EXT-STS:vm_state -f value "$instance_name" | grep 'stopped'; then
+    volume_id="$(_volume_for_server "$instance_name")"
+    if [ -z "$volume_id" ]; then
+        echo "Error: Volume ID empty"
+        os_failed=true
+    fi
+
+    # delete the instance before creating the image
+    openstack server delete "$instance_name"
+
+    # wait until the volume status is available
+    available_status=false
+    for _ in $(seq 20); do
+        if [ "$(openstack volume show -f value -c status "$volume_id")" == "available" ]; then
+            available_status=true
             break
+        else
+            sleep 3
         fi
-        sleep 5
     done
 
     # Create the snapshot just when the spread task didn't fail
     if [ "$spread_failed" = false ]; then
-       # create the snapshot
-        target_id="$(openstack server image create --name "$target_image" --property "family=$task" -f value -c id "$instance_name")"
+       # create the image       
+        target_id="$(openstack image create --volume "$volume_id" -f value -c image_id "$target_image")"
         if [ -z "$target_id" ]; then
             echo "Error: Image ID empty"
             os_failed=true
@@ -140,14 +151,14 @@ update_image(){
         fi
 
         if [ "$os_failed" = false ]; then
-            for _ in $(seq 10); do
+            for _ in $(seq 20); do
                 if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
                     openstack image set --tag "family=$task" "$target_id"
                     openstack image set --tag "test-image" "$target_id"
                     openstack image set --private "$target_id"
                     break
                 fi
-                 sleep 10
+                 sleep 30
              done
          fi
      fi
@@ -162,6 +173,7 @@ update_image(){
     # clean old images
     if [ "$spread_failed" = false ] && [ "$os_failed" = false ] && [ "$start_failed" = false ]; then
         _deactivate_old_images "$target_id" "$task" "test-image"
+        openstack volume delete "$volume_id"
     fi
 
     # delete the instance
@@ -196,6 +208,17 @@ _snapshot_for_volume(){
     openstack volume show "$1" -c snapshot_id -f value
 }
 
+count_used_volumes(){
+    openstack volume summary -f value -c 'Total Count'
+}
+
+count_used_snapshots(){
+    openstack volume snapshot list -f value -c ID | wc -l
+}
+
+count_used_servers(){
+    openstack server list -f value -c ID | wc -l
+}
 
 list_orphan_volumes(){
     echo "ERROR STATUS"
@@ -235,10 +258,34 @@ list_orphan_volumes(){
             echo "$volume_id"
         fi
     done
+
+    echo "RESERVED STATUS"
+    reserved_volumes="$(openstack volume list --status reserved -f value --column ID)"
+    for volume_id in $reserved_volumes; do
+        attachments="$(openstack volume show -f value -c attachments "$volume_id")"
+        if [ "$attachments" = "[]" ]; then
+            echo "$volume_id"
+        fi
+    done
 }
 
 clean_volumes(){
     set -x
+    STATUS=${1:-}
+
+    if [ -n "$STATUS" ]; then
+        status_volumes="$(openstack volume list --status "$STATUS" -f value --column ID)"
+        if [ -z "$status_volumes" ]; then
+            echo "No volumes in error $STATUS"
+        fi
+        for volume_id in $status_volumes; do
+            if openstack volume delete "$volume_id"; then
+                echo "volume $volume_id deleted"
+            fi
+        done
+        exit 0
+        
+    fi
 
     error_volumes="$(openstack volume list --status error -f value --column ID)"
     if [ -z "$error_volumes" ]; then
