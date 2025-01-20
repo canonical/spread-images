@@ -138,12 +138,11 @@ update_image(){
 
     # Create the snapshot just when the spread task didn't fail
     if [ "$spread_failed" = false ]; then
-       # create the image       
-        target_id="$(openstack image create --volume "$volume_id" -f value -c image_id "$target_image")"
-        if [ -z "$target_id" ]; then
-            echo "Error: Image ID empty"
-            os_failed=true
-        fi
+       # create the image
+        target_id="$(cat /proc/sys/kernel/random/uuid)"
+        # Openstack code (openstack image create) checks tty status: it needs a tty (even if you create from a volume),
+        # that the ci runners may not provide. So it is needed to "fake" a tty to execute the command.
+        _fake_tty openstack image create --id "$target_id" --volume "$volume_id" -f value -c image_id "$target_image"
 
         if openstack image show "$target_id" | grep "No Image found"; then
            echo "Error: Image not found"
@@ -153,12 +152,13 @@ update_image(){
         if [ "$os_failed" = false ]; then
             for _ in $(seq 20); do
                 if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
+                    openstack image set --property "family=$task" "$target_id"
                     openstack image set --tag "family=$task" "$target_id"
                     openstack image set --tag "test-image" "$target_id"
                     openstack image set --private "$target_id"
                     break
                 fi
-                 sleep 30
+                sleep 30
              done
          fi
      fi
@@ -190,6 +190,10 @@ update_image(){
     [ "$spread_failed" = false ] && [ "$os_failed" = false ] && [ "$start_failed" = false ]
 
     set +x
+}
+
+_fake_tty(){
+    script -qefc "$(printf "%q " "$@")" /dev/null
 }
 
 _snapshot_for_image(){
