@@ -184,7 +184,9 @@ update_image(){
     fi
 
     # check spread and os commands didn't fail
-    [ "$spread_failed" == "false" ] && [ "$os_failed" == "false" ] && [ "$start_failed" == "false" ]
+    if [ "$spread_failed" == "true" ] || [ "$os_failed" == "true" ] || [ "$start_failed" == "true" ]; then
+        exit 1
+    fi
 
     set +x
 }
