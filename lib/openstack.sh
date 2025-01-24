@@ -42,6 +42,11 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64 --target-image snapd-spread/ubuntu-20.04-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64 --target-image snapd-spread/ubuntu-22.04-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64 --target-image snapd-spread/ubuntu-24.04-64-v$(date +'%Y%m%d')"
+    echo ""
+    echo "examples for base images:"
+    echo "./lib/openstack.sh update-image --task opensuse-15.5-64-base --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64-base --target-image snapd-base/opensuse-15.5-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task opensuse-15.6-64-base --source-system opensuse-15.6-64-base --target-system opensuse-15.6-64-base --target-image snapd-base/opensuse-15.6-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task opensuse-tumbleweed-64-base --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64-base --target-image snapd-base/opensuse-tumbleweed-64-base-v$(date +'%Y%m%d')"
 }
 
 update_image(){
