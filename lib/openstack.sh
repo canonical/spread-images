@@ -157,7 +157,7 @@ update_image(){
                     openstack image set --property "family=$task" "$target_id"
                     openstack image set --tag "family=$task" "$target_id"
                     openstack image set --tag "test-image" "$target_id"
-                    openstack image set --private "$target_id"
+                    openstack image set --shared "$target_id"
                     break
                 fi
                 sleep 30
