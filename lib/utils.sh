@@ -13,4 +13,6 @@ clean_machine() {
         /root/.bash_history \
         /root/.viminfo \
         /root/.cache
+
+    sync
 }
