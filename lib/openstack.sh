@@ -146,6 +146,11 @@ update_image(){
         # that the ci runners may not provide. So it is needed to "fake" a tty to execute the command.
         target_id="$(true | openstack image create -f value -c image_id --volume "$volume_id" "$target_image")"
 
+        if [ -z "$target_id" ]; then
+           echo "Error: Image not created"
+           os_failed=true
+        fi
+
         if openstack image show "$target_id" | grep "No Image found"; then
            echo "Error: Image not found"
            os_failed=true
