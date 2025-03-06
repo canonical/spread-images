@@ -12,6 +12,9 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
+
+        cp pacman.conf /etc/pacman.conf
+
         # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
