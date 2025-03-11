@@ -40,7 +40,8 @@ execute: |
         distro_install_package apparmor
         systemctl enable apparmor
 
-        sed -e 's/options /options lsm=landlock,lockdown,yama,integrity,apparmor,bpf/g' -i /boot/loader/entries/arch.conf
+        sed -e 's/options /options lsm=landlock,lockdown,yama,integrity,apparmor,bpf /g' \
+            -i /boot/loader/entries/arch.conf
     fi
 
     # Clean disk before create the shapshot
