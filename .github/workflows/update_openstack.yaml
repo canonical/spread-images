@@ -84,7 +84,7 @@ jobs:
           OS_REGION_NAME: ${{ secrets.OS_REGION_NAME }}
           OS_USER_DOMAIN_NAME: ${{ vars.OS_USER_DOMAIN_NAME }}
           OS_USERNAME: ${{ secrets.OS_USERNAME }}
-      shell: 'script -q -e -c "bash {0}"'
+      shell: bash
       run: |
           ./lib/openstack.sh update-image --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"-v"$(date +'%Y%m%d')"
   

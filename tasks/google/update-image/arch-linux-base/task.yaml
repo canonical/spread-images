@@ -12,7 +12,7 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-
+        # use the pacman.conf without the community section
         cp pacman.conf /etc/pacman.conf
 
         # Make the upgrade
@@ -29,7 +29,7 @@ execute: |
         distro_install_package inetutils vim
 
         REBOOT
-    fi
+    fi    
 
     # Clean disk before create the shapshot
     clean_machine

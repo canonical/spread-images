@@ -1,9 +1,9 @@
-summary: Update opensuse 15.6 64 bits image with the latest updates and test dependencies
+summary: Update opensuse 15.6 64 bits image with the latest updates, test dependencies and selinux enabled
 
 systems: [opensuse-tumbleweed-64-base]
 
 environment:
-    TARGET_SYSTEM: opensuse-tumbleweed-64
+    TARGET_SYSTEM: opensuse-tumbleweed-64-selinux-enabled
 
 execute: |
     . "$TESTSLIB/pkgdb.sh"
@@ -28,6 +28,12 @@ execute: |
 
         remove_pkg_blacklist
 
+        # Prepare to use selinux in permissive mode
+        distro_install_package restorecond policycoreutils setools-console selinux-policy-targeted selinux-policy-devel
+
+        sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="/&security=selinux selinux=1 /' /etc/default/grub
+        grub2-mkconfig -o /boot/grub2/grub.cfg
+
         REBOOT
     fi
 
@@ -37,7 +43,7 @@ execute: |
     # Make sure root is in sudoers file
     cp "$PWD"/sudoers /etc/sudoers
 
-    # Reinstall Chrony to make sure we have the configuration
+    # Reinstall Chrony to make sure we have the correct configuration
     zypper remove -y chrony
     zypper install -y chrony
 

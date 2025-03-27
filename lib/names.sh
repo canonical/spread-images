@@ -177,6 +177,11 @@ else
             FAMILY="opensuse-tumbleweed-64"
             DESCRIPTION="Opensuse tumbleweed 64 bits"
             ;;
+        opensuse-tumbleweed-64-selinux-enabled)
+            IMAGE="opensuse-tumbleweed-64-selinux-enabled-v$(date +'%Y%m%d')"
+            FAMILY="opensuse-tumbleweed-64-selinux-enabled"
+            DESCRIPTION="Opensuse tumbleweed 64 bits with selinux enabled"
+            ;;
         # Amazon linux 2
         amazon-linux-2-64-base)
             IMAGE="amazon-linux-2-64-base-v$(date +'%Y%m%d')"

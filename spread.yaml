@@ -241,6 +241,9 @@ backends:
             - opensuse-tumbleweed-64:
                 image: snapd-spread/opensuse-tumbleweed-64
                 workers: 1
+            - opensuse-tumbleweed-64-selinux-enabled:
+                image: snapd-spread/opensuse-tumbleweed-64-selinux-enabled
+                workers: 1
 
             - centos-9-64-base:
                 image: snapd-base/centos-9-64-base

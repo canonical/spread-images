@@ -39,6 +39,7 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --task opensuse-15.5-64 --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64 --target-image snapd-spread/opensuse-15.5-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task opensuse-15.6-64 --source-system opensuse-15.6-64-base --target-system opensuse-15.6-64 --target-image snapd-spread/opensuse-15.6-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task opensuse-tumbleweed-64 --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64 --target-image snapd-spread/opensuse-tumbleweed-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task opensuse-tumbleweed-64-selinux --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64-selinux-enabled --target-image snapd-spread/opensuse-tumbleweed-64-selinux-enabled-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64 --target-image snapd-spread/ubuntu-20.04-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64 --target-image snapd-spread/ubuntu-22.04-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64 --target-image snapd-spread/ubuntu-24.04-64-v$(date +'%Y%m%d')"
@@ -131,13 +132,18 @@ update_image(){
     openstack server delete "$instance_name"
 
     # wait until the volume status is available
-    for _ in $(seq 20); do
+    for _ in $(seq 30); do
         if [ "$(openstack volume show -f value -c status "$volume_id")" == "available" ]; then
             break
         else
-            sleep 3
+            sleep 5
         fi
     done
+
+    if [ "$(openstack volume show -f value -c status "$volume_id")" != "available" ]; then
+        echo "Error: Volume not available"
+        spread_failed="true"
+    fi
 
     # Create the snapshot just when the spread task didn't fail
     if [ "$spread_failed" == "false" ]; then
