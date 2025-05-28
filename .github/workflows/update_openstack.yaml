@@ -6,9 +6,10 @@ on:
     - cron: '30 4 * * 0'
 
 jobs:
-  update-image:
-    name: ${{ matrix.group }}
+  update-image-ps6:
+    name: os-amd64-ps6 (${{ matrix.group }})
     runs-on: [self-hosted, spread-enabled]
+    environment: OS_AMD64_PS6
     strategy:
       fail-fast: false
       matrix:
@@ -86,7 +87,7 @@ jobs:
           OS_USERNAME: ${{ secrets.OS_USERNAME }}
       shell: bash
       run: |
-          ./lib/openstack.sh update-image --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"-v"$(date +'%Y%m%d')"
+          ./lib/openstack.sh update-image --backend openstack-ps6 "${{ matrix.backend }}" --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"-v"$(date +'%Y%m%d')"
   
     - name: Discard spread workers
       if: always()
@@ -96,8 +97,148 @@ jobs:
           spread -discard -reuse-pid="$(echo "$r" | grep -o -E '[0-9]+')";
         done
 
-    - name: Cleanup job workspace after run tests
-      if: always()
+  update-image-ps7:
+    name: os-amd64-ps7 (${{ matrix.group }})
+    runs-on: [self-hosted, spread-enabled]
+    environment: OS_AMD64_PS7
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - group: ubuntu 20.04
+            task: ubuntu-20.04-64
+            source: ubuntu-20.04-64-base
+            target: ubuntu-20.04-64
+          - group: ubuntu 22.04
+            task: ubuntu-22.04-64
+            source: ubuntu-22.04-64-base
+            target: ubuntu-22.04-64
+          - group: ubuntu 24.04
+            task: ubuntu-24.04-64
+            source: ubuntu-24.04-64-base
+            target: ubuntu-24.04-64
+
+          - group: debian 12
+            task: debian-12-64
+            source: debian-12-64-base
+            target: debian-12-64
+          - group: debian sid
+            task: debian-sid-64
+            source: debian-sid-64-base
+            target: debian-sid-64
+
+          - group: centos 9
+            task: centos-9-64
+            source: centos-9-64-base
+            target: centos-9-64
+
+          - group: fedora 40
+            task: fedora-40-64
+            source: fedora-40-64-base
+            target: fedora-40-64
+          - group: fedora 41
+            task: fedora-41-64
+            source: fedora-41-64-base
+            target: fedora-41-64
+
+          - group: opensuse 15.5
+            task: opensuse-15.5-64
+            source: opensuse-15.5-64-base
+            target: opensuse-15.5-64
+          - group: opensuse 15.6
+            task: opensuse-15.6-64
+            source: opensuse-15.6-64-base
+            target: opensuse-15.6-64
+          - group: opensuse tumbleweed
+            task: opensuse-tumbleweed-64
+            source: opensuse-tumbleweed-64-base
+            target: opensuse-tumbleweed-64
+
+    steps:
+    - name: Ensure the workspace is clean
       run: |
           rm -rf "${{ github.workspace }}"
           mkdir "${{ github.workspace }}"
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+          ref: master
+
+    - name: Run test
+      env:
+          OS_AUTH_URL: ${{ secrets.OS_AUTH_URL }}
+          OS_IDENTITY_API_VERSION: ${{ vars.OS_IDENTITY_API_VERSION }}
+          OS_INTERFACE: ${{ vars.OS_INTERFACE }}
+          OS_PASSWORD: ${{ secrets.OS_PASSWORD }}
+          OS_PROJECT_DOMAIN_NAME: ${{ vars.OS_PROJECT_DOMAIN_NAME }}
+          OS_PROJECT_NAME: ${{ secrets.OS_PROJECT_NAME }}
+          OS_REGION_NAME: ${{ secrets.OS_REGION_NAME }}
+          OS_USER_DOMAIN_NAME: ${{ vars.OS_USER_DOMAIN_NAME }}
+          OS_USERNAME: ${{ secrets.OS_USERNAME }}
+      shell: bash
+      run: |
+          ./lib/openstack.sh update-image --backend openstack-ps7 "${{ matrix.backend }}" --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"-v"$(date +'%Y%m%d')"
+  
+    - name: Discard spread workers
+      if: always()
+      run: |
+        shopt -s nullglob;
+        for r in .spread-reuse.*.yaml; do
+          spread -discard -reuse-pid="$(echo "$r" | grep -o -E '[0-9]+')";
+        done
+
+  update-image-arm-ps7:
+    name: os-arm64-ps7 (${{ matrix.group }})
+    runs-on: [self-hosted, spread-enabled]
+    environment: OS_ARM64_PS7
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - group: ubuntu 20.04
+            task: ubuntu-20.04-arm-64
+            source: ubuntu-20.04-arm-64-base
+            target: ubuntu-20.04-arm-64
+          - group: ubuntu 22.04
+            task: ubuntu-22.04-arm-64
+            source: ubuntu-22.04-arm-64-base
+            target: ubuntu-22.04-arm-64
+          - group: ubuntu 24.04
+            task: ubuntu-24.04-arm-64
+            source: ubuntu-24.04-arm-64-base
+            target: ubuntu-24.04-arm-64
+
+    steps:
+    - name: Ensure the workspace is clean
+      run: |
+          rm -rf "${{ github.workspace }}"
+          mkdir "${{ github.workspace }}"
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+          ref: master
+
+    - name: Run test
+      env:
+          OS_AUTH_URL: ${{ secrets.OS_AUTH_URL }}
+          OS_IDENTITY_API_VERSION: ${{ vars.OS_IDENTITY_API_VERSION }}
+          OS_INTERFACE: ${{ vars.OS_INTERFACE }}
+          OS_PASSWORD: ${{ secrets.OS_PASSWORD }}
+          OS_PROJECT_DOMAIN_NAME: ${{ vars.OS_PROJECT_DOMAIN_NAME }}
+          OS_PROJECT_NAME: ${{ secrets.OS_PROJECT_NAME }}
+          OS_REGION_NAME: ${{ secrets.OS_REGION_NAME }}
+          OS_USER_DOMAIN_NAME: ${{ vars.OS_USER_DOMAIN_NAME }}
+          OS_USERNAME: ${{ secrets.OS_USERNAME }}
+      shell: bash
+      run: |
+          ./lib/openstack.sh update-image --backend openstack-arm-ps7 "${{ matrix.backend }}" --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"-v"$(date +'%Y%m%d')"
+  
+    - name: Discard spread workers
+      if: always()
+      run: |
+        shopt -s nullglob;
+        for r in .spread-reuse.*.yaml; do
+          spread -discard -reuse-pid="$(echo "$r" | grep -o -E '[0-9]+')";
+        done
