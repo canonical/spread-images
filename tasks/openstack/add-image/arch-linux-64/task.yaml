@@ -4,7 +4,7 @@ summary: Add new arch linux image
 systems: [ubuntu-*]
 
 environment:
-    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://geo.mirror.pkgbuild.com/images/v20250525.354894/Arch-Linux-x86_64-cloudimg.qcow2}")'
+    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://geo.mirror.pkgbuild.com/images/latest/Arch-Linux-x86_64-cloudimg.qcow2}")'
     IMAGE_NAME: '$(HOST: echo "${SPREAD_IMAGE_NAME:-arch-linux-64-base.qcow2}")'
 
 execute: |
