@@ -32,6 +32,7 @@ show_help_update() {
     echo "Create and update images for openstack"
     echo ""
     echo "examples:"
+    echo "./lib/openstack.sh update-image --task arch-linux-64 --source-system arch-linux-64-base --target-system arch-linux-64 --target-image snapd-spread/arch-linux-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task centos-9-64 --source-system centos-9-64-base --target-system centos-9-64 --target-image snapd-spread/centos-9-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task debian-12-64 --source-system debian-12-64-base --target-system debian-12-64 --target-image snapd-spread/debian-12-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task debian-sid-64 --source-system debian-sid-64-base --target-system debian-sid-64 --target-image snapd-spread/debian-sid-64-v$(date +'%Y%m%d')"

@@ -1,0 +1,49 @@
+summary: Update arch-linux 64 bits image with the latest updates and test dependencies
+
+systems: [arch-linux-64-base]
+
+environment:
+    TARGET_SYSTEM: arch-linux-64
+
+execute: |
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        distro_install_package wget
+        distro_upgrade_packages
+
+        install_pkg_dependencies
+        install_test_dependencies "$TARGET_SYSTEM"
+
+        remove_pkg_blacklist
+
+        REBOOT
+    fi
+
+    # Install grub to make it compatible with boot-state tool
+    distro_install_package grub
+    mkdir -p /boot/grub/
+    if [ ! -e /boot/grub/grubenv ]; then
+        echo "# GRUB Environment Block" > /boot/grub/grubenv
+        echo "#######################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################" >> /boot/grub/grubenv
+    fi
+
+    # Enable apparmor on systemd-boot
+    if ! MATCH "apparmor=1" < /boot/loader/entries/arch.conf; then
+        distro_install_package apparmor
+        systemctl enable apparmor
+
+        sed -e 's/options /options lsm=landlock,lockdown,yama,integrity,apparmor,bpf /g' \
+            -i /boot/loader/entries/arch.conf
+    fi
+
+    # Clean the disk
+    clean_machine
+
+restore: |
+    # Remove the project path content
+    rm -rf "$PROJECT_PATH"
+
