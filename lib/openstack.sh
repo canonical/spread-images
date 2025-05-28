@@ -51,15 +51,15 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64-uefi --target-image snapd-spread/ubuntu-22.04-64-uefi-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64-uefi --target-image snapd-spread/ubuntu-24.04-64-uefi-v$(date +'%Y%m%d')"
     echo ""
-    echo "examples for core images:"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-20.04-64 --source-system ubuntu-20.04-arm-64-base --target-system ubuntu-20.04-arm-64 --target-image snapd-spread/ubuntu-20.04-arm-64-uefi-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-22.04-64 --source-system ubuntu-22.04-arm-64-base --target-system ubuntu-22.04-arm-64 --target-image snapd-spread/ubuntu-22.04-arm-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-24.04-64 --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64 --target-image snapd-spread/ubuntu-24.04-arm-64-uefi-v$(date +'%Y%m%d')"
+    echo "examples for arm images:"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-20.04-arm-64 --source-system ubuntu-20.04-arm-64-base --target-system ubuntu-20.04-arm-64 --target-image snapd-spread/ubuntu-20.04-arm-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-22.04-arm-64 --source-system ubuntu-22.04-arm-64-base --target-system ubuntu-22.04-arm-64 --target-image snapd-spread/ubuntu-22.04-arm-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-24.04-arm-64 --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64 --target-image snapd-spread/ubuntu-24.04-arm-64-v$(date +'%Y%m%d')"
     echo ""
     echo "examples for core-arm images:"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-20.04-64 --source-system ubuntu-20.04-arm-64-base --target-system ubuntu-20.04-arm-64-uefi --target-image snapd-spread/ubuntu-20.04-arm-64-uefi-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-22.04-64 --source-system ubuntu-22.04-arm-64-base --target-system ubuntu-22.04-arm-64-uefi --target-image snapd-spread/ubuntu-22.04-arm-64-uefi-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-24.04-64 --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64-uefi --target-image snapd-spread/ubuntu-24.04-arm-64-uefi-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-20.04-arm-64 --source-system ubuntu-20.04-arm-64-base --target-system ubuntu-20.04-arm-64-uefi --target-image snapd-spread/ubuntu-20.04-arm-64-uefi-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-22.04-arm-64 --source-system ubuntu-22.04-arm-64-base --target-system ubuntu-22.04-arm-64-uefi --target-image snapd-spread/ubuntu-22.04-arm-64-uefi-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-24.04-arm-64 --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64-uefi --target-image snapd-spread/ubuntu-24.04-arm-64-uefi-v$(date +'%Y%m%d')"
     echo ""
     echo "examples for base images:"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-15.5-64-base --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64-base --target-image snapd-base/opensuse-15.5-64-base-v$(date +'%Y%m%d')"
@@ -80,12 +80,12 @@ _check_env_vars(){
     fi
 
     # Check environment name
-    if [ "$REGION" == prodstack6 ]; then
-        if [[ ! "$backend" == *-ps6 ]]; then
+    if [ "$REGION" = prodstack6 ]; then
+        if [ ! "$backend" = openstack ]; then
             echo "openstack backend "$backend" doesn't match the region $REGION"
             exit 1
         fi
-    elif [ "$REGION" == prodstack7 ]; then
+    elif [ "$REGION" = prodstack7 ]; then
         if [[ ! "$backend" == *-ps7 ]]; then
             echo "openstack backend "$backend" doesn't match the region $REGION"
             exit 1
@@ -100,9 +100,8 @@ _check_env_vars(){
         if [[ ! "$backend" == *-arm* ]]; then
             echo "openstack backend $backend doesn't match the project arm architecture"
             exit 1
-        fi        
+        fi
     fi
-
 }
 
 update_image(){

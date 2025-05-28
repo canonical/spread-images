@@ -193,8 +193,7 @@ backends:
                   workers: 8
                   storage: 12G
 
-    openstack-ps6:
-        type: openstack
+    openstack:
         key: '$(HOST: echo $OS_CREDENTIALS_AMD64_PS6)'
         plan: staging-cpu2-ram4-disk20
         halt-timeout: 2h
@@ -442,7 +441,7 @@ backends:
 
     openstack-arm-ps7:
         type: openstack
-        key: '$(HOST: echo "$OS_CREDENTIALS_AMD64_PS7")'
+        key: '$(HOST: echo "$OS_CREDENTIALS_ARM64_PS7")'
         plan: shared.xsmall.arm64
         halt-timeout: 2h
         wait-timeout: 5m
@@ -541,7 +540,7 @@ suites:
 
     tasks/openstack/common/:
         summary: Commmon tasks for openstack backend
-        backends: [openstack]
+        backends: [openstack, openstack-ps7, openstack-arm-ps7]
         environment:
             OS_USERNAME: '$(HOST: echo "${OS_USERNAME:-}")'
             OS_PROJECT_NAME: '$(HOST: echo "${OS_PROJECT_NAME:-}")'
@@ -563,7 +562,7 @@ suites:
 
     tasks/openstack/update-image/:
         summary: Update images for openstack backend
-        backends: [openstack]
+        backends: [openstack, openstack-ps7, openstack-arm-ps7]
         environment:
             OS_USERNAME: '$(HOST: echo "${OS_USERNAME:-}")'
             OS_PROJECT_NAME: '$(HOST: echo "${OS_PROJECT_NAME:-}")'
