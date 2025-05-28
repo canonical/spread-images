@@ -1,0 +1,17 @@
+
+summary: Add new arch linux image
+
+systems: [ubuntu-*]
+
+environment:
+    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://geo.mirror.pkgbuild.com/images/v20250525.354894/Arch-Linux-x86_64-cloudimg.qcow2}")'
+    IMAGE_NAME: '$(HOST: echo "${SPREAD_IMAGE_NAME:-arch-linux-64-base.qcow2}")'
+
+execute: |
+    source_image_name="$(basename $IMAGE_URL)"
+    wget -q -O "$IMAGE_NAME" "$IMAGE_URL"
+    gsutil cp "$IMAGE_NAME" gs://snapd-spread-tests/images/openstack/"$IMAGE_NAME"
+
+restore: |
+    # Remove the project path content
+    rm -rf "$PROJECT_PATH"

@@ -1,6 +1,6 @@
 summary: Update Ubuntu xenial/bionic/focal/jammy 64 bits image with the latest updates and kvm enabled
 
-systems: [ubuntu-16.04-64-virt-enabled, ubuntu-18.04-64-virt-enabled, ubuntu-20.04-64-base, ubuntu-20.04-arm-64, ubuntu-22.04-64-base, ubuntu-22.04-arm-64, ubuntu-22.10-64-base, ubuntu-24.04-64-base]
+systems: [ubuntu-16.04-64-virt-enabled, ubuntu-18.04-64-virt-enabled, ubuntu-20.04-64-base, ubuntu-20.04-arm-64, ubuntu-22.04-64-base, ubuntu-22.04-arm-64, ubuntu-22.10-64-base, ubuntu-24.04-64-base, ubuntu-24.04-arm-64]
 
 environment:
     LICENSES: https://www.googleapis.com/compute/v1/projects/vm-options/global/licenses/enable-vmx
@@ -31,6 +31,9 @@ execute: |
         ubuntu-24.04-64*)
             TARGET_SYSTEM=ubuntu-24.04-64-virt-enabled
         ;;
+        ubuntu-24.04-arm-64*)
+            TARGET_SYSTEM=ubuntu-24.04-arm-64-virt-enabled
+        ;;
         *)
             echo "System not supported"
             exit 1
@@ -47,7 +50,7 @@ execute: |
         distro_update_package_db
 
         # Install virtualization dependencies and configure them
-        if [[ "$SPREAD_SYSTEM" = ubuntu-24.04-64* ]]; then
+        if [[ "$SPREAD_SYSTEM" = ubuntu-24.04* ]]; then
             distro_install_package snapd qemu-utils genisoimage sshpass qemu-kvm cloud-image-utils ovmf kpartx
         else    
             distro_install_package snapd qemu qemu-utils genisoimage sshpass qemu-kvm cloud-image-utils ovmf kpartx
@@ -100,6 +103,9 @@ restore: |
         ;;
         ubuntu-24.04-64*)
             TARGET_SYSTEM=ubuntu-24.04-64-virt-enabled
+        ;;
+        ubuntu-24.04-arm-64*)
+            TARGET_SYSTEM=ubuntu-24.04-arm-64-virt-enabled
         ;;
         *)
             echo "System not supported"

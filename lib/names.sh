@@ -97,10 +97,25 @@ else
             FAMILY="ubuntu-2404-64-virt-enabled"
             DESCRIPTION="Image with virtualization enabled"
             ;;
+        ubuntu-24.04-arm-64)
+            IMAGE="ubuntu-2404-arm-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-2404-arm-64"
+            DESCRIPTION="Ubuntu 24.04 ARM 64 bits"
+            ;;
+        ubuntu-24.04-arm-64-virt-enabled)
+            IMAGE="ubuntu-2404-arm-64-v$(date +'%Y%m%d')-virt-enabled"
+            FAMILY="ubuntu-2404-arm-64-virt-enabled"
+            DESCRIPTION="Image with virtualization enabled"
+            ;;
         ubuntu-24.10-64)
             IMAGE="ubuntu-2410-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-2410-64"
             DESCRIPTION="Ubuntu 24.10 64 bits"
+            ;;
+        ubuntu-25.04-64)
+            IMAGE="ubuntu-2504-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-2504-64"
+            DESCRIPTION="Ubuntu 25.04 64 bits"
             ;;
         # Debian
         debian-11-64)
@@ -124,11 +139,6 @@ else
             DESCRIPTION="Debian sid 64 bits"
             ;;
         # Fedora
-        fedora-39-64)
-            IMAGE="fedora-39-64-v$(date +'%Y%m%d')"
-            FAMILY="fedora-39-64"
-            DESCRIPTION="Fedora 39 64 bits with test dependencies"
-            ;;
         fedora-40-64)
             IMAGE="fedora-40-64-v$(date +'%Y%m%d')"
             FAMILY="fedora-40-64"
@@ -138,6 +148,11 @@ else
             IMAGE="fedora-41-64-v$(date +'%Y%m%d')"
             FAMILY="fedora-41-64"
             DESCRIPTION="Fedora 41 64 bits with test dependencies"
+            ;;
+        fedora-42-64)
+            IMAGE="fedora-42-64-v$(date +'%Y%m%d')"
+            FAMILY="fedora-42-64"
+            DESCRIPTION="Fedora 42 64 bits with test dependencies"
             ;;
         fedora-rawhide-64)
             IMAGE="fedora-rawhide-64-v$(date +'%Y%m%d')"

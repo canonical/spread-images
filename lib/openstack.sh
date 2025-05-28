@@ -18,9 +18,9 @@ show_help_add() {
     echo "examples:"
     echo "./lib/openstack.sh add-image --task centos-9-64 --target-image snapd-base/centos-9-64-base-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh add-image --task debian-12-64 --target-image snapd-base/debian-12-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --task debian-sid-64 --target-image snapd-base/debian-sid-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --task fedora-40-64 --target-image snapd-base/fedora-40-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task debian-sid-64 --target-image snapd-base/debian-sid-64-base-v$(date +'%Y%m%d')"    
     echo "./lib/openstack.sh add-image --task fedora-41-64 --target-image snapd-base/fedora-41-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --task fedora-42-64 --target-image snapd-base/fedora-42-64-base-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh add-image --task opensuse-15.5-64 --target-image snapd-base/opensuse-15.5-64-base-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh add-image --task opensuse-15.6-64 --target-image snapd-base/opensuse-15.6-64-base-v$(date +'%Y%m%d')"
 }
@@ -34,8 +34,8 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --task centos-9-64 --source-system centos-9-64-base --target-system centos-9-64 --target-image snapd-spread/centos-9-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task debian-12-64 --source-system debian-12-64-base --target-system debian-12-64 --target-image snapd-spread/debian-12-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task debian-sid-64 --source-system debian-sid-64-base --target-system debian-sid-64 --target-image snapd-spread/debian-sid-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --task fedora-40-64 --source-system fedora-40-64-base --target-system fedora-40-64 --target-image snapd-spread/fedora-40-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task fedora-41-64 --source-system fedora-41-64-base --target-system fedora-41-64 --target-image snapd-spread/fedora-41-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task fedora-42-64 --source-system fedora-42-64-base --target-system fedora-42-64 --target-image snapd-spread/fedora-42-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task opensuse-15.5-64 --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64 --target-image snapd-spread/opensuse-15.5-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task opensuse-15.6-64 --source-system opensuse-15.6-64-base --target-system opensuse-15.6-64 --target-image snapd-spread/opensuse-15.6-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task opensuse-tumbleweed-64 --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64 --target-image snapd-spread/opensuse-tumbleweed-64-v$(date +'%Y%m%d')"
@@ -43,6 +43,11 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64 --target-image snapd-spread/ubuntu-20.04-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64 --target-image snapd-spread/ubuntu-22.04-64-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh update-image --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64 --target-image snapd-spread/ubuntu-24.04-64-v$(date +'%Y%m%d')"
+    echo ""
+    echo "examples for core images:"
+    echo "./lib/openstack.sh update-image --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64-uefi --target-image snapd-spread/ubuntu-20.04-64-uefi-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64-uefi --target-image snapd-spread/ubuntu-22.04-64-uefi-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64-uefi --target-image snapd-spread/ubuntu-24.04-64-uefi-v$(date +'%Y%m%d')"
     echo ""
     echo "examples for base images:"
     echo "./lib/openstack.sh update-image --task opensuse-15.5-64-base --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64-base --target-image snapd-base/opensuse-15.5-64-base-v$(date +'%Y%m%d')"
@@ -165,8 +170,14 @@ update_image(){
         if [ "$os_failed" == "false" ]; then
             for _ in $(seq 20); do
                 if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
-                    openstack image set --property "family=$task" "$target_id"
-                    openstack image set --tag "family=$task" "$target_id"
+                    if [[ "$target_system" == *uefi* ]]; then
+                        family=${task}-uefi
+                        openstack image set --property "hw_firmware_type=uefi" "$target_id"
+                    else
+                        family=$task
+                    fi
+                    openstack image set --property "family=$family" "$target_id"
+                    openstack image set --tag "family=$family" "$target_id"
                     openstack image set --tag "test-image" "$target_id"
                     openstack image set --shared "$target_id"
                     break

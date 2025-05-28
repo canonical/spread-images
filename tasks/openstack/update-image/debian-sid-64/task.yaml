@@ -23,7 +23,7 @@ execute: |
     fi
 
     # Disable daily checks for updates to avoid apt locks
-    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
+    systemctl disable --now apt-daily{,-upgrade}.{timer,service}
 
     # Configure ntp to ntp.ubuntu.com
     sed -i 's/#NTP=/NTP=ntp.ubuntu.com/g' /etc/systemd/timesyncd.conf

@@ -1,9 +1,9 @@
 summary: Update fedora image with the latest updates and test dependencies with selinux permissive
 
-systems: [fedora-40-64-base]
+systems: [fedora-42-64-base]
 
 environment:
-    TARGET_SYSTEM: fedora-40-64
+    TARGET_SYSTEM: fedora-42-64
 
 execute: |
     . "$TESTSLIB/pkgdb.sh"
