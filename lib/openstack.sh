@@ -32,40 +32,44 @@ show_help_update() {
     echo "Create and update images for openstack"
     echo ""
     echo "examples:"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task arch-linux-64 --source-system arch-linux-64-base --target-system arch-linux-64 --target-image snapd-spread/arch-linux-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task centos-9-64 --source-system centos-9-64-base --target-system centos-9-64 --target-image snapd-spread/centos-9-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task debian-12-64 --source-system debian-12-64-base --target-system debian-12-64 --target-image snapd-spread/debian-12-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task debian-sid-64 --source-system debian-sid-64-base --target-system debian-sid-64 --target-image snapd-spread/debian-sid-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task fedora-41-64 --source-system fedora-41-64-base --target-system fedora-41-64 --target-image snapd-spread/fedora-41-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task fedora-42-64 --source-system fedora-42-64-base --target-system fedora-42-64 --target-image snapd-spread/fedora-42-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-15.5-64 --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64 --target-image snapd-spread/opensuse-15.5-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-15.6-64 --source-system opensuse-15.6-64-base --target-system opensuse-15.6-64 --target-image snapd-spread/opensuse-15.6-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-tumbleweed-64 --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64 --target-image snapd-spread/opensuse-tumbleweed-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-tumbleweed-64-selinux --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64-selinux-enabled --target-image snapd-spread/opensuse-tumbleweed-64-selinux-enabled-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64 --target-image snapd-spread/ubuntu-20.04-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64 --target-image snapd-spread/ubuntu-22.04-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64 --target-image snapd-spread/ubuntu-24.04-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task arch-linux-64 --source-system arch-linux-64-base --target-system arch-linux-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task centos-9-64 --source-system centos-9-64-base --target-system centos-9-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task debian-12-64 --source-system debian-12-64-base --target-system debian-12-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task debian-sid-64 --source-system debian-sid-64-base --target-system debian-sid-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task fedora-41-64 --source-system fedora-41-64-base --target-system fedora-41-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task fedora-42-64 --source-system fedora-42-64-base --target-system fedora-42-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-15.5-64 --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-15.6-64 --source-system opensuse-15.6-64-base --target-system opensuse-15.6-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-tumbleweed-64 --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-tumbleweed-64-selinux --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64-selinux-enabled"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-16.04-64 --source-system ubuntu-16.04-64-base --target-system ubuntu-16.04-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-18.04-64 --source-system ubuntu-18.04-64-base --target-system ubuntu-18.04-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64"
     echo ""
     echo "examples for core images:"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64-uefi --target-image snapd-spread/ubuntu-20.04-64-uefi-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64-uefi --target-image snapd-spread/ubuntu-22.04-64-uefi-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64-uefi --target-image snapd-spread/ubuntu-24.04-64-uefi-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64-uefi"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64-uefi"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64-uefi"
     echo ""
     echo "examples for arm images:"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-20.04-arm-64 --source-system ubuntu-20.04-arm-64-base --target-system ubuntu-20.04-arm-64 --target-image snapd-spread/ubuntu-20.04-arm-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-22.04-arm-64 --source-system ubuntu-22.04-arm-64-base --target-system ubuntu-22.04-arm-64 --target-image snapd-spread/ubuntu-22.04-arm-64-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-24.04-arm-64 --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64 --target-image snapd-spread/ubuntu-24.04-arm-64-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-20.04-arm-64 --source-system ubuntu-20.04-arm-64-base --target-system ubuntu-20.04-arm-64"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-22.04-arm-64 --source-system ubuntu-22.04-arm-64-base --target-system ubuntu-22.04-arm-64"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-24.04-arm-64 --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64"
     echo ""
     echo "examples for core-arm images:"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-20.04-arm-64 --source-system ubuntu-20.04-arm-64-base --target-system ubuntu-20.04-arm-64-uefi --target-image snapd-spread/ubuntu-20.04-arm-64-uefi-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-22.04-arm-64 --source-system ubuntu-22.04-arm-64-base --target-system ubuntu-22.04-arm-64-uefi --target-image snapd-spread/ubuntu-22.04-arm-64-uefi-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-24.04-arm-64 --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64-uefi --target-image snapd-spread/ubuntu-24.04-arm-64-uefi-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-20.04-arm-64 --source-system ubuntu-20.04-arm-64-base --target-system ubuntu-20.04-arm-64-uefi"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-22.04-arm-64 --source-system ubuntu-22.04-arm-64-base --target-system ubuntu-22.04-arm-64-uefi"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-24.04-arm-64 --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64-uefi"
     echo ""
     echo "examples for base images:"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-15.5-64-base --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64-base --target-image snapd-base/opensuse-15.5-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-15.6-64-base --source-system opensuse-15.6-64-base --target-system opensuse-15.6-64-base --target-image snapd-base/opensuse-15.6-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-tumbleweed-64-base --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64-base --target-image snapd-base/opensuse-tumbleweed-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-15.5-64-base --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64-base"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-15.6-64-base --source-system opensuse-15.6-64-base --target-system opensuse-15.6-64-base"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-tumbleweed-64-base --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64-base"
 }
+
+
 
 _check_env_vars(){
     backend=$1
@@ -158,9 +162,13 @@ update_image(){
         _check_env_vars "$backend"
     fi    
 
-    if [ -z "$source_system" ] || [ -z "$target_system" ] || [ -z "$target_image" ]; then
-        echo "Required parametes: source-system, target-system and target-image"
+    if [ -z "$source_system" ] || [ -z "$target_system" ]; then
+        echo "Required parametes: source-system, target-system"
         exit 1
+    fi
+    if [ -z "$target_image" ]; then
+        target_image="snapd-spread/${target_system}-v$(date +'%Y%m%d')"
+        echo "Using target_image=$target_image"
     fi
 
     # Run the update image task with reuse to keep the instance after the update is completed
