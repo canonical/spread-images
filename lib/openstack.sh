@@ -606,6 +606,7 @@ add_image() {
 
     # Get the image and register it in openstack
     wget -q https://storage.googleapis.com/snapd-spread-tests/images/openstack/"$SPREAD_IMAGE_NAME"
+    echo "Running command: openstack image create --file $SPREAD_IMAGE_NAME --disk-format $image_format --property family=$task $properties_param --private -- family=$task --tag base-image $target_image"
     openstack image create --file "$SPREAD_IMAGE_NAME" --disk-format "$image_format" --property "family=$task" $properties_param --private -- "family=$task" --tag "base-image" "$target_image"
 
     # clean up
