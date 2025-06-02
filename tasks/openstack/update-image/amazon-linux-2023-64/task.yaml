@@ -1,0 +1,28 @@
+summary: Update amazon linux 2023 image in openstack account and install test dependencies
+
+systems: [amazon-linux-2023-64-base]
+
+environment:
+    TARGET_SYSTEM: amazon-linux-2023-64
+
+execute: |
+    . "$TESTSLIB/google.sh"
+    . "$TESTSLIB/names.sh"
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade
+        distro_update_package_db
+        distro_upgrade_packages
+        #install_test_dependencies "$TARGET_SYSTEM"
+        remove_pkg_blacklist
+        REBOOT
+    fi
+
+    # Clean the disk
+    clean_machine
+
+restore: |
+    # Remove the project path content
+    rm -rf "$PROJECT_PATH"

@@ -16,15 +16,15 @@ show_help_add() {
     echo "Create and update images for openstack"
     echo ""
     echo "examples:"
-    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task amazon-linux-2023-64 --target-image snapd-base/amazon-linux-2023-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task arch-linux-64 --target-image snapd-base/arch-linux-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task centos-9-64 --target-image snapd-base/centos-9-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task debian-12-64 --target-image snapd-base/debian-12-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task debian-sid-64 --target-image snapd-base/debian-sid-64-base-v$(date +'%Y%m%d')"    
-    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task fedora-41-64 --target-image snapd-base/fedora-41-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task fedora-42-64 --target-image snapd-base/fedora-42-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task opensuse-15.5-64 --target-image snapd-base/opensuse-15.5-64-base-v$(date +'%Y%m%d')"
-    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task opensuse-15.6-64 --target-image snapd-base/opensuse-15.6-64-base-v$(date +'%Y%m%d')"
+    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task amazon-linux-2023-64 --target-system amazon-linux-2023-64-base --property os_secure_boot=required"
+    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task arch-linux-64 --target-system arch-linux-64-base"
+    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task centos-9-64 --target-system centos-9-64-base"
+    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task debian-12-64 --target-system debian-12-64-base"
+    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task debian-sid-64 --target-system debian-sid-64-base"
+    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task fedora-41-64 --target-system fedora-41-64-base"
+    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task fedora-42-64 --target-system fedora-42-64-base --property os_secure_boot=required"
+    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task opensuse-15.5-64 --target-system opensuse-15.5-64-base"
+    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task opensuse-15.6-64 --target-system opensuse-15.6-64-base"
 }
 
 show_help_update() {
@@ -33,6 +33,7 @@ show_help_update() {
     echo "Create and update images for openstack"
     echo ""
     echo "examples:"
+    echo "./lib/openstack.sh update-image --backend openstack-ext-ps7 --task amazon-linux-2023-64 --source-system amazon-linux-2023-64-base --target-system amazon-linux-2023-64"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task arch-linux-64 --source-system arch-linux-64-base --target-system arch-linux-64"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task centos-9-64 --source-system centos-9-64-base --target-system centos-9-64"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task debian-12-64 --source-system debian-12-64-base --target-system debian-12-64"
@@ -53,9 +54,9 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-25.04-64 --source-system ubuntu-25.04-64-base --target-system ubuntu-25.04-64"
     echo ""
     echo "examples for core images:"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64-uefi"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64-uefi"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64-uefi"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64-uefi --property hw_firmware_type=uefi"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64-uefi --property hw_firmware_type=uefi"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64-uefi --property hw_firmware_type=uefi"
     echo ""
     echo "examples for arm images:"
     echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-20.04-arm-64 --source-system ubuntu-20.04-arm-64-base --target-system ubuntu-20.04-arm-64"
@@ -63,9 +64,9 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-24.04-arm-64 --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64"
     echo ""
     echo "examples for core-arm images:"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-20.04-arm-64 --source-system ubuntu-20.04-arm-64-base --target-system ubuntu-20.04-arm-64-uefi"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-22.04-arm-64 --source-system ubuntu-22.04-arm-64-base --target-system ubuntu-22.04-arm-64-uefi"
-    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-24.04-arm-64 --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64-uefi"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-20.04-arm-64 --source-system ubuntu-20.04-arm-64-base --target-system ubuntu-20.04-arm-64-uefi --property hw_firmware_type=uefi"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-22.04-arm-64 --source-system ubuntu-22.04-arm-64-base --target-system ubuntu-22.04-arm-64-uefi --property hw_firmware_type=uefi"
+    echo "./lib/openstack.sh update-image --backend openstack-arm-ps7 --task ubuntu-24.04-arm-64 --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64-uefi --property hw_firmware_type=uefi"
     echo ""
     echo "examples for base images:"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-15.5-64-base --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64-base"
@@ -123,6 +124,7 @@ update_image(){
     source_system=""
     target_system=""
     target_image=""
+    properties=""
     while [ $# -gt 0 ]; do
         case "$1" in
             -h|--help)
@@ -147,6 +149,10 @@ update_image(){
                 ;;
             --target-image)
                 target_image="$2"
+                shift 2
+                ;;
+            --property)
+                properties="$properties $2"
                 shift 2
                 ;;
             *)
@@ -244,11 +250,14 @@ update_image(){
             for _ in $(seq 20); do
                 if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
                     if [[ "$target_system" == *uefi* ]]; then
-                        family=${task}-uefi
-                        openstack image set --property "hw_firmware_type=uefi" "$target_id"
+                        family=${task}-uefi                        
                     else
-                        family=$task
+                        family=$task                        
                     fi
+                    # Set the properties specified
+                    for property in $properties; do
+                        openstack image set --property "$property" "$target_id" 
+                    done
                     openstack image set --property "family=$family" "$target_id"
                     openstack image set --tag "family=$family" "$target_id"
                     openstack image set --tag "test-image" "$target_id"
@@ -503,7 +512,9 @@ add_image() {
     task=""
     backend=""
     image_url=""
+    target_system=""
     target_image=""
+    properties=""
     while [ $# -gt 0 ]; do
         case "$1" in
             -h|--help)
@@ -522,8 +533,16 @@ add_image() {
                 image_url="$2"
                 shift 2
                 ;;
+            --target-system)
+                target_system="$2"
+                shift 2
+                ;;
             --target-image)
                 target_image="$2"
+                shift 2
+                ;;
+            --property)
+                properties="$properties $2"
                 shift 2
                 ;;
             *)
@@ -547,9 +566,13 @@ add_image() {
         echo "A task needs to be defined"
         exit 1
     fi
-    if [ -z "$target_image" ]; then
-        echo "A target image needs to be defined"
+    if [ -z "$target_system" ]; then
+        echo "A target system needs to be defined"
         exit 1
+    fi
+    if [ -z "$target_image" ]; then
+        target_image="snapd-base/${target_system}-v$(date +'%Y%m%d')"
+        echo "Using target_image=$target_image"
     fi
     if ! [ -d tasks/openstack/add-image/"$task" ]; then
         echo "There is not task tasks/openstack/add-image/$task"
@@ -575,9 +598,15 @@ add_image() {
     export SPREAD_GOOGLE_KEY="./sa.json"
     spread google:ubuntu-22.04-64:tasks/openstack/add-image/"$task"
     
+    # Set the properties specified
+    properties_param=""
+    for property in $properties; do
+        properties_param="$properties_param --property $property"
+    done
+
     # Get the image and register it in openstack
     wget -q https://storage.googleapis.com/snapd-spread-tests/images/openstack/"$SPREAD_IMAGE_NAME"
-    openstack image create --file "$SPREAD_IMAGE_NAME" --disk-format "$image_format" --property "family=$task" --private --tag "family=$task" --tag "base-image" "$target_image"
+    openstack image create --file "$SPREAD_IMAGE_NAME" --disk-format "$image_format" --property "family=$task" $properties_param --private -- "family=$task" --tag "base-image" "$target_image"
 
     # clean up
     rm "$SPREAD_IMAGE_NAME"

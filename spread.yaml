@@ -313,14 +313,6 @@ backends:
                 image: snapd-spread/arch-linux-64
                 workers: 1
 
-            - amazon-linux-2023-64-base:
-                image: snapd-base/amazon-linux-2023-64-base
-                workers: 1
-            - amazon-linux-2023-64:
-                image: snapd-spread/amazon-linux-2023-64
-                workers: 1
-
-
             - centos-9-64-base:
                 image: snapd-base/centos-9-64-base
                 workers: 1
@@ -350,7 +342,7 @@ backends:
 
     openstack-ps7:
         type: openstack
-        key: '$(HOST: echo "$OS_CREDENTIALS_AMD64_PS7")'
+        key: '$(HOST: echo "$OS_CREDENTIALS_AMD64_PS7")'                                                                                                                                                            
         plan: shared.xsmall
         halt-timeout: 2h
         wait-timeout: 5m
@@ -365,6 +357,32 @@ backends:
             no_proxy: '127.0.0.1'
             NO_PROXY: '127.0.0.1'
         systems: *openstack-systems
+
+    openstack-ext-ps7:
+        type: openstack
+        key: '$(HOST: echo "$OS_CREDENTIALS_AMD64_PS7")'
+        plan: shared.medium
+        halt-timeout: 2h
+        wait-timeout: 5m
+        groups: [default]
+        proxy: ingress-haproxy.ps7.canonical.com
+        cidr-port-rel: [10.151.54.0/24:4000]
+        environment:
+            HTTP_PROXY: 'http://egress.ps7.internal:3128'
+            HTTPS_PROXY: 'http://egress.ps7.internal:3128'
+            http_proxy: 'http://egress.ps7.internal:3128'
+            https_proxy: 'http://egress.ps7.internal:3128'
+            no_proxy: '127.0.0.1'
+            NO_PROXY: '127.0.0.1'
+        systems: 
+            - amazon-linux-2023-64-base:
+                image: snapd-base/amazon-linux-2023-64-base
+                storage: 50G
+                workers: 1
+            - amazon-linux-2023-64:
+                image: snapd-spread/amazon-linux-2023-64
+                storage: 50G
+                workers: 1
 
     openstack-arm-ps7:
         type: openstack
@@ -466,7 +484,7 @@ suites:
 
     tasks/openstack/common/:
         summary: Commmon tasks for openstack backend
-        backends: [openstack, openstack-ps7, openstack-arm-ps7]
+        backends: [openstack, openstack-ps7, openstack-ext-ps7, openstack-arm-ps7]
         environment:
             OS_USERNAME: '$(HOST: echo "${OS_USERNAME:-}")'
             OS_PROJECT_NAME: '$(HOST: echo "${OS_PROJECT_NAME:-}")'
@@ -488,7 +506,7 @@ suites:
 
     tasks/openstack/update-image/:
         summary: Update images for openstack backend
-        backends: [openstack, openstack-ps7, openstack-arm-ps7]
+        backends: [openstack, openstack-ps7, openstack-ext-ps7, openstack-arm-ps7]
         environment:
             OS_USERNAME: '$(HOST: echo "${OS_USERNAME:-}")'
             OS_PROJECT_NAME: '$(HOST: echo "${OS_PROJECT_NAME:-}")'
