@@ -16,6 +16,7 @@ show_help_add() {
     echo "Create and update images for openstack"
     echo ""
     echo "examples:"
+    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task amazon-linux-2023-64 --target-image snapd-base/amazon-linux-2023-64-base-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task arch-linux-64 --target-image snapd-base/arch-linux-64-base-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task centos-9-64 --target-image snapd-base/centos-9-64-base-v$(date +'%Y%m%d')"
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task debian-12-64 --target-image snapd-base/debian-12-64-base-v$(date +'%Y%m%d')"

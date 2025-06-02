@@ -275,6 +275,12 @@ backends:
             - fedora-41-64:
                 image: snapd-spread/fedora-41-64
                 workers: 1
+            - fedora-42-64-base:
+                image: snapd-base/fedora-42-64-base
+                workers: 1
+            - fedora-42-64:
+                image: snapd-spread/fedora-42-64
+                workers: 1
 
             - opensuse-15.5-64-base:
                 image: snapd-base/opensuse-15.5-64-base
@@ -306,6 +312,14 @@ backends:
             - arch-linux-64:
                 image: snapd-spread/arch-linux-64
                 workers: 1
+
+            - amazon-linux-2023-64-base:
+                image: snapd-base/amazon-linux-2023-64-base
+                workers: 1
+            - amazon-linux-2023-64:
+                image: snapd-spread/amazon-linux-2023-64
+                workers: 1
+
 
             - centos-9-64-base:
                 image: snapd-base/centos-9-64-base
