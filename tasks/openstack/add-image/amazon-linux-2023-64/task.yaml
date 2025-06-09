@@ -40,7 +40,6 @@ execute: |
     cp /etc/resolv.conf /mnt/disk/etc/
 
     chroot /mnt/disk /bin/bash -c "yum --nogpgcheck makecache"
-    chroot /mnt/disk /bin/bash -c "yum remove -y cloud-init"
     chroot /mnt/disk /bin/bash -c "yum install -y cloud-init"
 
     # The default dns server is not working properly in google
@@ -49,12 +48,6 @@ execute: |
 
     # Configure time
     chroot /mnt/disk /bin/bash -c "ln -sf /usr/share/zoneinfo/UTC /etc/localtime"
-
-    # Configure ssh
-    mkdir -p /mnt/disk/etc/ssh/sshd_config.d
-    sed -i 's/^\s*#\?\s*\(PermitRootLogin\|PasswordAuthentication\)\>.*/\1 yes/' /mnt/disk/etc/ssh/sshd_config
-    echo 'PermitRootLogin=yes' > /mnt/disk/etc/ssh/sshd_config.d/00-spread.conf
-    echo 'PasswordAuthentication=yes' >> /mnt/disk/etc/ssh/sshd_config.d/00-spread.conf
 
     # Update grub Config
     chroot /mnt/disk /bin/bash -c "sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"console=ttyS0,115200n8\"/g' /etc/default/grub"
