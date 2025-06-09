@@ -40,6 +40,7 @@ execute: |
     cp /etc/resolv.conf /mnt/disk/etc/
 
     chroot /mnt/disk /bin/bash -c "yum --nogpgcheck makecache"
+    chroot /mnt/disk /bin/bash -c "yum remove -y cloud-init"
     chroot /mnt/disk /bin/bash -c "yum install -y cloud-init"
 
     # The default dns server is not working properly in google
