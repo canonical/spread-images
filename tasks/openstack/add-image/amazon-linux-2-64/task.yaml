@@ -45,6 +45,7 @@ execute: |
 
     # Clean other init script witch make the user data to fail
     rm -f /mnt/disk/etc/cloud/cloud.cfg.d/*
+    cp cloud.cfg /mnt/disk/etc/cloud/cloud.cfg
     cp 05_logging.cfg /mnt/disk/etc/cloud/cloud.cfg.d/05_logging.cfg
 
     # The default dns server is not working properly in google
