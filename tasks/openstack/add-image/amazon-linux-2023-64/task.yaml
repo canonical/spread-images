@@ -39,8 +39,13 @@ execute: |
     # Copy nameservers
     cp /etc/resolv.conf /mnt/disk/etc/
 
+    # Make sure cloud init is installed
     chroot /mnt/disk /bin/bash -c "yum --nogpgcheck makecache"
     chroot /mnt/disk /bin/bash -c "yum install -y cloud-init"
+
+    # Clean other init script witch make the user data to fail
+    rm -f /mnt/disk/etc/cloud/cloud.cfg.d/*
+    cp 05_logging.cfg /mnt/disk/etc/cloud/cloud.cfg.d/05_logging.cfg
 
     # The default dns server is not working properly in google
     # so we force using also 8.8.8.8
