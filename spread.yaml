@@ -139,27 +139,21 @@ backends:
             - ubuntu-16.04-64:
                 image: ubuntu-1604-64-virt-enabled
                 storage: 20G
-                workers: 1
             - ubuntu-18.04-64:
                 image: ubuntu-1804-64-virt-enabled
                 storage: 20G
-                workers: 1
             - ubuntu-20.04-64:
                 image: ubuntu-2004-64-virt-enabled
                 storage: 20G
-                workers: 1
             - ubuntu-22.04-64:
                 image: ubuntu-2204-64-virt-enabled
                 storage: 20G
-                workers: 1
             - ubuntu-22.04-arm-64:
                 image: ubuntu-2204-arm-64-virt-enabled
                 storage: 20G
-                workers: 1
             - ubuntu-24.04-64:
                 image: ubuntu-2204-64-virt-enabled
                 storage: 20G
-                workers: 1
 
     google-arm:
         type: google
@@ -170,27 +164,21 @@ backends:
         systems:
             - ubuntu-20.04-arm-64-base:
                   image: ubuntu-os-cloud/ubuntu-2004-lts-arm64
-                  workers: 8
                   storage: 12G
             - ubuntu-20.04-arm-64:
                   image: ubuntu-2004-arm-64
-                  workers: 8
                   storage: 12G
             - ubuntu-22.04-arm-64-base:
                   image: ubuntu-os-cloud/ubuntu-2204-lts-arm64
-                  workers: 8
                   storage: 12G
             - ubuntu-22.04-arm-64:
                   image: ubuntu-2204-arm-64
-                  workers: 8
                   storage: 12G
             - ubuntu-24.04-arm-64-base:
                   image: ubuntu-os-cloud/ubuntu-2404-lts-arm64
-                  workers: 8
                   storage: 12G
             - ubuntu-24.04-arm-64:
                   image: ubuntu-2404-arm-64
-                  workers: 8
                   storage: 12G
 
     openstack:
@@ -209,136 +197,95 @@ backends:
         systems: &openstack-systems
             - ubuntu-16.04-64-base:
                 image: auto-sync/ubuntu-xenial-16.04-amd64-server
-                workers: 8
             - ubuntu-16.04-64:
                 image: snapd-spread/ubuntu-16.04-64
-                workers: 1
             - ubuntu-18.04-64-base:
                 image: auto-sync/ubuntu-bionic-18.04-amd64-server 
-                workers: 8
             - ubuntu-18.04-64:
                 image: snapd-spread/ubuntu-18.04-64
-                workers: 1
             - ubuntu-20.04-64-base:
                 image: auto-sync/ubuntu-focal-20.04-amd64-server
-                workers: 1
             - ubuntu-20.04-64:
                 image: snapd-spread/ubuntu-20.04-64
-                workers: 1
             - ubuntu-20.04-64-uefi:
                 image: snapd-spread/ubuntu-20.04-64-uefi
-                workers: 1
             - ubuntu-22.04-64-base:
                 image: auto-sync/ubuntu-jammy-22.04-amd64-server
-                workers: 1
             - ubuntu-22.04-64:
                 image: snapd-spread/ubuntu-22.04-64
-                workers: 1
             - ubuntu-22.04-64-uefi:
                 image: snapd-spread/ubuntu-22.04-64-uefi
-                workers: 1
             - ubuntu-24.04-64-base:
                 image: auto-sync/ubuntu-noble-24.04-amd64-server
-                workers: 1
             - ubuntu-24.04-64:
                 image: snapd-spread/ubuntu-24.04-64
-                workers: 1
             - ubuntu-24.04-64-uefi:
                 image: snapd-spread/ubuntu-24.04-64-uefi
-                workers: 1
             - ubuntu-25.04-64-base:
                 image: auto-sync/ubuntu-plucky-25.04-amd64-server
-                workers: 1
             - ubuntu-25.04-64:
                 image: snapd-spread/ubuntu-25.04-64
-                workers: 1
-
+ 
             - ubuntu-core-20-64:
                 image: snapd-spread/ubuntu-20.04-64-uefi
-                workers: 1
             - ubuntu-core-22-64:
                 image: snapd-spread/ubuntu-22.04-64-uefi
-                workers: 1
             - ubuntu-core-24-64:
                 image: snapd-spread/ubuntu-24.04-64-uefi
-                workers: 1
-
+ 
             - fedora-40-64-base:
                 image: snapd-base/fedora-40-64-base
-                workers: 1
             - fedora-40-64:
                 image: snapd-spread/fedora-40-64
-                workers: 1
             - fedora-41-64-base:
                 image: snapd-base/fedora-41-64-base
-                workers: 1
             - fedora-41-64:
                 image: snapd-spread/fedora-41-64
-                workers: 1
             - fedora-42-64-base:
                 image: snapd-base/fedora-42-64-base
-                workers: 1
             - fedora-42-64:
                 image: snapd-spread/fedora-42-64
-                workers: 1
 
             - opensuse-15.5-64-base:
                 image: snapd-base/opensuse-15.5-64-base
-                workers: 1
             - opensuse-15.5-64:
                 image: snapd-spread/opensuse-15.5-64
-                workers: 1
             - opensuse-15.6-64-base:
                 image: snapd-base/opensuse-15.6-64-base
-                workers: 1
             - opensuse-15.6-64:
                 image: snapd-spread/opensuse-15.6-64
-                workers: 1
             - opensuse-tumbleweed-64-base:
                 image: snapd-base/opensuse-tumbleweed-64-base
-                workers: 1
             - opensuse-tumbleweed-64:
                 image: snapd-spread/opensuse-tumbleweed-64
-                workers: 1
             - opensuse-tumbleweed-64-selinux-enabled:
                 image: snapd-spread/opensuse-tumbleweed-64-selinux-enabled
-                workers: 1
 
             - arch-linux-64-base:
                 image: snapd-base/arch-linux-64-base
                 username: arch
                 password: arch
-                workers: 1
             - arch-linux-64:
                 image: snapd-spread/arch-linux-64
-                workers: 1
 
             - centos-9-64-base:
                 image: snapd-base/centos-9-64-base
-                workers: 1
             - centos-9-64:
                 image: snapd-spread/centos-9-64
-                workers: 1
 
             - debian-12-64-base:
                 image: snapd-base/debian-12-64-base
-                workers: 1
             - debian-12-64:
                 image: snapd-spread/debian-12-64
-                workers: 1
             - debian-sid-64-base:
                 image: snapd-base/debian-sid-64-base
-                workers: 1
             - debian-sid-64:
                 image: snapd-spread/debian-sid-64
-                workers: 1
 
             - arch-linux-64-base:
                 image: snapd-base/arch-Linux-64-base
-                workers: 1
             - arch-linux-64:
                 image: snapd-spread/arch-Linux-64
-                workers: 1
 
     openstack-ps7:
         type: openstack
@@ -375,14 +322,18 @@ backends:
             no_proxy: '127.0.0.1'
             NO_PROXY: '127.0.0.1'
         systems: 
+            - amazon-linux-2-64-base:
+                image: snapd-base/amazon-linux-2-64-base
+                storage: 50G
+            - amazon-linux-2-64:
+                image: snapd-spread/amazon-linux-2-64
+                storage: 50G
             - amazon-linux-2023-64-base:
                 image: snapd-base/amazon-linux-2023-64-base
                 storage: 50G
-                workers: 1
             - amazon-linux-2023-64:
                 image: snapd-spread/amazon-linux-2023-64
                 storage: 50G
-                workers: 1
 
     openstack-arm-ps7:
         type: openstack
@@ -403,31 +354,22 @@ backends:
         systems:
             - ubuntu-20.04-arm-64-base:
                 image: auto-sync/ubuntu-focal-20.04-arm64-server
-                workers: 8
             - ubuntu-20.04-arm-64:
                 image: snapd-spread/ubuntu-20.04-arm-64
-                workers: 1
             - ubuntu-20.04-arm-64-uefi:
                 image: snapd-spread/ubuntu-20.04-arm-64-uefi
-                workers: 1
             - ubuntu-22.04-arm-64-base:
                 image: auto-sync/ubuntu-jammy-22.04-arm64-server
-                workers: 8
             - ubuntu-22.04-arm-64:
                 image: snapd-spread/ubuntu-22.04-arm-64
-                workers: 1
             - ubuntu-22.04-arm-64-uefi:
                 image: snapd-spread/ubuntu-22.04-arm-64-uefi
-                workers: 1
             - ubuntu-24.04-arm-64-base:
                 image: auto-sync/ubuntu-noble-24.04-arm64-server
-                workers: 8
             - ubuntu-24.04-arm-64:
                 image: snapd-spread/ubuntu-24.04-arm-64
-                workers: 1
             - ubuntu-24.04-arm-64-uefi:
                 image: snapd-spread/ubuntu-24.04-arm-64-uefi
-                workers: 1
 
 
 path: /root/spread
