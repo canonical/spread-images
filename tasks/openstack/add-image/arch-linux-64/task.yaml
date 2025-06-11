@@ -10,8 +10,44 @@ environment:
 execute: |
     source_image_name="$(basename $IMAGE_URL)"
     wget -q -O "$IMAGE_NAME" "$IMAGE_URL"
+
+    # Install test dependencies
+    apt install -y qemu-utils
+
+    # Get the raw image    
+    qemu-img convert -O raw "$IMAGE_NAME" disk.raw
+
+    # Get /dev/sda1 parition offset
+    OFFSET=$( sfdisk -J disk.raw | jq '.partitiontable.partitions[2].start * 512' )
+
+    if [ -z $OFFSET ]; then
+        echo "failed to calculate offset"
+        exit 1
+    fi
+
+    mkdir -p /mnt/disk
+    sudo mount -o loop,offset="$OFFSET" disk.raw /mnt/disk
+
+    # Clean other init script witch make the user data to fail
+    rm -f /mnt/disk/etc/cloud/cloud.cfg.d/*
+    cp cloud.cfg /mnt/disk/etc/cloud/cloud.cfg
+
+    # The default dns server is not working properly in google
+    # so we force using also 8.8.8.8
+    echo "nameserver 8.8.8.8" | tee -a /mnt/disk/etc/resolv.conf
+
+    # Configure time
+    chroot /mnt/disk /bin/bash -c "ln -sf /usr/share/zoneinfo/UTC /etc/localtime"
+
+    # Create the disk image
+    sleep 30
+    umount -AR /mnt/disk
+    sleep 30    
+    qemu-img convert -O qcow2 disk.raw "$IMAGE_NAME"
+
     gsutil cp "$IMAGE_NAME" gs://snapd-spread-tests/images/openstack/"$IMAGE_NAME"
 
 restore: |
     # Remove the project path content
     rm -rf "$PROJECT_PATH"
+    sync

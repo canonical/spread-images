@@ -27,14 +27,14 @@ execute: |
     # Either become root and paste these line-by-line or the whole block at once
     OFFSET="$OFFSET" sh -c '\
     # Make mounting directory
-    mkdir -p /mnt/disk3
+    mkdir -p /mnt/disk
     # Mount the image and prepare the chroot
-    mount -o loop,offset=$OFFSET disk3.raw /mnt/disk3
-    mount -t proc /proc /mnt/disk3/proc
-    mount --rbind /sys /mnt/disk3/sys
-    mount --make-rslave /mnt/disk3/sys
-    mount --rbind /dev /mnt/disk3/dev
-    mount --make-rslave /mnt/disk3/dev'
+    mount -o loop,offset=$OFFSET disk.raw /mnt/disk
+    mount -t proc /proc /mnt/disk/proc
+    mount --rbind /sys /mnt/disk/sys
+    mount --make-rslave /mnt/disk/sys
+    mount --rbind /dev /mnt/disk/dev
+    mount --make-rslave /mnt/disk/dev'
 
     # Copy nameservers
     cp /etc/resolv.conf /mnt/disk/etc/
