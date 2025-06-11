@@ -17,7 +17,7 @@ execute: |
     qemu-img convert -O raw "$IMAGE_NAME" disk.raw
 
     # Get /dev/sda1 parition offset
-    OFFSET=$( sfdisk -J disk.raw | jq '.partitiontable.partitions[0].start * 512' )
+    OFFSET=$( sfdisk -J disk.raw | jq '.partitiontable.partitions[2].start * 512' )
 
     if [ -z $OFFSET ]; then
         echo "failed to calculate offset"
@@ -27,14 +27,14 @@ execute: |
     # Either become root and paste these line-by-line or the whole block at once
     OFFSET="$OFFSET" sh -c '\
     # Make mounting directory
-    mkdir -p /mnt/disk
+    mkdir -p /mnt/disk3
     # Mount the image and prepare the chroot
-    mount -o offset=$OFFSET disk.raw /mnt/disk
-    mount -t proc /proc /mnt/disk/proc
-    mount --rbind /sys /mnt/disk/sys
-    mount --make-rslave /mnt/disk/sys
-    mount --rbind /dev /mnt/disk/dev
-    mount --make-rslave /mnt/disk/dev'
+    mount -o loop,offset=$OFFSET disk3.raw /mnt/disk3
+    mount -t proc /proc /mnt/disk3/proc
+    mount --rbind /sys /mnt/disk3/sys
+    mount --make-rslave /mnt/disk3/sys
+    mount --rbind /dev /mnt/disk3/dev
+    mount --make-rslave /mnt/disk3/dev'
 
     # Copy nameservers
     cp /etc/resolv.conf /mnt/disk/etc/
@@ -54,10 +54,6 @@ execute: |
 
     # Configure time
     chroot /mnt/disk /bin/bash -c "ln -sf /usr/share/zoneinfo/UTC /etc/localtime"
-
-    # Update grub Config
-    chroot /mnt/disk /bin/bash -c "sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"console=ttyS0,115200n8\"/g' /etc/default/grub"
-    chroot /mnt/disk /bin/bash -c "grub2-mkconfig -o /boot/grub2/grub.cfg"
 
     # Create the disk image
     sleep 30
