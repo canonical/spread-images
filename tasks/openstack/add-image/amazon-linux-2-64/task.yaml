@@ -17,7 +17,7 @@ execute: |
     qemu-img convert -O raw "$IMAGE_NAME" disk.raw
 
     # Get /dev/sda1 parition offset
-    OFFSET=$( sfdisk -J disk.raw | jq '.partitiontable.partitions[2].start * 512' )
+    OFFSET=$( sfdisk -J disk.raw | jq '.partitiontable.partitions[0].start * 512' )
 
     if [ -z $OFFSET ]; then
         echo "failed to calculate offset"
