@@ -303,6 +303,7 @@ backends:
             https_proxy: 'http://egress.ps7.internal:3128'
             no_proxy: '127.0.0.1'
             NO_PROXY: '127.0.0.1'
+            NTP_SERVER: 'ntp.ps7.internal'
         systems: *openstack-systems
 
     openstack-ext-ps7:
@@ -321,6 +322,7 @@ backends:
             https_proxy: 'http://egress.ps7.internal:3128'
             no_proxy: '127.0.0.1'
             NO_PROXY: '127.0.0.1'
+            NTP_SERVER: 'ntp.ps7.internal'
         systems: 
             - amazon-linux-2-64-base:
                 image: snapd-base/amazon-linux-2-64-base
@@ -351,6 +353,7 @@ backends:
             https_proxy: 'http://egress.ps7.internal:3128'
             no_proxy: '127.0.0.1'
             NO_PROXY: '127.0.0.1'
+            NTP_SERVER: 'ntp.ps7.internal'
         systems:
             - ubuntu-20.04-arm-64-base:
                 image: auto-sync/ubuntu-focal-20.04-arm64-server

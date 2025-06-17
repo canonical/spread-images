@@ -31,6 +31,9 @@ execute: |
     # Disable the service because sometimes is failing
     systemctl disable --now fwupd.service fwupd-refresh.service fwupd-refresh.timer
 
+    # Setup ntp server depending on the openstack environment
+    setup_chrony
+
     # Clean disk before create the shapshot
     clean_machine
 

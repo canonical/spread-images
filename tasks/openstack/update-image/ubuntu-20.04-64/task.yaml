@@ -28,6 +28,9 @@ execute: |
     # Disable daily checks for updates to avoid apt locks
     sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
 
+    # Setup ntp server depending on the openstack environment
+    setup_chrony
+
     # Clean the disk
     clean_machine
 

@@ -18,7 +18,7 @@ show_help_add() {
     echo "examples:"
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task amazon-linux-2-64 --target-system amazon-linux-2-64-base --property os_secure_boot=required"
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task amazon-linux-2023-64 --target-system amazon-linux-2023-64-base --property os_secure_boot=required"
-    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task arch-linux-64 --target-system arch-linux-64-base"
+    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task arch-linux-64 --target-system arch-linux-64-base --property os_secure_boot=required"
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task centos-9-64 --target-system centos-9-64-base"
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task debian-12-64 --target-system debian-12-64-base"
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task debian-sid-64 --target-system debian-sid-64-base"
