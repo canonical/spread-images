@@ -41,6 +41,10 @@ jobs:
             task: ubuntu-24.10-64
             source: ubuntu-24.10-64-base
             target: ubuntu-24.10-64
+          - group: ubuntu 25.04
+            task: ubuntu-25.04-64
+            source: ubuntu-25.04-64-base
+            target: ubuntu-25.04-64
 
           - group: debian 11
             task: debian-11
