@@ -56,7 +56,6 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-25.04-64 --source-system ubuntu-25.04-64-base --target-system ubuntu-25.04-64"
     echo ""
     echo "examples for core images:"
-    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-18.04-64 --source-system ubuntu-18.04-64-base --target-system ubuntu-18.04-64-qlx --property hw_video_model=qxl"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64-uefi --property hw_firmware_type=uefi"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64-uefi --property hw_firmware_type=uefi"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64-uefi --property hw_firmware_type=uefi"
