@@ -288,11 +288,6 @@ backends:
             - debian-sid-64:
                 image: snapd-spread/debian-sid-64
 
-            - arch-linux-64-base:
-                image: snapd-base/arch-Linux-64-base
-            - arch-linux-64:
-                image: snapd-spread/arch-Linux-64
-
     openstack-ps7:
         type: openstack
         key: '$(HOST: echo "$OS_CREDENTIALS_AMD64_PS7")'                                                                                                                                                            

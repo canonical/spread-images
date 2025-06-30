@@ -31,14 +31,23 @@ execute: |
         echo "#######################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################" >> /boot/grub/grubenv
     fi
 
-    # Enable apparmor on systemd-boot
-    if ! MATCH "apparmor=1" < /boot/loader/entries/arch.conf; then
-        distro_install_package apparmor
-        systemctl enable apparmor
-
-        sed -e 's/options /options lsm=landlock,lockdown,yama,integrity,apparmor,bpf /g' \
-            -i /boot/loader/entries/arch.conf
+    # Enable apparmor on grub (systemd-boot is not used)
+    GRUB_FILE="/etc/default/grub"
+    # Add apparmor parameters if not already present
+    if grep -q '^GRUB_CMDLINE_LINUX_DEFAULT=' "$GRUB_FILE"; then
+        sudo sed -i '/^GRUB_CMDLINE_LINUX_DEFAULT=/ s/"$/ apparmor=1 security=apparmor"/' "$GRUB_FILE"
+    else
+        echo 'GRUB_CMDLINE_LINUX_DEFAULT="apparmor=1 security=apparmor"' | sudo tee -a "$GRUB_FILE"
     fi
+
+    # Regenerating GRUB config
+    GRUB_CFG_PATH="$(find /boot -name grub.cfg | head -n 1)"
+    if [ -z "$GRUB_CFG_PATH" ]; then
+        exit 1
+    fi
+    sudo grub-mkconfig -o "$GRUB_CFG_PATH"
+    systemctl enable apparmor.service
+    systemctl start apparmor.service
 
     # Clean the disk
     clean_machine

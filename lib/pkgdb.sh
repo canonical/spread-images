@@ -438,6 +438,7 @@ pkg_dependencies_opensuse(){
 
 pkg_dependencies_arch(){
     echo "
+        git
         xdelta3
         "
 }
