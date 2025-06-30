@@ -233,7 +233,11 @@ backends:
                 image: auto-sync/ubuntu-plucky-25.04-amd64-server
             - ubuntu-25.04-64:
                 image: snapd-spread/ubuntu-25.04-64
- 
+            - ubuntu-25.10-64-base:
+                image: snapd-base/ubuntu-25.10-64-base
+            - ubuntu-25.10-64:
+                image: snapd-spread/ubuntu-25.10-64
+
             - ubuntu-core-20-64:
                 image: snapd-spread/ubuntu-20.04-64-uefi
             - ubuntu-core-22-64:
