@@ -14,7 +14,7 @@ execute: |
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
-        distro_upgrade_packages
+        # distro_upgrade_packages
         install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
 

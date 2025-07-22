@@ -1,6 +1,6 @@
 summary: Update Ubuntu focal 64 bits image with the latest updates and test dependencies
 
-systems: [ubuntu-20.04-arm-64-base]
+systems: [ubuntu-20.04-arm-64*]
 
 environment:
     TARGET_SYSTEM: ubuntu-20.04-arm-64
