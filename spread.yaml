@@ -13,7 +13,6 @@ environment:
     https_proxy: '$(HOST: echo "$SPREAD_HTTPS_PROXY")'
 
 backends:
-
     google:
         key: "$(HOST: echo $SPREAD_GOOGLE_KEY)"
         location: snapd-spread/us-east1-b
@@ -234,7 +233,7 @@ backends:
             - ubuntu-25.04-64:
                 image: snapd-spread/ubuntu-25.04-64
             - ubuntu-25.10-64-base:
-                image: snapd-base/ubuntu-25.10-64-base
+                image: auto-sync/ubuntu-questing-daily-amd64-server
             - ubuntu-25.10-64:
                 image: snapd-spread/ubuntu-25.10-64
 
@@ -300,7 +299,7 @@ backends:
         wait-timeout: 5m
         groups: [default]
         proxy: ingress-haproxy.ps7.canonical.com
-        cidr-port-rel: [10.151.54.0/24:4000]
+        cidr-port-rel: [10.151.96.0/21:5000]
         environment:
             HTTP_PROXY: 'http://egress.ps7.internal:3128'
             HTTPS_PROXY: 'http://egress.ps7.internal:3128'
@@ -314,12 +313,12 @@ backends:
     openstack-ext-ps7:
         type: openstack
         key: '$(HOST: echo "$OS_CREDENTIALS_AMD64_PS7")'
-        plan: shared.medium
+        plan: shared.large
         halt-timeout: 2h
         wait-timeout: 5m
         groups: [default]
         proxy: ingress-haproxy.ps7.canonical.com
-        cidr-port-rel: [10.151.54.0/24:4000]
+        cidr-port-rel: [10.151.96.0/21:5000]
         environment:
             HTTP_PROXY: 'http://egress.ps7.internal:3128'
             HTTPS_PROXY: 'http://egress.ps7.internal:3128'
@@ -345,6 +344,62 @@ backends:
     openstack-arm-ps7:
         type: openstack
         key: '$(HOST: echo "$OS_CREDENTIALS_ARM64_PS7")'
+        plan: shared.xsmall.arm64
+        halt-timeout: 2h
+        wait-timeout: 5m
+        groups: [default]
+        proxy: ingress-haproxy.ps7.canonical.com
+        cidr-port-rel: [10.151.89.0/24:8000]
+        environment:
+            HTTP_PROXY: 'http://egress.ps7.internal:3128'
+            HTTPS_PROXY: 'http://egress.ps7.internal:3128'
+            http_proxy: 'http://egress.ps7.internal:3128'
+            https_proxy: 'http://egress.ps7.internal:3128'
+            no_proxy: '127.0.0.1'
+            NO_PROXY: '127.0.0.1'
+            NTP_SERVER: 'ntp.ps7.internal'
+        systems:
+            - ubuntu-20.04-arm-64-base:
+                image: auto-sync/ubuntu-focal-20.04-arm64-server
+            - ubuntu-20.04-arm-64:
+                image: snapd-spread/ubuntu-20.04-arm-64
+            - ubuntu-20.04-arm-64-uefi:
+                image: snapd-spread/ubuntu-20.04-arm-64-uefi
+            - ubuntu-22.04-arm-64-base:
+                image: auto-sync/ubuntu-jammy-22.04-arm64-server
+            - ubuntu-22.04-arm-64:
+                image: snapd-spread/ubuntu-22.04-arm-64
+            - ubuntu-22.04-arm-64-uefi:
+                image: snapd-spread/ubuntu-22.04-arm-64-uefi
+            - ubuntu-24.04-arm-64-base:
+                image: auto-sync/ubuntu-noble-24.04-arm64-server
+            - ubuntu-24.04-arm-64:
+                image: snapd-spread/ubuntu-24.04-arm-64
+            - ubuntu-24.04-arm-64-uefi:
+                image: snapd-spread/ubuntu-24.04-arm-64-uefi
+
+    openstack-stg-ps7:
+        type: openstack
+        key: '$(HOST: echo "$OS_CREDENTIALS_STG_AMD64_PS7")'                                                                                                                                                            
+        plan: shared.xsmall
+        halt-timeout: 2h
+        wait-timeout: 5m
+        groups: [default]
+        proxy: ingress-haproxy.ps7.canonical.com
+        cidr-port-rel: [10.151.54.0/24:4000]
+        environment:
+            HTTP_PROXY: 'http://egress.ps7.internal:3128'
+            HTTPS_PROXY: 'http://egress.ps7.internal:3128'
+            http_proxy: 'http://egress.ps7.internal:3128'
+            https_proxy: 'http://egress.ps7.internal:3128'
+            no_proxy: '127.0.0.1'
+            NO_PROXY: '127.0.0.1'
+            NTP_SERVER: 'ntp.ps7.internal'
+        systems: *openstack-systems
+
+    openstack-stg-arm-ps7:
+        type: openstack
+        key: '$(HOST: echo "$OS_CREDENTIALS_STG_ARM64_PS7")'
         plan: shared.xsmall.arm64
         halt-timeout: 2h
         wait-timeout: 5m
@@ -382,12 +437,11 @@ backends:
 
 path: /root/spread
 
-
 kill-timeout: 20m
 
 suites:
     tasks/google/add-image/:
-        summary: Create images for google backend
+        summary: Create images  for google backend
         backends: [google]
         environment:
             GCE_PROJECT: snapd-spread
@@ -434,7 +488,7 @@ suites:
 
     tasks/openstack/common/:
         summary: Commmon tasks for openstack backend
-        backends: [openstack, openstack-ps7, openstack-ext-ps7, openstack-arm-ps7]
+        backends: [openstack, openstack-ps7, openstack-ext-ps7, openstack-arm-ps7, openstack-stg-ps7, openstack-stg-arm-ps7]
         environment:
             OS_USERNAME: '$(HOST: echo "${OS_USERNAME:-}")'
             OS_PROJECT_NAME: '$(HOST: echo "${OS_PROJECT_NAME:-}")'
@@ -456,7 +510,7 @@ suites:
 
     tasks/openstack/update-image/:
         summary: Update images for openstack backend
-        backends: [openstack, openstack-ps7, openstack-ext-ps7, openstack-arm-ps7]
+        backends: [openstack, openstack-ps7, openstack-ext-ps7, openstack-arm-ps7, openstack-stg-ps7, openstack-stg-arm-ps7]
         environment:
             OS_USERNAME: '$(HOST: echo "${OS_USERNAME:-}")'
             OS_PROJECT_NAME: '$(HOST: echo "${OS_PROJECT_NAME:-}")'

@@ -78,9 +78,25 @@ show_help_update() {
 }
 
 
-
 _check_env_vars(){
     backend=$1
+    
+    local key_line cred_key cred_file
+    key_line="$(yq ".backends.${backend}.key" spread.yaml)"
+    cred_key=$(echo "$key_line" | grep -o '\$OS_[A-Za-z0-9_]*')
+    if [ -z "$cred_key" ]; then
+        echo "openstack credentials key \"$cred_key\" for backend $backend not found"
+        exit 1
+    fi
+
+    eval "cred_file=$cred_key"
+    if [ ! -f "$cred_file" ]; then
+        echo "openstack credentials file \"$cred_file\" for backend $backend not found"
+        exit 1
+    else
+        echo "sourcing $cred_file"
+        source "$cred_file"
+    fi
 
     local REGION PROJECT
     REGION="$OS_REGION_NAME"
@@ -94,12 +110,12 @@ _check_env_vars(){
     # Check environment name
     if [ "$REGION" = prodstack6 ]; then
         if [ ! "$backend" = openstack ]; then
-            echo "openstack backend "$backend" doesn't match the region $REGION"
+            echo "openstack backend \"$backend\" doesn't match the region $REGION"
             exit 1
         fi
     elif [ "$REGION" = prodstack7 ]; then
         if [[ ! "$backend" == *-ps7 ]]; then
-            echo "openstack backend "$backend" doesn't match the region $REGION"
+            echo "openstack backend \"$backend\" doesn't match the region $REGION"
             exit 1
         fi
     else
@@ -110,7 +126,7 @@ _check_env_vars(){
     # Check architecture
     if [[ "$PROJECT" == *-arm* ]]; then
         if [[ ! "$backend" == *-arm* ]]; then
-            echo "openstack backend $backend doesn't match the project arm architecture"
+            echo "openstack backend \"$backend\" doesn't match the project arm architecture"
             exit 1
         fi
     fi
