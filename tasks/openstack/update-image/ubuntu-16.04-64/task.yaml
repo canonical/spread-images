@@ -29,7 +29,7 @@ execute: |
     sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
 
     # Setup ntp server depending on the openstack environment
-    setup_chrony    
+    update_ntp    
 
     # Clean the disk
     clean_machine

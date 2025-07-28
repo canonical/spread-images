@@ -394,8 +394,9 @@ distro_auto_remove_packages() {
 pkg_dependencies_ubuntu(){
     echo "
         git
-        jq
+        jq        
         unzip
+        xdelta3
         "
     case "$SPREAD_SYSTEM" in
         ubuntu-16.04-64*)
