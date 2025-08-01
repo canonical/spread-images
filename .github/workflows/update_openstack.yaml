@@ -87,7 +87,7 @@ jobs:
           OS_USERNAME: ${{ secrets.OS_USERNAME }}
       shell: bash
       run: |
-          ./lib/openstack.sh update-image --backend openstack-ps6 "${{ matrix.backend }}" --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"-v"$(date +'%Y%m%d')"
+          ./lib/openstack.sh update-image --backend openstack --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"
   
     - name: Discard spread workers
       if: always()
@@ -178,7 +178,7 @@ jobs:
           OS_USERNAME: ${{ secrets.OS_USERNAME }}
       shell: bash
       run: |
-          ./lib/openstack.sh update-image --backend openstack-ps7 "${{ matrix.backend }}" --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"-v"$(date +'%Y%m%d')"
+          ./lib/openstack.sh update-image --backend openstack-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"
   
     - name: Discard spread workers
       if: always()
@@ -233,7 +233,7 @@ jobs:
           OS_USERNAME: ${{ secrets.OS_USERNAME }}
       shell: bash
       run: |
-          ./lib/openstack.sh update-image --backend openstack-arm-ps7 "${{ matrix.backend }}" --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"-v"$(date +'%Y%m%d')"
+          ./lib/openstack.sh update-image --backend openstack-arm-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"
   
     - name: Discard spread workers
       if: always()
