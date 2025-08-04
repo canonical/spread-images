@@ -24,8 +24,7 @@ update_ntp() {
     fi
 }
 
-setup_ntp_chrony() {
-    distro_install_package chrony
+setup_chrony_config() {
     CRONY_CONF=/etc/chrony/chrony.conf
     if [ -f /etc/chrony.conf ]; then
         CRONY_CONF=/etc/chrony.conf
@@ -34,6 +33,20 @@ setup_ntp_chrony() {
     # When Running in PS7+, Configure ntp to the $NTP_SERVER
     sed -i -e "s/^pool.*/pool $NTP_SERVER iburst/g" "$CRONY_CONF"
     sed -i -e "s/^#pool.*/pool $NTP_SERVER iburst/g" "$CRONY_CONF"
+}
+
+setup_chrony_sources(){
+    CRONY_SOURCES=$(find /etc/chrony -name ubuntu-ntp-pools.sources)
+    if [ -f "$CRONY_SOURCES" ]; then
+        sed -i -e "/^pool.*/d" "$CRONY_SOURCES"
+        echo "pool $NTP_SERVER iburst" >> "$CRONY_SOURCES"
+    fi
+}
+
+setup_ntp_chrony() {
+    distro_install_package chrony
+    setup_chrony_config
+    setup_chrony_sources
 
     systemctl restart chrony
     for _ in $(seq 10); do
