@@ -34,6 +34,7 @@ execute: |
         zypper in -y --type pattern apparmor
 
         sed -i -e 's/security=selinux/security=apparmor/g' -e 's/selinux=1//g' /etc/default/grub
+        update-bootloader
 
         remove_pkg_blacklist
 
