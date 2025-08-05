@@ -9,6 +9,9 @@ execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
+    # the image has SELinux enabled by default
+    selinuxenabled
+
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Cleanup non required repos
         rm -f /etc/zypp/repos.d/*-debug*.repo

@@ -10,6 +10,9 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
+        # the image has SELinux enabled by default
+        selinuxenabled
+
         # Cleanup non required repos
         rm -f /etc/zypp/repos.d/*-debug*.repo
         rm -f /etc/zypp/repos.d/*-backports*.repo
@@ -26,10 +29,22 @@ execute: |
         install_pkg_dependencies
         install_test_dependencies "$TARGET_SYSTEM"
 
+        # see (applies to TW as well): https://en.opensuse.org/How_to_switch_from_SELinux_to_AppArmor_in_Leap_16
+        # install AppArmor tools
+        zypper in -y --type pattern apparmor
+
+        sed -i -e 's/security=selinux/security=apparmor/g' -e 's/selinux=1//g' /etc/default/grub
+
         remove_pkg_blacklist
 
         REBOOT
     fi
+
+    # confirm that AppArmor is enabled
+    aa-enabled
+
+    # and selinux is disabled
+    ! selinuxenabled
 
     # Make sure /etc/environment exists
     touch /etc/environment

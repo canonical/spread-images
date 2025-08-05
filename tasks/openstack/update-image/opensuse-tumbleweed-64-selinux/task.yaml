@@ -10,6 +10,9 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
+        # the image has SELinux enabled by default
+        selinuxenabled
+
         # Cleanup non required repos
         rm -f /etc/zypp/repos.d/*-debug*.repo
         rm -f /etc/zypp/repos.d/*-backports*.repo
@@ -31,11 +34,11 @@ execute: |
         # Prepare to use selinux in permissive mode
         distro_install_package restorecond policycoreutils setools-console selinux-policy-targeted selinux-policy-devel
 
-        sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="/&security=selinux selinux=1 /' /etc/default/grub
-        grub2-mkconfig -o /boot/grub2/grub.cfg
-
         REBOOT
     fi
+
+    # confirm that SELinux is enabled
+    selinuxenabled
 
     # Make sure /etc/environment exists
     touch /etc/environment
