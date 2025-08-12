@@ -25,10 +25,8 @@ execute: |
     # Disable daily checks for updates to avoid apt locks
     sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
 
-    # Configure ntp to ntp.ubuntu.com
-    sed -i 's/#NTP=/NTP=ntp.ubuntu.com/g' /etc/systemd/timesyncd.conf
-    systemctl restart systemd-timesyncd
-    timedatectl set-ntp yes
+    # Setup ntp server depending on the openstack environment
+    update_ntp
 
     # Clean the disk
     clean_machine

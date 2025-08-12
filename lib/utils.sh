@@ -36,28 +36,52 @@ setup_chrony_config() {
 }
 
 setup_chrony_sources(){
-    CRONY_SOURCES=$(find /etc/chrony -name ubuntu-ntp-pools.sources)
-    if [ -f "$CRONY_SOURCES" ]; then
-        sed -i -e "/^pool.*/d" "$CRONY_SOURCES"
-        echo "pool $NTP_SERVER iburst" >> "$CRONY_SOURCES"
-    fi
+    for chrony_dir in /etc/chrony /etc/chrony.d /usr/share/chrony/; do
+        if [ -d "$chrony_dir" ]; then
+            CRONY_SOURCES="$(find "$chrony_dir" -type f -name *.sources)"
+            for source_file in $CRONY_SOURCES; do
+                if grep '^pool ' "$source_file"; then
+                    sed -i -e "s/^pool /#pool /g" "$source_file"
+                    echo "pool $NTP_SERVER iburst" >> "$source_file"
+                fi
+                if grep '^server ' "$source_file"; then
+                    sed -i -e "s/^server /#server /g" "$source_file"
+                fi
+            done
+        fi
+    done
+
+    # Remove any sources link in /run which could fail to ln when the service is started
+    for chrony_run_dir in /run/chrony /run/chrony.d; do
+        CRONY_SOURCES="$(find "$chrony_run_dir" -type l -name *.sources)"
+        for source_file in $CRONY_SOURCES; do
+            rm -f "$source_file"
+        done
+    done    
 }
 
 setup_ntp_chrony() {
     distro_install_package chrony
+
+    service=chrony.service
+    if ! systemctl -l | grep -q "$service"; then
+        service=chronyd.service
+    fi
+
+    systemctl stop "$service"
     setup_chrony_config
     setup_chrony_sources
+    systemctl start "$service"
 
-    systemctl restart chrony
     for _ in $(seq 10); do
-        if systemctl is-active chrony | grep active; then
+        if systemctl is-active"$service" | grep active; then
             return
         fi
         sleep 1
     done
     timedatectl set-ntp yes
     for _ in $(seq 30); do
-        if timedatectl status | grep -E "clock synchronized:.*yes"; then
+        if timedatectl status | grep -E "synchronized:.*yes"; then
             return
         fi
         sleep 1
