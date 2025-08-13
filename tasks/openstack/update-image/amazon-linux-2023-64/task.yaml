@@ -10,13 +10,23 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make sure names are resolved (these nameservers are used in aml-2 in ps7)
+        echo "nameserver 10.151.11.5" | sudo tee /etc/resolv.conf
+        echo "nameserver 10.151.11.7" | sudo tee -a /etc/resolv.conf
+        echo "nameserver 10.151.11.7" | sudo tee -a /etc/resolv.conf
+        systemctl disable --now systemd-resolved
+
         # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
-        #install_test_dependencies "$TARGET_SYSTEM"
+        distro_install_package git
+        install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
         REBOOT
     fi
+
+    # Make sure /etc/environment exists
+    touch /etc/environment    
 
     # Setup ntp server depending on the openstack environment
     update_ntp

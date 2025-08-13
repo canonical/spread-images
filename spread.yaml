@@ -484,7 +484,7 @@ suites:
 
     tasks/openstack/add-image/:
         summary: add images for openstack backend
-        backends: [google]
+        backends: [google, openstack, openstack-ps7]
         systems: [ubuntu-*]
         environment:
         prepare: |

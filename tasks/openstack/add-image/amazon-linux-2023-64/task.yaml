@@ -50,6 +50,8 @@ execute: |
     # so we force using also 8.8.8.8
     echo "nameserver 8.8.8.8" | tee -a /mnt/disk/etc/resolv.conf
 
+    chroot /mnt/disk /bin/bash -c "systemctl disable --now systemd-resolved"
+
     # Configure time
     chroot /mnt/disk /bin/bash -c "ln -sf /usr/share/zoneinfo/UTC /etc/localtime"
 
