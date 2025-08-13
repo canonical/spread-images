@@ -144,6 +144,7 @@ update_image(){
     target_system=""
     target_image=""
     properties=""
+    nockecks=""
     while [ $# -gt 0 ]; do
         case "$1" in
             -h|--help)
@@ -174,6 +175,10 @@ update_image(){
                 properties="$properties $2"
                 shift 2
                 ;;
+            --nockecks)
+                nockecks="true"
+                shift 1
+                ;;
             *)
                 echo "parameter non supported: $1"
                 show_help_update
@@ -188,7 +193,9 @@ update_image(){
         echo "A backend needs to be defined"
         exit 1
     else
-        _check_env_vars "$backend"
+        if [ "$nockecks" != true ]; then
+            _check_env_vars "$backend"
+        fi
     fi    
 
     if [ -z "$source_system" ] || [ -z "$target_system" ]; then
