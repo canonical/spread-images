@@ -26,15 +26,15 @@ jobs:
             target: centos-9-64
             property:
 
-          - group: fedora 40
-            task: fedora-40-64
-            source: fedora-40-64-base
-            target: fedora-40-64
-            property:
           - group: fedora 41
             task: fedora-41-64
             source: fedora-41-64-base
             target: fedora-41-64
+            property:
+          - group: fedora 42
+            task: fedora-42-64
+            source: fedora-42-64-base
+            target: fedora-42-64
             property:
 
           - group: opensuse 15.6
