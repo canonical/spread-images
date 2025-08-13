@@ -144,7 +144,7 @@ update_image(){
     target_system=""
     target_image=""
     properties=""
-    nockecks=""
+    no_checks=""
     while [ $# -gt 0 ]; do
         case "$1" in
             -h|--help)
@@ -175,8 +175,8 @@ update_image(){
                 properties="$properties $2"
                 shift 2
                 ;;
-            --nockecks)
-                nockecks="true"
+            --no-checks)
+                no_checks="true"
                 shift 1
                 ;;
             *)
@@ -193,7 +193,7 @@ update_image(){
         echo "A backend needs to be defined"
         exit 1
     else
-        if [ "$nockecks" != true ]; then
+        if [ "$no_checks" != true ]; then
             _check_env_vars "$backend"
         fi
     fi    
