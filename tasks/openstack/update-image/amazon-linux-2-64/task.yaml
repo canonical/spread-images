@@ -13,7 +13,8 @@ execute: |
         # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
-        #install_test_dependencies "$TARGET_SYSTEM"
+        distro_install_package python3 git
+        install_test_dependencies "$TARGET_SYSTEM"
         remove_pkg_blacklist
         REBOOT
     fi

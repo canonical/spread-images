@@ -20,7 +20,8 @@ clean_machine() {
 update_ntp() {
     if [ -n "${NTP_SERVER:-}" ]; then
         setup_ntp_timesyncd
-        setup_ntp_chrony
+        # This is the default so we configure it at last
+        setup_ntp_chrony 
     fi
 }
 
@@ -53,6 +54,9 @@ setup_chrony_sources(){
 
     # Remove any sources link in /run which could fail to ln when the service is started
     for chrony_run_dir in /run/chrony /run/chrony.d; do
+        if [ ! -d "$chrony_run_dir" ]; then
+            continue
+        fi
         CRONY_SOURCES="$(find "$chrony_run_dir" -type l -name *.sources)"
         for source_file in $CRONY_SOURCES; do
             rm -f "$source_file"
@@ -74,8 +78,8 @@ setup_ntp_chrony() {
     systemctl start "$service"
 
     for _ in $(seq 10); do
-        if systemctl is-active"$service" | grep active; then
-            return
+        if systemctl is-active "$service" | grep -E "^active"; then
+            break
         fi
         sleep 1
     done
@@ -100,7 +104,7 @@ setup_ntp_timesyncd(){
     CONF_FILE="/etc/systemd/timesyncd.conf"
 
     # Backup the original file
-    cp "$CONF_FILE" "${CONF_FILE}.bak.$(date +%F_%T)"
+    cp "$CONF_FILE" "${CONF_FILE}.bak"
 
     # Update or add NTP= line
     sed -i '/^NTP=/d' "$CONF_FILE"
