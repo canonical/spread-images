@@ -36,8 +36,8 @@ show_help_update() {
     echo "Create and update images for openstack"
     echo ""
     echo "examples:"
-    echo "./lib/openstack.sh update-image --backend openstack-ext-ps7 --task amazon-linux-2-64 --source-system amazon-linux-2-64-base --target-system amazon-linux-2-64 --property os_secure_boot=required"
-    echo "./lib/openstack.sh update-image --backend openstack-ext-ps7 --task amazon-linux-2023-64 --source-system amazon-linux-2023-64-base --target-system amazon-linux-2023-64 --property os_secure_boot=required"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task amazon-linux-2-64 --source-system amazon-linux-2-64-base --target-system amazon-linux-2-64 --property os_secure_boot=required"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task amazon-linux-2023-64 --source-system amazon-linux-2023-64-base --target-system amazon-linux-2023-64 --property os_secure_boot=required"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task arch-linux-64 --source-system arch-linux-64-base --target-system arch-linux-64"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task centos-9-64 --source-system centos-9-64-base --target-system centos-9-64"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task debian-12-64 --source-system debian-12-64-base --target-system debian-12-64"
@@ -254,7 +254,9 @@ update_image(){
         # create the image
         # Openstack code (openstack image create) checks tty status: it needs a tty (even if you create from a volume),
         # that the ci runners may not provide. So it is needed to "fake" a tty to execute the command.
-        target_id="$(true | openstack image create -f value -c image_id --volume "$volume_id" "$target_image")"
+        target_id=$(script -q -c "openstack image create -f value -c image_id --volume $volume_id $target_image" /dev/null)
+        target_id="${target_id//$'\r'/}"
+
 
         if [ -z "$target_id" ]; then
            echo "Error: Image not created"
@@ -267,7 +269,7 @@ update_image(){
         fi
 
         if [ "$os_failed" == "false" ]; then
-            for _ in $(seq 20); do
+            for _ in $(seq 30); do
                 if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
                     if [[ "$target_system" == *uefi* ]]; then
                         family=${task}-uefi                        

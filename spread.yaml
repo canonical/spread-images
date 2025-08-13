@@ -291,6 +291,19 @@ backends:
             - debian-sid-64:
                 image: snapd-spread/debian-sid-64
 
+            - amazon-linux-2-64-base:
+                image: snapd-base/amazon-linux-2-64-base
+                storage: 50G
+            - amazon-linux-2-64:
+                image: snapd-spread/amazon-linux-2-64
+                storage: 50G
+            - amazon-linux-2023-64-base:
+                image: snapd-base/amazon-linux-2023-64-base
+                storage: 50G
+            - amazon-linux-2023-64:
+                image: snapd-spread/amazon-linux-2023-64
+                storage: 50G
+
     openstack-ps7:
         type: openstack
         key: '$(HOST: echo "$OS_CREDENTIALS_AMD64_PS7")'                                                                                                                                                            
@@ -309,37 +322,6 @@ backends:
             NO_PROXY: '127.0.0.1'
             NTP_SERVER: 'ntp.ps7.internal'
         systems: *openstack-systems
-
-    openstack-ext-ps7:
-        type: openstack
-        key: '$(HOST: echo "$OS_CREDENTIALS_AMD64_PS7")'
-        plan: shared.large
-        halt-timeout: 2h
-        wait-timeout: 5m
-        groups: [default]
-        proxy: ingress-haproxy.ps7.canonical.com
-        cidr-port-rel: [10.151.96.0/21:5000]
-        environment:
-            HTTP_PROXY: 'http://egress.ps7.internal:3128'
-            HTTPS_PROXY: 'http://egress.ps7.internal:3128'
-            http_proxy: 'http://egress.ps7.internal:3128'
-            https_proxy: 'http://egress.ps7.internal:3128'
-            no_proxy: '127.0.0.1'
-            NO_PROXY: '127.0.0.1'
-            NTP_SERVER: 'ntp.ps7.internal'
-        systems: 
-            - amazon-linux-2-64-base:
-                image: snapd-base/amazon-linux-2-64-base
-                storage: 50G
-            - amazon-linux-2-64:
-                image: snapd-spread/amazon-linux-2-64
-                storage: 50G
-            - amazon-linux-2023-64-base:
-                image: snapd-base/amazon-linux-2023-64-base
-                storage: 50G
-            - amazon-linux-2023-64:
-                image: snapd-spread/amazon-linux-2023-64
-                storage: 50G
 
     openstack-arm-ps7:
         type: openstack
@@ -488,7 +470,7 @@ suites:
 
     tasks/openstack/common/:
         summary: Commmon tasks for openstack backend
-        backends: [openstack, openstack-ps7, openstack-ext-ps7, openstack-arm-ps7, openstack-stg-ps7, openstack-stg-arm-ps7]
+        backends: [openstack, openstack-ps7, openstack-arm-ps7, openstack-stg-ps7, openstack-stg-arm-ps7]
         environment:
             OS_USERNAME: '$(HOST: echo "${OS_USERNAME:-}")'
             OS_PROJECT_NAME: '$(HOST: echo "${OS_PROJECT_NAME:-}")'
@@ -502,7 +484,7 @@ suites:
 
     tasks/openstack/add-image/:
         summary: add images for openstack backend
-        backends: [google]
+        backends: [google, openstack, openstack-ps7]
         systems: [ubuntu-*]
         environment:
         prepare: |
@@ -510,7 +492,7 @@ suites:
 
     tasks/openstack/update-image/:
         summary: Update images for openstack backend
-        backends: [openstack, openstack-ps7, openstack-ext-ps7, openstack-arm-ps7, openstack-stg-ps7, openstack-stg-arm-ps7]
+        backends: [openstack, openstack-ps7, openstack-arm-ps7, openstack-stg-ps7, openstack-stg-arm-ps7]
         environment:
             OS_USERNAME: '$(HOST: echo "${OS_USERNAME:-}")'
             OS_PROJECT_NAME: '$(HOST: echo "${OS_PROJECT_NAME:-}")'

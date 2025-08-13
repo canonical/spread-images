@@ -49,6 +49,9 @@ execute: |
     systemctl enable apparmor.service
     systemctl start apparmor.service
 
+    # Setup ntp server depending on the openstack environment
+    update_ntp
+
     # Clean the disk
     clean_machine
 
