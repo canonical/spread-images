@@ -82,7 +82,7 @@ jobs:
             property_param="--property ${{ matrix.property }}"
           fi
 
-          ./lib/openstack.sh update-image --nockecks --backend openstack --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}" $property_param
+          ./lib/openstack.sh update-image --no-checks --backend openstack --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}" $property_param
   
     - name: Discard spread workers
       if: always()
@@ -203,7 +203,7 @@ jobs:
           if [ -n "${{ matrix.property }}" ]; then
             property_param="--property ${{ matrix.property }}"
           fi
-          ./lib/openstack.sh update-image --nockecks --backend openstack-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}" $property_param
+          ./lib/openstack.sh update-image --no-checks --backend openstack-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}" $property_param
   
     - name: Discard spread workers
       if: always()
@@ -267,7 +267,7 @@ jobs:
             property_param="--property ${{ matrix.property }}"
           fi
 
-          ./lib/openstack.sh update-image --nockecks --backend openstack-arm-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}" $property_param
+          ./lib/openstack.sh update-image --no-checks --backend openstack-arm-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}" $property_param
   
     - name: Discard spread workers
       if: always()
