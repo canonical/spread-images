@@ -14,54 +14,44 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - group: ubuntu 20.04
-            task: ubuntu-20.04-64
-            source: ubuntu-20.04-64-base
-            target: ubuntu-20.04-64
-          - group: ubuntu 22.04
-            task: ubuntu-22.04-64
-            source: ubuntu-22.04-64-base
-            target: ubuntu-22.04-64
-          - group: ubuntu 24.04
-            task: ubuntu-24.04-64
-            source: ubuntu-24.04-64-base
-            target: ubuntu-24.04-64
-
-          - group: debian 12
-            task: debian-12-64
-            source: debian-12-64-base
-            target: debian-12-64
           - group: debian sid
             task: debian-sid-64
             source: debian-sid-64-base
             target: debian-sid-64
+            property:
 
           - group: centos 9
             task: centos-9-64
             source: centos-9-64-base
             target: centos-9-64
+            property:
 
           - group: fedora 40
             task: fedora-40-64
             source: fedora-40-64-base
             target: fedora-40-64
+            property:
           - group: fedora 41
             task: fedora-41-64
             source: fedora-41-64-base
             target: fedora-41-64
+            property:
 
-          - group: opensuse 15.5
-            task: opensuse-15.5-64
-            source: opensuse-15.5-64-base
-            target: opensuse-15.5-64
           - group: opensuse 15.6
             task: opensuse-15.6-64
             source: opensuse-15.6-64-base
             target: opensuse-15.6-64
+            property:
           - group: opensuse tumbleweed
             task: opensuse-tumbleweed-64
             source: opensuse-tumbleweed-64-base
             target: opensuse-tumbleweed-64
+            property:
+          - group: opensuse tumbleweed selinux enabled
+            task: opensuse-tumbleweed-64-selinux
+            source: opensuse-tumbleweed-64-base
+            target: opensuse-tumbleweed-64-selinux-enabled
+            property:
 
     steps:
     - name: Ensure the workspace is clean
@@ -87,7 +77,12 @@ jobs:
           OS_USERNAME: ${{ secrets.OS_USERNAME }}
       shell: bash
       run: |
-          ./lib/openstack.sh update-image --backend openstack --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"
+          property_param=""
+          if [ -n "${{ matrix.property }}" ]; then
+            property_param="--property ${{ matrix.property }}"
+          fi
+
+          ./lib/openstack.sh update-image --backend openstack --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}" "$property_param"
   
     - name: Discard spread workers
       if: always()
@@ -105,54 +100,80 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - group: ubuntu 16.04
+            task: ubuntu-16.04-64
+            source: ubuntu-16.04-64-base
+            target: ubuntu-16.04-64
+            property:
+          - group: ubuntu 18.04
+            task: ubuntu-18.04-64
+            source: ubuntu-18.04-64-base
+            target: ubuntu-18.04-64
+            property:
           - group: ubuntu 20.04
             task: ubuntu-20.04-64
             source: ubuntu-20.04-64-base
             target: ubuntu-20.04-64
+            property:
           - group: ubuntu 22.04
             task: ubuntu-22.04-64
             source: ubuntu-22.04-64-base
             target: ubuntu-22.04-64
+            property:
           - group: ubuntu 24.04
             task: ubuntu-24.04-64
             source: ubuntu-24.04-64-base
             target: ubuntu-24.04-64
+            property:
+          - group: ubuntu 25.04
+            task: ubuntu-25.04-64
+            source: ubuntu-25.04-64-base
+            target: ubuntu-25.04-64
+            property:
+          - group: ubuntu 25.10
+            task: ubuntu-25.10-64
+            source: ubuntu-25.10-64-base
+            target: ubuntu-25.10-64
+            property:
+
+          - group: ubuntu 20.04 uefi
+            task: ubuntu-20.04-64
+            source: ubuntu-20.04-64-base
+            target: ubuntu-20.04-64-uefi
+            property: hw_firmware_type=uefi
+          - group: ubuntu 22.04 uefi
+            task: ubuntu-22.04-64
+            source: ubuntu-22.04-64-base
+            target: ubuntu-22.04-64-uefi
+            property: hw_firmware_type=uefi
+          - group: ubuntu 24.04 uefi
+            task: ubuntu-24.04-64
+            source: ubuntu-24.04-64-base
+            target: ubuntu-24.04-64-uefi
+            property: hw_firmware_type=uefi
 
           - group: debian 12
             task: debian-12-64
             source: debian-12-64-base
             target: debian-12-64
-          - group: debian sid
-            task: debian-sid-64
-            source: debian-sid-64-base
-            target: debian-sid-64
+            property:
 
-          - group: centos 9
-            task: centos-9-64
-            source: centos-9-64-base
-            target: centos-9-64
+          - group: amazon-linux 2
+            task: amazon-linux-2-64
+            source: amazon-linux-2-base
+            target: amazon-linux-2
+            property: os_secure_boot=required
+          - group: amazon-linux 2023
+            task: amazon-linux-2023-64
+            source: amazon-linux-2023-base
+            target: amazon-linux-2023
+            property: os_secure_boot=required
 
-          - group: fedora 40
-            task: fedora-40-64
-            source: fedora-40-64-base
-            target: fedora-40-64
-          - group: fedora 41
-            task: fedora-41-64
-            source: fedora-41-64-base
-            target: fedora-41-64
-
-          - group: opensuse 15.5
-            task: opensuse-15.5-64
-            source: opensuse-15.5-64-base
-            target: opensuse-15.5-64
-          - group: opensuse 15.6
-            task: opensuse-15.6-64
-            source: opensuse-15.6-64-base
-            target: opensuse-15.6-64
-          - group: opensuse tumbleweed
-            task: opensuse-tumbleweed-64
-            source: opensuse-tumbleweed-64-base
-            target: opensuse-tumbleweed-64
+          - group: arch-linux
+            task: arch-linux-64
+            source: arch-linux-base
+            target: arch-linux
+            property:
 
     steps:
     - name: Ensure the workspace is clean
@@ -178,7 +199,11 @@ jobs:
           OS_USERNAME: ${{ secrets.OS_USERNAME }}
       shell: bash
       run: |
-          ./lib/openstack.sh update-image --backend openstack-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"
+          property_param=""
+          if [ -n "${{ matrix.property }}" ]; then
+            property_param="--property ${{ matrix.property }}"
+          fi
+          ./lib/openstack.sh update-image --backend openstack-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}" $property_param
   
     - name: Discard spread workers
       if: always()
@@ -196,18 +221,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - group: ubuntu 20.04
-            task: ubuntu-20.04-arm-64
-            source: ubuntu-20.04-arm-64-base
-            target: ubuntu-20.04-arm-64
           - group: ubuntu 22.04
             task: ubuntu-22.04-arm-64
             source: ubuntu-22.04-arm-64-base
             target: ubuntu-22.04-arm-64
+            property:
           - group: ubuntu 24.04
             task: ubuntu-24.04-arm-64
             source: ubuntu-24.04-arm-64-base
             target: ubuntu-24.04-arm-64
+            property:
+          - group: ubuntu 24.04 uefi
+            task: ubuntu-24.04-arm-64
+            source: ubuntu-24.04-arm-64-base
+            target: ubuntu-24.04-arm-64-uefi
+            property: hw_firmware_type=uefi
+
 
     steps:
     - name: Ensure the workspace is clean
@@ -233,7 +262,12 @@ jobs:
           OS_USERNAME: ${{ secrets.OS_USERNAME }}
       shell: bash
       run: |
-          ./lib/openstack.sh update-image --backend openstack-arm-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}"
+          property_param=""
+          if [ -n "${{ matrix.property }}" ]; then
+            property_param="--property ${{ matrix.property }}"
+          fi
+
+          ./lib/openstack.sh update-image --backend openstack-arm-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}" "$property_param"
   
     - name: Discard spread workers
       if: always()
