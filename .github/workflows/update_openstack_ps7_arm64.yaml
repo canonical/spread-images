@@ -9,8 +9,6 @@ jobs:
   update-image:
     name: os-arm64-ps7 (${{ matrix.group }})
     runs-on: [self-hosted, spread-enabled]
-    environment:
-      name: OS_ARM64_PS7
     strategy:
       fail-fast: false
       matrix:
@@ -45,15 +43,15 @@ jobs:
 
     - name: Run test
       env:
-          OS_AUTH_URL: ${{ secrets.OS_AUTH_URL }}
+          OS_AUTH_URL: ${{ secrets.OS_AUTH_URL_ARM64_PS7 }}
           OS_IDENTITY_API_VERSION: ${{ vars.OS_IDENTITY_API_VERSION }}
           OS_INTERFACE: ${{ vars.OS_INTERFACE }}
-          OS_PASSWORD: ${{ secrets.OS_PASSWORD }}
+          OS_PASSWORD: ${{ secrets.OS_PASSWORD_ARM64_PS7 }}
           OS_PROJECT_DOMAIN_NAME: ${{ vars.OS_PROJECT_DOMAIN_NAME }}
-          OS_PROJECT_NAME: ${{ secrets.OS_PROJECT_NAME }}
-          OS_REGION_NAME: ${{ secrets.OS_REGION_NAME }}
+          OS_PROJECT_NAME: ${{ secrets.OS_PROJECT_NAME_ARM64_PS7 }}
+          OS_REGION_NAME: ${{ secrets.OS_REGION_NAME_ARM64_PS7 }}
           OS_USER_DOMAIN_NAME: ${{ vars.OS_USER_DOMAIN_NAME }}
-          OS_USERNAME: ${{ secrets.OS_USERNAME }}
+          OS_USERNAME: ${{ secrets.OS_USERNAME_ARM64_PS7 }}
       shell: bash
       run: |
           property_param=""
