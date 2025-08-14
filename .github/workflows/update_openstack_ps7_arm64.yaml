@@ -1,0 +1,71 @@
+name: Weekly Openstack arm64 images update in ps7
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 6 * * 0'
+
+jobs:
+  update-image:
+    name: os-arm64-ps7 (${{ matrix.group }})
+    runs-on: [self-hosted, spread-enabled]
+    environment: OS_ARM64_PS7
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - group: ubuntu 22.04
+            task: ubuntu-22.04-arm-64
+            source: ubuntu-22.04-arm-64-base
+            target: ubuntu-22.04-arm-64
+            property:
+          - group: ubuntu 24.04
+            task: ubuntu-24.04-arm-64
+            source: ubuntu-24.04-arm-64-base
+            target: ubuntu-24.04-arm-64
+            property:
+          - group: ubuntu 24.04 uefi
+            task: ubuntu-24.04-arm-64
+            source: ubuntu-24.04-arm-64-base
+            target: ubuntu-24.04-arm-64-uefi
+            property: hw_firmware_type=uefi
+
+
+    steps:
+    - name: Ensure the workspace is clean
+      run: |
+          rm -rf "${{ github.workspace }}"
+          mkdir "${{ github.workspace }}"
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+          ref: master
+
+    - name: Run test
+      env:
+          OS_AUTH_URL: ${{ secrets.OS_AUTH_URL }}
+          OS_IDENTITY_API_VERSION: ${{ vars.OS_IDENTITY_API_VERSION }}
+          OS_INTERFACE: ${{ vars.OS_INTERFACE }}
+          OS_PASSWORD: ${{ secrets.OS_PASSWORD }}
+          OS_PROJECT_DOMAIN_NAME: ${{ vars.OS_PROJECT_DOMAIN_NAME }}
+          OS_PROJECT_NAME: ${{ secrets.OS_PROJECT_NAME }}
+          OS_REGION_NAME: ${{ secrets.OS_REGION_NAME }}
+          OS_USER_DOMAIN_NAME: ${{ vars.OS_USER_DOMAIN_NAME }}
+          OS_USERNAME: ${{ secrets.OS_USERNAME }}
+      shell: bash
+      run: |
+          property_param=""
+          if [ -n "${{ matrix.property }}" ]; then
+            property_param="--property ${{ matrix.property }}"
+          fi
+
+          ./lib/openstack.sh update-image --no-checks --backend openstack-arm-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" --target-image snapd-spread/"${{ matrix.target }}" $property_param
+  
+    - name: Discard spread workers
+      if: always()
+      run: |
+        shopt -s nullglob;
+        for r in .spread-reuse.*.yaml; do
+          spread -discard -reuse-pid="$(echo "$r" | grep -o -E '[0-9]+')";
+        done
