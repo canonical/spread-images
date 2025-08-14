@@ -1,4 +1,4 @@
-name: Update Openstack amd64 images in ps7
+name: Update OS amd64 images in ps7
 on:
   workflow_dispatch:
   schedule:
@@ -8,7 +8,8 @@ jobs:
   update-image:
     name: os-amd64-ps7 (${{ matrix.group }})
     runs-on: [self-hosted, spread-enabled]
-    environment: OS_AMD64_PS7
+    environment:
+      name: OS_AMD64_PS7
     strategy:
       fail-fast: false
       matrix:

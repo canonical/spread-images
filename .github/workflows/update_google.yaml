@@ -1,4 +1,4 @@
-name: Update Google images
+name: Update GCE images
 
 on:
   workflow_dispatch:
