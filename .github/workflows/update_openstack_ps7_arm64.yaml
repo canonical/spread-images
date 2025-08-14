@@ -1,4 +1,4 @@
-name: Update Openstack arm64 images in ps7
+name: Update OS arm64 images in ps7
 
 on:
   workflow_dispatch:
@@ -9,7 +9,8 @@ jobs:
   update-image:
     name: os-arm64-ps7 (${{ matrix.group }})
     runs-on: [self-hosted, spread-enabled]
-    environment: OS_ARM64_PS7
+    environment:
+      name: OS_ARM64_PS7
     strategy:
       fail-fast: false
       matrix:

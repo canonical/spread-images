@@ -1,4 +1,4 @@
-name: Weekly Openstack images cleanup
+name: Clean OS images
 
 on:
   workflow_dispatch:
