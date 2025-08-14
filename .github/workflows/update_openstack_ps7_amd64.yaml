@@ -72,19 +72,19 @@ jobs:
 
           - group: amazon-linux 2
             task: amazon-linux-2-64
-            source: amazon-linux-2-base
-            target: amazon-linux-2
+            source: amazon-linux-2-64-base
+            target: amazon-linux-2-64
             property: os_secure_boot=required
           - group: amazon-linux 2023
             task: amazon-linux-2023-64
-            source: amazon-linux-2023-base
-            target: amazon-linux-2023
+            source: amazon-linux-2023-64-base
+            target: amazon-linux-2023-64
             property: os_secure_boot=required
 
           - group: arch-linux
             task: arch-linux-64
-            source: arch-linux-base
-            target: arch-linux
+            source: arch-linux-64-base
+            target: arch-linux-64
             property:
 
     steps:

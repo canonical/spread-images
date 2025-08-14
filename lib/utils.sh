@@ -83,7 +83,8 @@ setup_ntp_chrony() {
         fi
         sleep 1
     done
-    timedatectl set-ntp yes
+
+    timedatectl set-ntp yes || true
     for _ in $(seq 30); do
         if timedatectl status | grep -E "synchronized:.*yes"; then
             return
