@@ -76,6 +76,7 @@ jobs:
           OS_USERNAME: ${{ secrets.OS_USERNAME_AMD64_PS6 }}
       shell: bash
       run: |
+          env > "${{ github.workspace }}"/job-env.txt
           property_param=""
           if [ -n "${{ matrix.property }}" ]; then
             property_param="--property ${{ matrix.property }}"
