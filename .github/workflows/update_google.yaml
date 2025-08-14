@@ -1,4 +1,4 @@
-name: Weekly Google images update
+name: Update Google images
 
 on:
   workflow_dispatch:

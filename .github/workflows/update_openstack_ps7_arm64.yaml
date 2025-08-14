@@ -1,4 +1,4 @@
-name: Weekly Openstack arm64 images update in ps7
+name: Update Openstack arm64 images in ps7
 
 on:
   workflow_dispatch:
