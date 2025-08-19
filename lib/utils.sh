@@ -51,6 +51,7 @@ setup_chrony_sources(){
                 sed -i -e "s/^server /#server /g" "$source_file"
             fi
             if [ "$updated" = true ]; then
+                rm -f /etc/chrony.d/*.sources
                 cp -f "$source_file" /etc/chrony.d/snapd-ntp-pool.sources
                 break
             fi
