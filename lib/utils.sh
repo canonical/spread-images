@@ -37,20 +37,25 @@ setup_chrony_config() {
 }
 
 setup_chrony_sources(){
-    for chrony_dir in /etc/chrony /etc/chrony.d /usr/share/chrony/; do
-        if [ -d "$chrony_dir" ]; then
-            CRONY_SOURCES="$(find "$chrony_dir" -type f -name *.sources)"
-            for source_file in $CRONY_SOURCES; do
-                if grep '^pool ' "$source_file"; then
-                    sed -i -e "s/^pool /#pool /g" "$source_file"
-                    echo "pool $NTP_SERVER iburst" >> "$source_file"
-                fi
-                if grep '^server ' "$source_file"; then
-                    sed -i -e "s/^server /#server /g" "$source_file"
-                fi
-            done
-        fi
-    done
+    chrony_dir=/usr/share/chrony
+    if [ -d "$chrony_dir" ]; then
+        CRONY_SOURCES="$(find "$chrony_dir" -type f -name *.sources)"
+        for source_file in $CRONY_SOURCES; do
+            updated=false
+            if grep '^pool ' "$source_file"; then
+                sed -i -e "s/^pool /#pool /g" "$source_file"
+                echo "pool $NTP_SERVER iburst" >> "$source_file"
+                updated=true
+            fi
+            if grep '^server ' "$source_file"; then
+                sed -i -e "s/^server /#server /g" "$source_file"
+            fi
+            if [ "$updated" = true ]; then
+                cp -f "$source_file" /etc/chrony.d/snapd-ntp-pool.sources
+                break
+            fi
+        done
+    fi
 
     # Remove any sources link in /run which could fail to ln when the service is started
     for chrony_run_dir in /run/chrony /run/chrony.d; do

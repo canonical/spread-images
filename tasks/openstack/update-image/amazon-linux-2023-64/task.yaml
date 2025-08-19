@@ -20,13 +20,14 @@ execute: |
         distro_update_package_db
         distro_upgrade_packages
         distro_install_package git
-        install_test_dependencies "$TARGET_SYSTEM"
+        install_test_dependencies "$TARGET_SYSTEM"        
         remove_pkg_blacklist
+
         REBOOT
     fi
 
     # Make sure /etc/environment exists
-    touch /etc/environment    
+    touch /etc/environment
 
     # Setup ntp server depending on the openstack environment
     update_ntp
