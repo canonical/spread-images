@@ -203,7 +203,7 @@ update_image(){
         exit 1
     fi
     if [ -z "$target_image" ]; then
-        target_image="snapd-spread/${target_system}-v$(date +'%Y%m%d')"
+        target_image="snapd-spread/${target_system}"
         echo "Using target_image=$target_image"
     fi
 
@@ -482,7 +482,7 @@ clean_volumes(){
 clean_images(){
     set -x
 
-    deactivated_images="$(openstack image list --status deactivated --private -f value --column ID)"
+    deactivated_images="$(openstack image list --status deactivated -f value --column ID)"
     if [ -z "$deactivated_images" ]; then
         echo "No deactivated images found"
         return
@@ -513,7 +513,7 @@ _deactivate_old_images(){
         exit 1
     fi
 
-    active_images="$(openstack image list -f value --private --status active --tag "family=$family" --column ID)"
+    active_images="$(openstack image list -f value --status active --tag "family=$family" --column ID)"
     for active_image in $active_images; do
         if [ "$active_image" != "$image_id" ]; then
             tags="$(openstack image show -c tags -f value "$active_image")"
@@ -522,6 +522,14 @@ _deactivate_old_images(){
             elif grep -vq "family=$family" <<< "$tags"; then
                 echo "Skipping image with different family"
             else
+                created_at="$(openstack image show "$active_image" -c created_at -f value)"
+                image_name="$(openstack image show "$active_image" -c name -f value)"
+                created_at="$(date -d "$created_at" +"%Y%m%d")"                
+                image_name="${image_name}-v${created_at}"
+                if [ -n "$created_at" ] && [ -n "$image_name" ]; then
+                    echo "Renaming image name to $image_name"
+                    openstack image set --name "$image_name" "$active_image"
+                fi
                 echo "Deactivating old image: $active_image"
                 openstack image set --deactivate "$active_image"
             fi
@@ -634,7 +642,7 @@ add_image() {
 
     # Get the image and register it in openstack
     wget -q https://storage.googleapis.com/snapd-spread-tests/images/openstack/"$SPREAD_IMAGE_NAME"
-    openstack image create --file "$SPREAD_IMAGE_NAME" --disk-format "$image_format" --property "family=$task" $properties_param --private --property "family=$task" --tag "base-image" "$target_image"
+    openstack image create --file "$SPREAD_IMAGE_NAME" --disk-format "$image_format" --property "family=$task" $properties_param --property "family=$task" --tag "base-image" "$target_image"
 
     # clean up
     rm "$SPREAD_IMAGE_NAME"

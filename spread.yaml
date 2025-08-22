@@ -194,6 +194,7 @@ backends:
         halt-timeout: 2h
         wait-timeout: 5m
         groups: [default]
+        volume-auto-delete: false
         environment:
             HTTP_PROXY: 'http://squid.internal:3128'
             HTTPS_PROXY: 'http://squid.internal:3128'
@@ -313,6 +314,7 @@ backends:
         groups: [default]
         proxy: ingress-haproxy.ps7.canonical.com
         cidr-port-rel: [10.151.96.0/21:5000]
+        volume-auto-delete: false
         environment:
             HTTP_PROXY: 'http://egress.ps7.internal:3128'
             HTTPS_PROXY: 'http://egress.ps7.internal:3128'
@@ -332,6 +334,7 @@ backends:
         groups: [default]
         proxy: ingress-haproxy.ps7.canonical.com
         cidr-port-rel: [10.151.89.0/24:8000]
+        volume-auto-delete: false
         environment:
             HTTP_PROXY: 'http://egress.ps7.internal:3128'
             HTTPS_PROXY: 'http://egress.ps7.internal:3128'
@@ -369,6 +372,7 @@ backends:
         groups: [default]
         proxy: ingress-haproxy.ps7.canonical.com
         cidr-port-rel: [10.151.54.0/24:4000]
+        volume-auto-delete: false
         environment:
             HTTP_PROXY: 'http://egress.ps7.internal:3128'
             HTTPS_PROXY: 'http://egress.ps7.internal:3128'
@@ -388,6 +392,7 @@ backends:
         groups: [default]
         proxy: ingress-haproxy.ps7.canonical.com
         cidr-port-rel: [10.151.53.0/24:3000]
+        volume-auto-delete: false
         environment:
             HTTP_PROXY: 'http://egress.ps7.internal:3128'
             HTTPS_PROXY: 'http://egress.ps7.internal:3128'
