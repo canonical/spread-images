@@ -10,10 +10,14 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Make sure names are resolved (these nameservers are used in aml-2 in ps7)
-        echo "nameserver 10.151.11.5" | sudo tee /etc/resolv.conf
-        echo "nameserver 10.151.11.7" | sudo tee -a /etc/resolv.conf
-        echo "nameserver 10.151.11.7" | sudo tee -a /etc/resolv.conf
+        # Ensure the nameservers used are the same than the host vm
+        net_interface="$(ip route show default | awk '{print $5}')"
+        nameservers="$(resolvectl status "$net_interface" | grep "DNS Servers:" | cut -d: -f2)"
+        if [ -n "$nameservers" ]; then
+            for nameserver in $nameservers; do
+                echo "nameserver $nameserver" | tee -a /etc/resolv.conf
+            done
+        fi
         systemctl disable --now systemd-resolved
 
         # Make the upgrade
