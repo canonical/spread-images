@@ -215,6 +215,8 @@ backends:
                 image: auto-sync/ubuntu-focal-20.04-amd64-server
             - ubuntu-20.04-64:
                 image: snapd-spread/ubuntu-20.04-64
+            - ubuntu-20.04-64-hwe:
+                image: snapd-spread/ubuntu-20.04-64-hwe
             - ubuntu-20.04-64-uefi:
                 image: snapd-spread/ubuntu-20.04-64-uefi
             - ubuntu-22.04-64-base:

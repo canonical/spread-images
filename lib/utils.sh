@@ -36,23 +36,46 @@ setup_chrony_config() {
     sed -i -e "s/^#pool.*/pool $NTP_SERVER iburst/g" "$CRONY_CONF"
 }
 
+get_chrony_etc_sources_dir(){
+    CRONY_CONF=/etc/chrony/chrony.conf
+    if [ -f /etc/chrony.conf ]; then
+        CRONY_CONF=/etc/chrony.conf
+    fi
+    grep -E '^sourcedir' $CRONY_CONF | grep /etc/ | awk '{print $2}'
+}
+
+
 setup_chrony_sources(){
-    chrony_dir=/usr/share/chrony
-    if [ -d "$chrony_dir" ]; then
-        CRONY_SOURCES="$(find "$chrony_dir" -type f -name *.sources)"
-        for source_file in $CRONY_SOURCES; do
+    chrony_usr_dir=/usr/share/chrony
+    chrony_sources_dir="$(get_chrony_etc_sources_dir)"
+    
+    # Update  sources found in /etc sources dir
+    if [ -d "$chrony_sources_dir" ]; then
+        CHRONY_SOURCES="$(find "$chrony_sources_dir" -type f -name *.sources)"
+        for chrony_source in $CHRONY_SOURCES; do
+            sed -i -e "s/^pool /#pool /g" "$chrony_source"
+            echo "pool $NTP_SERVER iburst" >> "$chrony_source"
+            sed -i -e "s/^server /#server /g" "$chrony_source"
+        done
+    fi
+
+    # Update sources found in /usr sources dir
+    if [ -d "$chrony_usr_dir" ]; then
+        CHRONY_USR_SOURCES="$(find "$chrony_usr_dir" -type f -name *.sources)"
+        for chrony_usr_source in $CHRONY_USR_SOURCES; do
             updated=false
-            if grep '^pool ' "$source_file"; then
-                sed -i -e "s/^pool /#pool /g" "$source_file"
-                echo "pool $NTP_SERVER iburst" >> "$source_file"
+            if grep '^pool ' "$chrony_usr_source"; then
+                sed -i -e "s/^pool /#pool /g" "$chrony_usr_source"
+                echo "pool $NTP_SERVER iburst" >> "$chrony_usr_source"
                 updated=true
             fi
-            if grep '^server ' "$source_file"; then
-                sed -i -e "s/^server /#server /g" "$source_file"
+            if grep '^server ' "$chrony_usr_source"; then
+                sed -i -e "s/^server /#server /g" "$chrony_usr_source"
             fi
-            if [ "$updated" = true ]; then
-                rm -f /etc/chrony.d/*.sources
-                cp -f "$source_file" /etc/chrony.d/snapd-ntp-pool.sources
+            if [ "$updated" = true ]; then                                
+                mkdir -p "$chrony_sources_dir"                    
+                cp -f "$chrony_usr_source" "$chrony_sources_dir"/snapd-ntp-pool.sources
+                rm -f "$chrony_usr_source"/*.sources
                 break
             fi
         done
@@ -63,9 +86,9 @@ setup_chrony_sources(){
         if [ ! -d "$chrony_run_dir" ]; then
             continue
         fi
-        CRONY_SOURCES="$(find "$chrony_run_dir" -type l -name *.sources)"
-        for source_file in $CRONY_SOURCES; do
-            rm -f "$source_file"
+        CHRONY_RUN_SOURCES="$(find "$chrony_run_dir" -type l -name *.sources)"
+        for chrony_source in $CHRONY_RUN_SOURCES; do
+            rm -f "$chrony_source"
         done
     done    
 }
