@@ -1,0 +1,46 @@
+summary: Update Ubuntu 20.04 64 bits image with the latest updates
+
+systems: [ubuntu-20.04-64-base]
+
+environment:
+    TARGET_SYSTEM: ubuntu-20.04-64-hwe
+
+execute: |
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        distro_upgrade_packages
+
+        distro_install_package linux-generic-hwe-20.04
+
+        install_pkg_dependencies
+        install_test_dependencies "$TARGET_SYSTEM"
+
+        remove_pkg_blacklist
+
+        REBOOT
+    elif [ "$SPREAD_REBOOT" = 1 ]; then
+        distro_update_package_db
+        distro_upgrade_packages
+
+        REBOOT
+    fi
+
+    # Avoid checking for new release, it could cause lock on apt
+    sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
+
+    # Disable daily checks for updates to avoid apt locks
+    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
+
+    # Setup ntp server depending on the openstack environment
+    update_ntp
+
+    # Clean the disk
+    clean_machine
+
+restore: |
+    # Remove the project path content
+    rm -rf "$PROJECT_PATH"

@@ -52,6 +52,7 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-16.04-64 --source-system ubuntu-16.04-64-base --target-system ubuntu-16.04-64"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-18.04-64 --source-system ubuntu-18.04-64-base --target-system ubuntu-18.04-64"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-20.04-64-hwe --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64-hwe"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task ubuntu-25.04-64 --source-system ubuntu-25.04-64-base --target-system ubuntu-25.04-64"
@@ -207,6 +208,9 @@ update_image(){
         echo "Using target_image=$target_image"
     fi
 
+    # Family is used to identify the system despite the image name
+    family="$target_system"
+
     # Run the update image task with reuse to keep the instance after the update is completed
     rm -f .spread-reuse*
     spread_failed="false"
@@ -276,12 +280,8 @@ update_image(){
 
         if [ "$os_failed" == "false" ]; then
             for _ in $(seq 30); do
-                if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
-                    if [[ "$target_system" == *uefi* ]]; then
-                        family=${task}-uefi                        
-                    else
-                        family=$task                        
-                    fi
+                if openstack image show -c status -f value "$target_id" | grep -E "^active"; then   
+                    
                     # Set the properties specified
                     for property in $properties; do
                         openstack image set --property "$property" "$target_id" 
@@ -306,7 +306,7 @@ update_image(){
 
     # clean old images
     if [ "$spread_failed" == "false" ] && [ "$os_failed" == "false" ] && [ "$start_failed" == "false" ]; then
-        _deactivate_old_images "$target_id" "$task" "test-image"
+        _deactivate_old_images "$target_id" "$family" "test-image"
         openstack volume delete "$volume_id"
     fi
 
@@ -642,7 +642,7 @@ add_image() {
 
     # Get the image and register it in openstack
     wget -q https://storage.googleapis.com/snapd-spread-tests/images/openstack/"$SPREAD_IMAGE_NAME"
-    openstack image create --file "$SPREAD_IMAGE_NAME" --disk-format "$image_format" --property "family=$task" $properties_param --property "family=$task" --tag "base-image" "$target_image"
+    openstack image create --file "$SPREAD_IMAGE_NAME" --disk-format "$image_format" --property "family=$target_system" $properties_param --tag "base-image" "$target_image"
 
     # clean up
     rm "$SPREAD_IMAGE_NAME"
