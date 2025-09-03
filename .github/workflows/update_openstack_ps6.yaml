@@ -9,6 +9,7 @@ jobs:
   update-image:
     name: os-amd64-ps6 (${{ matrix.group }})
     runs-on: [self-hosted, spread-enabled]
+    environment: OS_AMD64_PS6
     strategy:
       fail-fast: false
       matrix:
@@ -65,15 +66,15 @@ jobs:
 
     - name: Run test
       env:
-          OS_AUTH_URL: ${{ secrets.OS_AUTH_URL_AMD64_PS6 }}
+          OS_AUTH_URL: ${{ secrets.OS_AUTH_URL }}
           OS_IDENTITY_API_VERSION: ${{ vars.OS_IDENTITY_API_VERSION }}
           OS_INTERFACE: ${{ vars.OS_INTERFACE }}
-          OS_PASSWORD: ${{ secrets.OS_PASSWORD_AMD64_PS6 }}
+          OS_PASSWORD: ${{ secrets.OS_PASSWORD }}
           OS_PROJECT_DOMAIN_NAME: ${{ vars.OS_PROJECT_DOMAIN_NAME }}
-          OS_PROJECT_NAME: ${{ secrets.OS_PROJECT_NAME_AMD64_PS6 }}
-          OS_REGION_NAME: ${{ secrets.OS_REGION_NAME_AMD64_PS6 }}
+          OS_PROJECT_NAME: ${{ secrets.OS_PROJECT_NAME }}
+          OS_REGION_NAME: ${{ secrets.OS_REGION_NAME }}
           OS_USER_DOMAIN_NAME: ${{ vars.OS_USER_DOMAIN_NAME }}
-          OS_USERNAME: ${{ secrets.OS_USERNAME_AMD64_PS6 }}
+          OS_USERNAME: ${{ secrets.OS_USERNAME }}
       shell: bash
       run: |
           property_param=""
