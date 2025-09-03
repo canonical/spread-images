@@ -37,3 +37,4 @@ execute: |
 restore: |
     # Remove the project path content
     rm -rf "$PROJECT_PATH"
+    sync
