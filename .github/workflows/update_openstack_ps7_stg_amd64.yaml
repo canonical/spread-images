@@ -6,9 +6,9 @@ on:
 
 jobs:
   update-image:
-    name: os-amd64-ps7 (${{ matrix.group }})
+    name: os-amd64-stg-ps7 (${{ matrix.group }})
     runs-on: [self-hosted, spread-enabled]
-    environment: OS_AMD64_PS7
+    environment: OS_AMD64_STG_PS7
     strategy:
       fail-fast: false
       matrix:
@@ -116,7 +116,7 @@ jobs:
           if [ -n "${{ matrix.property }}" ]; then
             property_param="--property ${{ matrix.property }}"
           fi
-          ./lib/openstack.sh update-image --no-checks --backend openstack-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" $property_param
+          ./lib/openstack.sh update-image --no-checks --backend openstack-stg-ps7 --task "${{ matrix.task }}" --source-system "${{ matrix.source }}" --target-system "${{ matrix.target }}" $property_param
   
     - name: Discard spread workers
       if: always()
