@@ -1,4 +1,4 @@
-name: Update OS amd64 images in ps7
+name: Update OS amd64 images in stg-ps7
 on:
   workflow_dispatch:
   schedule:

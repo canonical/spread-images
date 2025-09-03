@@ -1,4 +1,4 @@
-name: Update OS arm64 images in ps7
+name: Update OS arm64 images in stg-ps7
 
 on:
   workflow_dispatch:
