@@ -12,7 +12,6 @@ execute: |
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Normalize fedora base url among fedora versions
         sed -i -s -E -e 's@^#?baseurl=http://download.example/@baseurl=http://dl.fedoraproject.org/@g' /etc/yum.repos.d/fedora*.repo
-        sed -i -e 's/metalink=/#metalink=/g' /etc/yum.repos.d/fedora*.repo
         dnf --refresh -y makecache
 
         # Make the upgrade and install the dependencies needed to run snapd tests
