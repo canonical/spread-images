@@ -12,6 +12,11 @@ execute: |
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Normalize fedora base url among fedora versions
         sed -i -s -E -e 's@^#?baseurl=http://download.example/@baseurl=http://dl.fedoraproject.org/@g' /etc/yum.repos.d/fedora*.repo
+        for file in /etc/yum.repos.d/fedora*.repo; do
+            if [[ "$file" != *fedora-cisco-openh264.repo ]]; then
+                sed -i -e 's/metalink=/#metalink=/g' "$file"
+            fi
+        done
         dnf --refresh -y makecache
 
         # Make the upgrade and install the dependencies needed to run snapd tests
