@@ -9,5 +9,5 @@ deb-src https://deb.debian.org/debian/ unstable main contrib non-free non-free-f
 ## updates
 ##
 
-deb https://deb.debian.org/debian-security buster/updates main contrib non-free
-deb-src https://deb.debian.org/debian-security buster/updates main contrib non-free
+deb https://deb.debian.org/debian-security trixie-security main contrib non-free
+deb-src https://deb.debian.org/debian-security trixie-security main contrib non-free
