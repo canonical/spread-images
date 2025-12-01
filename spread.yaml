@@ -239,6 +239,10 @@ backends:
                 image: auto-sync/ubuntu-questing-daily-amd64-server
             - ubuntu-25.10-64:
                 image: snapd-spread/ubuntu-25.10-64
+            - ubuntu-26.04-64-base:
+                image: auto-sync/ubuntu-resolute-daily-amd64-server
+            - ubuntu-26.04-64:
+                image: snapd-spread/ubuntu-26.04-64
 
             - ubuntu-core-20-64:
                 image: snapd-spread/ubuntu-20.04-64-uefi
@@ -364,6 +368,12 @@ backends:
                 image: snapd-spread/ubuntu-24.04-arm-64
             - ubuntu-24.04-arm-64-uefi:
                 image: snapd-spread/ubuntu-24.04-arm-64-uefi
+            - ubuntu-26.04-arm-64-base:
+                image: auto-sync/ubuntu-resolute-daily-arm64-server
+            - ubuntu-26.04-arm-64:
+                image: snapd-spread/ubuntu-26.04-arm-64
+            - ubuntu-26.04-arm-64-uefi:
+                image: snapd-spread/ubuntu-26.04-arm-64-uefi
 
     openstack-stg-ps7:
         type: openstack
@@ -422,6 +432,12 @@ backends:
                 image: snapd-spread/ubuntu-24.04-arm-64
             - ubuntu-24.04-arm-64-uefi:
                 image: snapd-spread/ubuntu-24.04-arm-64-uefi
+            - ubuntu-26.04-arm-64-base:
+                image: auto-sync/ubuntu-resolute-daily-arm64-server
+            - ubuntu-26.04-arm-64:
+                image: snapd-spread/ubuntu-26.04-arm-64
+            - ubuntu-26.04-arm-64-uefi:
+                image: snapd-spread/ubuntu-26.04-arm-64-uefi
 
 
 path: /root/spread

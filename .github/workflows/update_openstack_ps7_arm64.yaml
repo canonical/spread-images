@@ -29,6 +29,16 @@ jobs:
             source: ubuntu-24.04-arm-64-base
             target: ubuntu-24.04-arm-64-uefi
             property: hw_firmware_type=uefi
+          - group: ubuntu 26.04
+            task: ubuntu-26.04-arm-64
+            source: ubuntu-26.04-arm-64-base
+            target: ubuntu-26.04-arm-64
+            property:
+          - group: ubuntu 26.04 uefi
+            task: ubuntu-26.04-arm-64
+            source: ubuntu-26.04-arm-64-base
+            target: ubuntu-26.04-arm-64-uefi
+            property: hw_firmware_type=uefi
 
 
     steps:
