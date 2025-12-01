@@ -48,6 +48,11 @@ jobs:
             source: ubuntu-25.10-64-base
             target: ubuntu-25.10-64
             property: hw_firmware_type=uefi
+          - group: ubuntu 26.04
+            task: ubuntu-26.04-64
+            source: ubuntu-26.04-64-base
+            target: ubuntu-26.04-64
+            property: hw_firmware_type=uefi
 
           - group: ubuntu 20.04 uefi
             task: ubuntu-20.04-64
@@ -63,6 +68,11 @@ jobs:
             task: ubuntu-24.04-64
             source: ubuntu-24.04-64-base
             target: ubuntu-24.04-64-uefi
+            property: hw_firmware_type=uefi
+          - group: ubuntu 26.04 uefi
+            task: ubuntu-26.04-64
+            source: ubuntu-26.04-64-base
+            target: ubuntu-26.04-64-uefi
             property: hw_firmware_type=uefi
 
           - group: debian 12
