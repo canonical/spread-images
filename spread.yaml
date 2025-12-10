@@ -73,9 +73,13 @@ backends:
             - ubuntu-25.04-64:
                 image: ubuntu-2504-64
             - ubuntu-25.10-64-base:
-                image: ubuntu-os-cloud-devel/ubuntu-2510-amd64
+                image: ubuntu-os-cloud/ubuntu-2510-amd64
             - ubuntu-25.10-64:
                 image: ubuntu-2510-64
+            - ubuntu-26.04-64-base:
+                image: ubuntu-os-cloud-devel/ubuntu-2604-lts-amd64
+            - ubuntu-26.04-64:
+                image: ubuntu-2604-64
 
             - debian-11-64-base:
                 image: debian-cloud/debian-11

@@ -10,19 +10,14 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Cleanup non required repos
-        rm -f /etc/zypp/repos.d/repo-sle-*.repo
-        rm -f /etc/zypp/repos.d/*-debug*.repo
-        rm -f /etc/zypp/repos.d/*-backports*.repo
-
-        # Use mirrorcache avoids errors trying to access the repo metadata
-        # It is possible to use https://ftp.icm.edu.pl/pub/Linux/opensuse/ as backup
-        sed -i -s -E -e 's@^baseurl=http://download.opensuse.org/@baseurl=http://mirrors.dotsrc.org/opensuse/@g' /etc/zypp/repos.d/repo*.repo
+        # Cleanup repos
+        rm -f /etc/zypp/repos.d/*.repo
+        cp leap16.repo /etc/zypp/repos.d/
 
         # Make the upgrade and install the dependencies needed to run snapd tests
         # In case some repo cannot be updated due to proxy restriction
-        distro_update_package_db || true
-        distro_upgrade_packages
+        distro_update_package_db
+        distro_upgrade_packages || true
 
         install_pkg_dependencies
         install_test_dependencies "$TARGET_SYSTEM"

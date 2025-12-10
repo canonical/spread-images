@@ -32,6 +32,7 @@ show_help_add() {
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task fedora-41-64 --target-system fedora-41-64-base"
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task fedora-42-64 --target-system fedora-42-64-base --property os_secure_boot=required"
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task opensuse-15.6-64 --target-system opensuse-15.6-64-base"
+    echo "./lib/openstack.sh add-image --backend openstack-ps7 --task opensuse-16.0-64 --target-system opensuse-16.0-64-base"
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task opensuse-tumbleweed-64 --target-system opensuse-tumbleweed-64-base"
     echo "./lib/openstack.sh add-image --backend openstack-ps7 --task ubuntu-25.10-64 --target-system ubuntu-25.10-64-base"
 }
@@ -59,6 +60,7 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task fedora-42-64 --source-system fedora-42-64-base --target-system fedora-42-64 --property os_secure_boot=required"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-15.5-64 --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-15.6-64 --source-system opensuse-15.6-64-base --target-system opensuse-15.6-64"
+    echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-16.0-64 --source-system opensuse-16.0-64-base --target-system opensuse-16.0-64"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-tumbleweed-64 --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64"
     echo "./lib/openstack.sh update-image --backend openstack-ps7 --task opensuse-tumbleweed-64-selinux --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64-selinux-enabled"
     echo ""

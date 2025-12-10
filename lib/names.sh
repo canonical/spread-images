@@ -117,10 +117,15 @@ else
             FAMILY="ubuntu-2504-64"
             DESCRIPTION="Ubuntu 25.04 64 bits"
             ;;
-       ubuntu-25.10-64)
+        ubuntu-25.10-64)
             IMAGE="ubuntu-2510-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-2510-64"
             DESCRIPTION="Ubuntu 25.10 64 bits"
+            ;;
+        ubuntu-26.04-64)
+            IMAGE="ubuntu-2604-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-2604-64"
+            DESCRIPTION="Ubuntu 26.04 64 bits"
             ;;
         # Debian
         debian-11-64)
