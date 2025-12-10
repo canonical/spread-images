@@ -1,0 +1,16 @@
+summary: Add new opensuse 16.0 image
+
+systems: [ubuntu-*]
+
+environment:
+    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://download.opensuse.org/repositories/openSUSE:/Leap:/16.0:/Images/images/Leap-16.0-Minimal-VM.x86_64-Cloud.qcow2}")'
+    IMAGE_NAME: '$(HOST: echo "${SPREAD_IMAGE_NAME:-opensuse-16.0-64-base.qcow2}")'
+
+execute: |
+    source_image_name="$(basename $IMAGE_URL)"
+    wget -q -O "$IMAGE_NAME" "$IMAGE_URL"
+    gsutil cp "$IMAGE_NAME" gs://snapd-spread-tests/images/openstack/"$IMAGE_NAME"
+
+restore: |
+    # Remove the project path content
+    rm -rf "$PROJECT_PATH"

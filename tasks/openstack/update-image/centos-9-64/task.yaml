@@ -37,12 +37,8 @@ execute: |
         REBOOT
     fi
 
-    # Configure ntp to ntp.ubuntu.com
-    sed -i -e 's/^pool.*/pool ntp.ubuntu.com iburst/g' /etc/chrony.conf
-    sed -i -e 's/^#pool.*/pool ntp.ubuntu.com iburst/g' /etc/chrony.conf
-    systemctl restart chronyd
-    sleep 5
-    timedatectl set-ntp yes
+    # Setup ntp server depending on the openstack environment
+    update_ntp
 
     sed -i 's/SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
     setenforce Permissive
