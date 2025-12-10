@@ -1,19 +1,17 @@
-summary: Update opensuse 15.6 64 bits image with the latest updates and test dependencies
+summary: Update opensuse 16.0 64 bits image with the latest updates and test dependencies
 
-systems: [opensuse-tumbleweed-64-base]
+systems: [opensuse-16.0-64-base]
 
 environment:
-    TARGET_SYSTEM: opensuse-tumbleweed-64-base
+    TARGET_SYSTEM: opensuse-16.0-64
 
 execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
-    # the image has SELinux enabled by default
-    selinuxenabled
-
     if [ "$SPREAD_REBOOT" = 0 ]; then
         # Cleanup non required repos
+        rm -f /etc/zypp/repos.d/repo-sle-*.repo
         rm -f /etc/zypp/repos.d/*-debug*.repo
         rm -f /etc/zypp/repos.d/*-backports*.repo
 
@@ -26,14 +24,13 @@ execute: |
         distro_update_package_db || true
         distro_upgrade_packages
 
+        install_pkg_dependencies
+        install_test_dependencies "$TARGET_SYSTEM"
+
+        remove_pkg_blacklist
+
         REBOOT
     fi
-
-    # Make sure /etc/environment exists
-    touch /etc/environment
-
-    # Make sure root is in sudoers file
-    cp "$PWD"/sudoers /etc/sudoers
 
     # Setup ntp server depending on the openstack environment
     update_ntp
