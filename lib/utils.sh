@@ -34,6 +34,8 @@ setup_chrony_config() {
     # When Running in PS7+, Configure ntp to the $NTP_SERVER
     sed -i -e "s/^pool.*/pool $NTP_SERVER iburst/g" "$CRONY_CONF"
     sed -i -e "s/^#pool.*/pool $NTP_SERVER iburst/g" "$CRONY_CONF"
+    # Also uncomment any disabled pool lines
+    sed -i -e "s/^! pool.*/pool $NTP_SERVER iburst/g" "$CRONY_CONF"
 }
 
 get_chrony_etc_sources_dir(){

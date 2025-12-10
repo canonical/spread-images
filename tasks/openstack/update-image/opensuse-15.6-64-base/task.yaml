@@ -27,13 +27,8 @@ execute: |
         REBOOT
     fi
 
-    # Configure ntp to ntp.ubuntu.com
-    sed -i -e 's/^pool.*/pool ntp.ubuntu.com iburst/g' /etc/chrony.conf
-    sed -i -e 's/^#pool.*/pool ntp.ubuntu.com iburst/g' /etc/chrony.conf
-    systemctl restart chronyd
-    sleep 5
-    timedatectl set-ntp yes
-    sleep 5
+    # Setup ntp server depending on the openstack environment
+    update_ntp
 
     # Clean the disk
     clean_machine
