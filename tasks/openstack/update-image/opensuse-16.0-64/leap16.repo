@@ -1,0 +1,14 @@
+[leap16-oss]
+name=openSUSE Leap 16 OSS
+baseurl=http://mirrors.dotsrc.org/opensuse/distribution/leap/16.0/repo/oss/
+enabled=1
+autorefresh=1
+gpgcheck=0
+
+[leap16-non-oss]
+name=openSUSE Leap 16 Non-OSS
+baseurl=http://mirrors.dotsrc.org/opensuse/distribution/leap/16.0/repo/non-oss/
+enabled=1
+autorefresh=1
+gpgcheck=0
+

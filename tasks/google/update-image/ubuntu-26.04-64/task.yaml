@@ -1,9 +1,9 @@
-summary: Update Ubuntu 24.10 64 bits image with the latest updates and test dependencies
+summary: Update Ubuntu 26.04 64 bits image with the latest updates and test dependencies
 
-systems: [ubuntu-24.10-64-base]
+systems: [ubuntu-26.04-64-base]
 
 environment:
-    TARGET_SYSTEM: ubuntu-24.10-64
+    TARGET_SYSTEM: ubuntu-26.04-64
 
 execute: |
     . "$TESTSLIB/google.sh"
@@ -27,7 +27,7 @@ execute: |
     # Disable daily checks for updates to avoid apt locks
     sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
 
-    # Clean disk before create the shapshot
+    # Clean disk before create the snapshot
     clean_machine
 
     # Create a new image based on the current disk

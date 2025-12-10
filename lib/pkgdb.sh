@@ -429,7 +429,7 @@ pkg_dependencies_opensuse(){
         unzip
         "
     case "$SPREAD_SYSTEM" in
-        opensuse-1*)
+        opensuse-15*)
             echo "
                 python311
                 "
