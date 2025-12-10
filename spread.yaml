@@ -73,9 +73,13 @@ backends:
             - ubuntu-25.04-64:
                 image: ubuntu-2504-64
             - ubuntu-25.10-64-base:
-                image: ubuntu-os-cloud-devel/ubuntu-2510-amd64
+                image: ubuntu-os-cloud/ubuntu-2510-amd64
             - ubuntu-25.10-64:
                 image: ubuntu-2510-64
+            - ubuntu-26.04-64-base:
+                image: ubuntu-os-cloud-devel/ubuntu-2604-amd64
+            - ubuntu-26.04-64:
+                image: ubuntu-2604-64
 
             - debian-11-64-base:
                 image: debian-cloud/debian-11
@@ -272,6 +276,10 @@ backends:
                 image: snapd-base/opensuse-15.6-64-base
             - opensuse-15.6-64:
                 image: snapd-spread/opensuse-15.6-64
+            - opensuse-16.0-64-base:
+                image: snapd-base/opensuse-16.0-64-base
+            - opensuse-16.0-64:
+                image: snapd-spread/opensuse-16.0-64
             - opensuse-tumbleweed-64-base:
                 image: snapd-base/opensuse-tumbleweed-64-base
             - opensuse-tumbleweed-64:
