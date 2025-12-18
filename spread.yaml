@@ -192,7 +192,7 @@ backends:
                   image: ubuntu-2404-arm-64
                   storage: 12G
 
-    openstack-ps7:
+    openstack:
         type: openstack
         key: '$(HOST: echo "$OS_CREDENTIALS_AMD64_PS7")'                                                                                                                                                            
         plan: shared.xsmall
@@ -323,7 +323,7 @@ backends:
                 image: snapd-spread/amazon-linux-2023-64
                 storage: 50G
 
-    openstack-arm-ps7:
+    openstack-arm:
         type: openstack
         key: '$(HOST: echo "$OS_CREDENTIALS_ARM64_PS7")'
         plan: shared.xsmall.arm64
@@ -367,7 +367,7 @@ backends:
             - ubuntu-26.04-arm-64-uefi:
                 image: snapd-spread/ubuntu-26.04-arm-64-uefi
 
-    openstack-stg-ps7:
+    openstack-stg:
         type: openstack
         key: '$(HOST: echo "$OS_CREDENTIALS_STG_AMD64_PS7")'                                                                                                                                                            
         plan: shared.xsmall
@@ -387,7 +387,7 @@ backends:
             NTP_SERVER: 'ntp.ps7.internal'
         systems: *openstack-systems
 
-    openstack-stg-arm-ps7:
+    openstack-stg-arm:
         type: openstack
         key: '$(HOST: echo "$OS_CREDENTIALS_STG_ARM64_PS7")'
         plan: shared.xsmall.arm64
@@ -485,7 +485,7 @@ suites:
 
     tasks/openstack/common/:
         summary: Commmon tasks for openstack backend
-        backends: [openstack-ps7, openstack-arm-ps7, openstack-stg-ps7, openstack-stg-arm-ps7]
+        backends: [openstack, openstack-arm, openstack-stg, openstack-stg-arm]
         environment:
             OS_USERNAME: '$(HOST: echo "${OS_USERNAME:-}")'
             OS_PROJECT_NAME: '$(HOST: echo "${OS_PROJECT_NAME:-}")'
@@ -499,7 +499,7 @@ suites:
 
     tasks/openstack/add-image/:
         summary: add images for openstack backend
-        backends: [google, openstack-ps7]
+        backends: [google, openstack]
         systems: [ubuntu-*]
         environment:
         prepare: |
@@ -507,7 +507,7 @@ suites:
 
     tasks/openstack/update-image/:
         summary: Update images for openstack backend
-        backends: [openstack-ps7, openstack-arm-ps7, openstack-stg-ps7, openstack-stg-arm-ps7]
+        backends: [openstack, openstack-arm, openstack-stg, openstack-stg-arm]
         environment:
             OS_USERNAME: '$(HOST: echo "${OS_USERNAME:-}")'
             OS_PROJECT_NAME: '$(HOST: echo "${OS_PROJECT_NAME:-}")'
