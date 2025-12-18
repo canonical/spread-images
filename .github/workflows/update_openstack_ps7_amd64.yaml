@@ -80,6 +80,11 @@ jobs:
             source: debian-12-64-base
             target: debian-12-64
             property:
+          - group: debian sid
+            task: debian-sid-64
+            source: debian-sid-64-base
+            target: debian-sid-64
+            property:
 
           - group: amazon-linux 2
             task: amazon-linux-2-64
@@ -96,6 +101,39 @@ jobs:
             task: arch-linux-64
             source: arch-linux-64-base
             target: arch-linux-64
+            property:
+
+          - group: centos 9
+            task: centos-9-64
+            source: centos-9-64-base
+            target: centos-9-64
+            property:
+
+          - group: fedora 41
+            task: fedora-41-64
+            source: fedora-41-64-base
+            target: fedora-41-64
+            property:
+          - group: fedora 42
+            task: fedora-42-64
+            source: fedora-42-64-base
+            target: fedora-42-64
+            property:
+
+          - group: opensuse 15.6
+            task: opensuse-15.6-64
+            source: opensuse-15.6-64-base
+            target: opensuse-15.6-64
+            property:
+          - group: opensuse tumbleweed
+            task: opensuse-tumbleweed-64
+            source: opensuse-tumbleweed-64-base
+            target: opensuse-tumbleweed-64
+            property:
+          - group: opensuse tumbleweed selinux enabled
+            task: opensuse-tumbleweed-64-selinux
+            source: opensuse-tumbleweed-64-base
+            target: opensuse-tumbleweed-64-selinux-enabled
             property:
 
     steps:
