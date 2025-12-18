@@ -10,6 +10,9 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Clean the old nameservers used in ps6
+        sed -i '/^nameserver 91/d' /etc/resolv.conf
+
         # Cleanup non required repos
         rm -f /etc/zypp/repos.d/repo-sle-*.repo
         rm -f /etc/zypp/repos.d/*-debug*.repo
