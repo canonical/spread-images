@@ -262,10 +262,6 @@ backends:
                 image: snapd-base/fedora-40-64-base
             - fedora-40-64:
                 image: snapd-spread/fedora-40-64
-            - fedora-41-64-base:
-                image: snapd-base/fedora-41-64-base
-            - fedora-41-64:
-                image: snapd-spread/fedora-41-64
             - fedora-42-64-base:
                 image: snapd-base/fedora-42-64-base
             - fedora-42-64:
