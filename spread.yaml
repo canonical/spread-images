@@ -250,6 +250,8 @@ backends:
                 image: auto-sync/ubuntu-resolute-daily-amd64-server
             - ubuntu-26.04-64:
                 image: snapd-spread/ubuntu-26.04-64
+            - ubuntu-26.04-64-uefi:
+                image: snapd-spread/ubuntu-26.04-64-uefi
 
             - ubuntu-core-20-64:
                 image: snapd-spread/ubuntu-20.04-64-uefi
