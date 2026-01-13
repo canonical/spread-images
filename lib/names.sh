@@ -135,7 +135,7 @@ else
         ubuntu-26.04-arm-64)
             IMAGE="ubuntu-2604-arm-64-v$(date +'%Y%m%d')"
             FAMILY="ubuntu-2604-arm-64"
-            DESCRIPTION="Ubuntu 24.04 ARM 64 bits"
+            DESCRIPTION="Ubuntu 26.04 ARM 64 bits"
             ;;
         ubuntu-26.04-arm-64-virt-enabled)
             IMAGE="ubuntu-2604-arm-64-v$(date +'%Y%m%d')-virt-enabled"
