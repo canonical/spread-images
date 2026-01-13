@@ -196,6 +196,12 @@ backends:
             - ubuntu-24.04-arm-64:
                   image: ubuntu-2404-arm-64
                   storage: 12G
+            - ubuntu-26.04-arm-64-base:
+                  image: ubuntu-os-cloud-devel/ubuntu-2604-lts-arm64
+                  storage: 12G
+            - ubuntu-26.04-arm-64:
+                  image: ubuntu-2604-arm-64
+                  storage: 12G
 
     openstack:
         key: '$(HOST: echo "$OS_CREDENTIALS_AMD64_PS7")'                                                                                                                                                            
