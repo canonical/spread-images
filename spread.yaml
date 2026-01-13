@@ -80,6 +80,8 @@ backends:
                 image: ubuntu-os-cloud-devel/ubuntu-2604-lts-amd64
             - ubuntu-26.04-64:
                 image: ubuntu-2604-64
+            - ubuntu-26.04-64-virt-enabled:
+                image: ubuntu-2604-64-virt-enabled
 
             - debian-11-64-base:
                 image: debian-cloud/debian-11
@@ -163,7 +165,10 @@ backends:
                 image: ubuntu-2204-arm-64-virt-enabled
                 storage: 20G
             - ubuntu-24.04-64:
-                image: ubuntu-2204-64-virt-enabled
+                image: ubuntu-2404-64-virt-enabled
+                storage: 20G
+            - ubuntu-26.04-64:
+                image: ubuntu-2604-64-virt-enabled
                 storage: 20G
 
     google-arm:
