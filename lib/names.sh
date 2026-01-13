@@ -127,6 +127,21 @@ else
             FAMILY="ubuntu-2604-64"
             DESCRIPTION="Ubuntu 26.04 64 bits"
             ;;
+        ubuntu-26.04-64-virt-enabled)
+            IMAGE="ubuntu-2604-64-v$(date +'%Y%m%d')-virt-enabled"
+            FAMILY="ubuntu-2604-64-virt-enabled"
+            DESCRIPTION="Image with virtualization enabled"
+            ;;
+        ubuntu-26.04-arm-64)
+            IMAGE="ubuntu-2604-arm-64-v$(date +'%Y%m%d')"
+            FAMILY="ubuntu-2604-arm-64"
+            DESCRIPTION="Ubuntu 24.04 ARM 64 bits"
+            ;;
+        ubuntu-26.04-arm-64-virt-enabled)
+            IMAGE="ubuntu-2604-arm-64-v$(date +'%Y%m%d')-virt-enabled"
+            FAMILY="ubuntu-2604-arm-64-virt-enabled"
+            DESCRIPTION="Image with virtualization enabled"
+            ;;
         # Debian
         debian-11-64)
             IMAGE="debian-11-64-v$(date +'%Y%m%d')"
