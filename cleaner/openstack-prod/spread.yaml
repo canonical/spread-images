@@ -1,0 +1,17 @@
+project: spread-cleaner
+
+backends:
+    openstack:
+        key: '$(HOST: echo "$SPREAD_OPENSTACK_ENV")'
+        plan: shared.xsmall
+        halt-timeout: 2h
+        groups: [default]        
+        systems:
+            - ubuntu-24.04-64:
+                workers: 1
+  
+suites:
+    fakesuite/:
+        summary: This is a fake test suite
+
+path: /tmp
