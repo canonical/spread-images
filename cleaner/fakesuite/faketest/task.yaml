@@ -1,0 +1,4 @@
+summary: this is a fake test
+
+execute: |
+    echo "true"
