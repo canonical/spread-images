@@ -1,0 +1,13 @@
+project: spread-cleaner
+
+backends:
+    testflinger:
+        halt-timeout: 6h
+        systems:
+            - ubuntu-core-18-rpi3:
+
+suites:
+    fakesuite/:
+        summary: This is a fake test suite
+
+path: /tmp

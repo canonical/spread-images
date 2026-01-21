@@ -446,7 +446,7 @@ kill-timeout: 20m
 
 suites:
     tasks/google/add-image/:
-        summary: Create images  for google backend
+        summary: Create images for google backend
         backends: [google]
         environment:
             GCE_PROJECT: snapd-spread

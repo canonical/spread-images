@@ -1,14 +1,14 @@
-name: Clean Openstack PS7 Prod VMs
+name: Clean Openstack PS7 Stg VMs
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/20 * * * *"
+    - cron: "0 */6 * * *"
 
 jobs:
   clean-os-amd64-ps7:
-    name: cleaner-amd64-prod-ps7
+    name: cleaner-amd64-stg-ps7
     runs-on: [self-hosted, spread-enabled]
-    environment: OS_AMD64_PS7
+    environment: OS_AMD64_STG_PS7
 
     steps:
     - name: Ensure the workspace is clean
@@ -43,9 +43,9 @@ jobs:
           spread -gc
 
   clean-os-arm64-ps7:
-    name: cleaner-amd64-prod-ps7
+    name: cleaner-arm64-stg-ps7
     runs-on: [self-hosted, spread-enabled]
-    environment: OS_ARM64_PS7
+    environment: OS_ARM64_STG_PS7
 
     steps:
     - name: Ensure the workspace is clean
