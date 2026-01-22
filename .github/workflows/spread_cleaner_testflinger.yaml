@@ -1,0 +1,34 @@
+name: Clean Testflinger Jobs
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/40 * * * *"
+
+jobs:
+  clean-testflinger:
+    name: cleaner-testflinger
+    runs-on: [self-hosted, spread-enabled]
+
+    steps:
+    - name: Ensure the workspace is clean
+      run: |
+          rm -rf "${{ github.workspace }}"
+          mkdir "${{ github.workspace }}"
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+          ref: master
+
+    - name: Create the fake env
+      shell: bash
+      run: |
+         cp -rf ./cleaner/fakesuite ./cleaner/testflinger
+
+    - name: Run cleanup
+      shell: bash
+      run: |
+          cd ./cleaner/testflinger          
+          no_proxy=testflinger.canonical.com ./spread -gc
+
+    

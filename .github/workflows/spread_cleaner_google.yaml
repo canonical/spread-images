@@ -1,0 +1,42 @@
+name: Clean Google VMs
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/40 * * * *"
+
+jobs:
+  clean-google:
+    name: cleaner-google
+    runs-on: [self-hosted, spread-enabled]
+
+    steps:
+    - name: Ensure the workspace is clean
+      run: |
+          rm -rf "${{ github.workspace }}"
+          mkdir "${{ github.workspace }}"
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+          ref: master
+
+    - name: Create the fake env
+      shell: bash
+      run: |
+         cp -rf ./cleaner/fakesuite ./cleaner/google
+
+    - name: Run cleanup
+      env:
+          IMAGE_BAKER_SA: ${{ secrets.IMAGE_BAKER_SA}}
+          SPREAD_GOOGLE_KEY: ${{ github.workspace }}/sa.json
+      shell: bash
+      run: |
+          echo "$IMAGE_BAKER_SA" > sa.json
+          cd ./cleaner/google          
+          spread -gc
+
+    - name: Cleanup job workspace after run tests
+      if: always()
+      run: |
+          rm -f "${{ github.workspace }}"/sa.json
+    
