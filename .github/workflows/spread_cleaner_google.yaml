@@ -26,8 +26,9 @@ jobs:
          cp -rf ./cleaner/fakesuite ./cleaner/google
 
     - name: Run cleanup
+      env:
+          SPREAD_GOOGLE_KEY: ${{ secrets.SPREAD_CLEANER_SA }}
       shell: bash
       run: |
           cd ./cleaner/google
           spread -gc
-    
