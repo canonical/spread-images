@@ -27,7 +27,7 @@ jobs:
             target: ubuntu-18.04-64
           - group: ubuntu 20.04
             task: ubuntu-20.04-64
-            source: ubuntu-20.04-64-base
+            source: ubuntu-20.04-64
             target: ubuntu-20.04-64
           - group: ubuntu 22.04
             task: ubuntu-22.04-64
@@ -37,10 +37,6 @@ jobs:
             task: ubuntu-24.04-64
             source: ubuntu-24.04-64-base
             target: ubuntu-24.04-64
-          - group: ubuntu 24.10
-            task: ubuntu-24.10-64
-            source: ubuntu-24.10-64-base
-            target: ubuntu-24.10-64
           - group: ubuntu 25.10
             task: ubuntu-25.10-64
             source: ubuntu-25.10-64-base
@@ -77,10 +73,6 @@ jobs:
             source: centos-9-64-base
             target: centos-9-64
 
-          - group: opensuse 15.5
-            task: opensuse-15-5
-            source: opensuse-15.5-64-base
-            target: opensuse-15.5-64
           - group: opensuse 15.6
             task: opensuse-15-6
             source: opensuse-15.6-64-base
