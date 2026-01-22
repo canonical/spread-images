@@ -29,6 +29,6 @@ jobs:
       shell: bash
       run: |
           cd ./cleaner/testflinger          
-          no_proxy=testflinger.canonical.com ./spread -gc
+          no_proxy=testflinger.canonical.com spread -gc
 
     

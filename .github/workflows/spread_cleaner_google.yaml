@@ -28,12 +28,11 @@ jobs:
     - name: Run cleanup
       env:
           IMAGE_BAKER_SA: ${{ secrets.IMAGE_BAKER_SA}}
-          SPREAD_GOOGLE_KEY: ${{ github.workspace }}/sa.json
       shell: bash
       run: |
           echo "$IMAGE_BAKER_SA" > sa.json
-          cd ./cleaner/google          
-          spread -gc
+          cd ./cleaner/google
+          SPREAD_GOOGLE_KEY="$(cat "${{ github.workspace }}/sa.json")" spread -gc
 
     - name: Cleanup job workspace after run tests
       if: always()
