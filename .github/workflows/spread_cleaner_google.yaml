@@ -26,15 +26,8 @@ jobs:
          cp -rf ./cleaner/fakesuite ./cleaner/google
 
     - name: Run cleanup
-      env:
-          SPREAD_GOOGLE_BAKER_KEY: ${{ secrets.IMAGE_BAKER_SA}}
       shell: bash
       run: |
           cd ./cleaner/google
           spread -gc
-
-    - name: Cleanup job workspace after run tests
-      if: always()
-      run: |
-          rm -f "${{ github.workspace }}"/sa.json
     
