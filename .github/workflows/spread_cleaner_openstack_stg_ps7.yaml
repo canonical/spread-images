@@ -1,4 +1,5 @@
 name: Clean Openstack PS7 Stg VMs
+
 on:
   workflow_dispatch:
   schedule:
