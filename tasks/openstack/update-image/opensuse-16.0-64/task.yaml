@@ -22,10 +22,23 @@ execute: |
         install_pkg_dependencies
         install_test_dependencies "$TARGET_SYSTEM"
 
+        # see (applies to TW as well): https://en.opensuse.org/How_to_switch_from_SELinux_to_AppArmor_in_Leap_16
+        # install AppArmor tools
+        zypper in -y --type pattern apparmor
+
+        sed -i -e 's/security=selinux/security=apparmor/g' -e 's/selinux=1//g' /etc/default/grub
+        update-bootloader
+
         remove_pkg_blacklist
 
         REBOOT
     fi
+
+    # confirm that AppArmor is enabled
+    aa-enabled
+
+    # and selinux is disabled
+    ! selinuxenabled
 
     # Setup ntp server depending on the openstack environment
     update_ntp
