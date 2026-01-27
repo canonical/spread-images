@@ -1,4 +1,5 @@
 name: Clean Google VMs
+
 on:
   workflow_dispatch:
   schedule:
