@@ -125,13 +125,8 @@ _check_env_vars(){
     fi
 
     # Check environment name
-    if [ "$REGION" = prodstack6 ]; then
-        if [ ! "$backend" = openstack ]; then
-            echo "openstack backend \"$backend\" doesn't match the region $REGION"
-            exit 1
-        fi
-    elif [ "$REGION" = prodstack7 ]; then
-        if [[ ! "$backend" == *-ps7 ]]; then
+    if [ "$REGION" = prodstack7 ]; then
+        if [[ ! "$backend" == openstack* ]]; then
             echo "openstack backend \"$backend\" doesn't match the region $REGION"
             exit 1
         fi
