@@ -290,22 +290,26 @@ update_image(){
         fi
 
         if [ "$os_failed" == "false" ]; then
-            for _ in $(seq 30); do
-                if openstack image show -c status -f value "$target_id" | grep -E "^active"; then   
-                    
-                    # Set the properties specified
-                    for property in $properties; do
-                        openstack image set --property "$property" "$target_id" 
-                    done
-                    openstack image set --property "family=$family" "$target_id"
-                    openstack image set --tag "family=$family" "$target_id"
-                    openstack image set --tag "test-image" "$target_id"
-                    openstack image set --shared "$target_id"
+            for _ in $(seq 60); do
+                if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
                     break
                 fi
                 sleep 30
-             done
-         fi
+            done
+            if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
+                # Set the properties specified
+                for property in $properties; do
+                    openstack image set --property "$property" "$target_id" 
+                done
+                openstack image set --property "family=$family" "$target_id"
+                openstack image set --tag "family=$family" "$target_id"
+                openstack image set --tag "test-image" "$target_id"
+                openstack image set --shared "$target_id"
+            else
+                echo "Error: Image not active after waiting"
+                os_failed=true
+            fi
+        fi
      fi
 
     if [ "$spread_failed" == "false" ] && [ "$os_failed" == "false" ]; then
