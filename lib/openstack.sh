@@ -100,7 +100,8 @@ _check_env_vars(){
     
     local key_line cred_key cred_file
     key_line="$(yq ".backends.${backend}.key" spread.yaml)"
-    cred_key=$(echo "$key_line" | grep -o '\$OS_[A-Za-z0-9_]*')
+    # shellcheck disable=SC2016
+    cred_key="$(echo "$key_line" | grep -o '\$OS_[A-Za-z0-9_]*')"
     if [ -z "$cred_key" ]; then
         echo "openstack credentials key \"$cred_key\" for backend $backend not found"
         exit 1
@@ -112,6 +113,7 @@ _check_env_vars(){
         exit 1
     else
         echo "sourcing $cred_file"
+        # shellcheck disable=SC1090
         source "$cred_file"
     fi
 
@@ -211,7 +213,7 @@ update_image(){
     fi    
 
     if [ -z "$source_system" ] || [ -z "$target_system" ]; then
-        echo "Required parametes: source-system, target-system"
+        echo "Required parameters: source-system, target-system"
         exit 1
     fi
     if [ -z "$target_image" ]; then
@@ -281,37 +283,45 @@ update_image(){
 
         if [ -z "$target_id" ]; then
            echo "Error: Image not created"
-           os_failed=true
+           os_failed="true"
         fi
 
         if openstack image show "$target_id" | grep "No Image found"; then
            echo "Error: Image not found"
-           os_failed=true
+           os_failed="true"
         fi
 
         if [ "$os_failed" == "false" ]; then
-            for _ in $(seq 30); do
-                if openstack image show -c status -f value "$target_id" | grep -E "^active"; then   
-                    
-                    # Set the properties specified
-                    for property in $properties; do
-                        openstack image set --property "$property" "$target_id" 
-                    done
-                    openstack image set --property "family=$family" "$target_id"
-                    openstack image set --tag "family=$family" "$target_id"
-                    openstack image set --tag "test-image" "$target_id"
-                    openstack image set --shared "$target_id"
+            for i in $(seq 60); do
+                echo "Checking if image is active, attempt $i/60"
+                status="$(openstack image show -c status -f value "$target_id")"
+                if [ "$status" == "active" ]; then
                     break
+                else
+                    echo "Image status is not active, it is $status"
                 fi
                 sleep 30
-             done
-         fi
+            done
+            if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
+                # Set the properties specified
+                for property in $properties; do
+                    openstack image set --property "$property" "$target_id" 
+                done
+                openstack image set --property "family=$family" "$target_id"
+                openstack image set --tag "family=$family" "$target_id"
+                openstack image set --tag "test-image" "$target_id"
+                openstack image set --shared "$target_id"
+            else
+                echo "Error: Image not active after waiting"
+                os_failed="true"
+            fi
+        fi
      fi
 
     if [ "$spread_failed" == "false" ] && [ "$os_failed" == "false" ]; then
         echo "Checking the new image boots properly"
         if ! spread "$backend":"$target_system":tasks/openstack/common/start-instance; then
-            start_failed=true
+            start_failed="true"
         fi
     fi
 
@@ -379,7 +389,7 @@ list_orphan_volumes(){
     in_use_volumes="$(openstack volume list --status in-use -f value --column ID)"
     in_use_servers="$(openstack server list -c ID -f value)"
     for volume_id in $in_use_volumes; do
-        server_id="$(openstack volume show $volume_id -c attachments -f json | jq -r '.attachments[0].server_id')"
+        server_id="$(openstack volume show "$volume_id" -c attachments -f json | jq -r '.attachments[0].server_id')"
         if [ -z "$server_id" ] || [ "$server_id" == null ]; then
             echo "$volume_id"
         else
@@ -447,7 +457,7 @@ clean_volumes(){
     in_use_volumes="$(openstack volume list --status in-use -f value --column ID)"
     in_use_servers="$(openstack server list -c ID -f value)"
     for volume_id in $in_use_volumes; do
-        server_id="$(openstack volume show $volume_id -c attachments -f json | jq -r '.attachments[0].server_id')"
+        server_id="$(openstack volume show "$volume_id" -c attachments -f json | jq -r '.attachments[0].server_id')"
         if [ -z "$server_id" ] || [ "$server_id" == null ]; then
             echo "No server id attached to the volume $volume_id"
         else
@@ -653,6 +663,7 @@ add_image() {
 
     # Get the image and register it in openstack
     wget -q https://storage.googleapis.com/snapd-spread-tests/images/openstack/"$SPREAD_IMAGE_NAME"
+    # shellcheck disable=SC2086
     openstack image create --file "$SPREAD_IMAGE_NAME" --disk-format "$image_format" --property "family=$target_system" $properties_param --tag "base-image" "$target_image"
 
     # clean up
