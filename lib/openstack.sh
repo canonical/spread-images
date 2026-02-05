@@ -290,9 +290,13 @@ update_image(){
         fi
 
         if [ "$os_failed" == "false" ]; then
-            for _ in $(seq 60); do
-                if openstack image show -c status -f value "$target_id" | grep -E "^active"; then
+            for i in $(seq 60); do
+                echo "Checking if image is active, attempt $i/60"
+                status="$(openstack image show -c status -f value "$target_id")"
+                if [ "$status" == "active" ]; then
                     break
+                else
+                    echo "Image status is not active, it is $status"
                 fi
                 sleep 30
             done
