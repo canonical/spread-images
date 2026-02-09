@@ -25,7 +25,7 @@ execute: |
         distro_upgrade_packages
         distro_install_package git golang
 
-        # Make sure we have the latest golang version, as some of the tests require at least 1.22
+        # Make sure we have the latest golang version, as some of the tests require at least 1.21
         dnf upgrade --releasever=latest -y golang
 
         install_test_dependencies "$TARGET_SYSTEM"        
