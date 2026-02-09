@@ -23,7 +23,11 @@ execute: |
         # Make the upgrade
         distro_update_package_db
         distro_upgrade_packages
-        distro_install_package git
+        distro_install_package git golang
+
+        # Make sure we have the latest golang version, as some of the tests require at least 1.22
+        dnf upgrade --releasever=latest -y golang
+
         install_test_dependencies "$TARGET_SYSTEM"        
         remove_pkg_blacklist
 
