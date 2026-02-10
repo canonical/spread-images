@@ -10,6 +10,10 @@ execute: |
     . "$TESTSLIB/utils.sh"
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
+
+        # Enable the mirrorlist to be able to update the system and install the dependencies
+        sed -i 's/^#Server = https:\/\/mirrors.kernel.org/Server = https:\/\/mirrors.kernel.org/' /etc/pacman.d/mirrorlist
+
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_install_package archlinux-keyring
