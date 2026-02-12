@@ -9,7 +9,24 @@ execute: |
     . "$TESTSLIB/pkgdb.sh"
     . "$TESTSLIB/utils.sh"
 
+    # Remove this kernel downgrade when the 6.19 kernel gets fixed
     if [ "$SPREAD_REBOOT" = 0 ]; then
+
+        distro_update_package_db
+
+        apt install -y linux-image-6.17.0-8-generic
+        apt install -y linux-headers-6.17.0-8-generic
+
+        sed -i 's/^GRUB_DEFAULT/# &/' /etc/default/grub
+        sh -c 'printf "GRUB_SAVEDEFAULT=true\nGRUB_DEFAULT=saved\n" >> /etc/default/grub'
+        update-grub
+        grub-set-default "Advanced options for Ubuntu>Ubuntu, with Linux 6.17.0-8-generic"
+        update-grub
+
+        REBOOT
+    fi
+
+    if [ "$SPREAD_REBOOT" = 1 ]; then
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
         distro_upgrade_packages
