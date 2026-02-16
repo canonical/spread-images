@@ -18,6 +18,7 @@ execute: |
         # In case some repo cannot be updated due to proxy restriction
         distro_update_package_db
         distro_upgrade_packages || true
+        distro_install_package grub2-compat-ia32 || true
 
         install_pkg_dependencies
         install_test_dependencies "$TARGET_SYSTEM"
@@ -39,6 +40,9 @@ execute: |
 
     # and selinux is disabled
     ! selinuxenabled
+
+    # Make sure /etc/environment exists
+    touch /etc/environment
 
     # Setup ntp server depending on the openstack environment
     update_ntp
