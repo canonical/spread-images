@@ -1,0 +1,53 @@
+name: Clean OpenStack Orphan Images
+
+on:
+  schedule:
+    # Runs daily at 02:00 UTC
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cleanup-orphan-images:
+    name: cleanup-orphan-volumes (${{ matrix.name }})
+    runs-on: [self-hosted, spread-enabled]
+    environment: ${{ matrix.env }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+            - name: amd-64
+              env: OS_AMD64_PS7
+            - name: arm-64
+              env: OS_ARM64_PS7
+            - name: stg-amd-64
+              env: OS_AMD64_STG_PS7
+            - name: stg-arm-64
+              env: OS_ARM64_STG_PS7
+
+    steps:
+      - name: Ensure the workspace is clean
+        run: |
+            rm -rf "${{ github.workspace }}"
+            mkdir "${{ github.workspace }}"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: master
+        
+      - name: Run test
+        env:
+            OS_AUTH_URL: ${{ secrets.OS_AUTH_URL }}
+            OS_IDENTITY_API_VERSION: ${{ vars.OS_IDENTITY_API_VERSION }}
+            OS_INTERFACE: ${{ vars.OS_INTERFACE }}
+            OS_PASSWORD: ${{ secrets.OS_PASSWORD }}
+            OS_PROJECT_DOMAIN_NAME: ${{ vars.OS_PROJECT_DOMAIN_NAME }}
+            OS_PROJECT_NAME: ${{ secrets.OS_PROJECT_NAME }}
+            OS_REGION_NAME: ${{ secrets.OS_REGION_NAME }}
+            OS_USER_DOMAIN_NAME: ${{ vars.OS_USER_DOMAIN_NAME }}
+            OS_USERNAME: ${{ secrets.OS_USERNAME }}
+        shell: bash
+        run: ./lib/openstack.sh clean-volumes available
