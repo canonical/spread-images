@@ -18,11 +18,17 @@ execute: |
         dnf config-manager --set-enabled crb
         dnf install -y epel-release epel-next-release || true
         
-        mv /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.old        
+        mv /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.old || true
         cp "$PWD"/epel.repo /etc/yum.repos.d/epel.repo
 
-        mv /etc/yum.repos.d/epel-next.repo /etc/yum.repos.d/epel-next.repo.old
+        mv /etc/yum.repos.d/epel-next.repo /etc/yum.repos.d/epel-next.repo.old || true
         cp "$PWD"/epel-next.repo /etc/yum.repos.d/epel-next.repo
+
+        sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/centos-addons.repo || true
+
+        curl -O https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9
+        rpm --import RPM-GPG-KEY-EPEL-9
+        rm RPM-GPG-KEY-EPEL-9
 
         # Make the upgrade and install the dependencies needed to run snapd tests
         distro_update_package_db
