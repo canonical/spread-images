@@ -3,7 +3,7 @@ summary: Add new fedora 44 image
 systems: [ubuntu-*]
 
 environment:
-    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://ask4.mm.fcix.net/fedora/linux/releases/44/Cloud/x86_64/images/Fedora-Cloud-Base-Generic-44-1.7.x86_64.qcow2}")'
+    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://download.fedoraproject.org/pub/fedora/linux/releases/44/Cloud/x86_64/images/Fedora-Cloud-Base-Generic-44-1.7.x86_64.qcow2}")'
     IMAGE_NAME: '$(HOST: echo "${SPREAD_IMAGE_NAME:-fedora-44-64-base.qcow2}")'
 
 execute: |
