@@ -73,10 +73,6 @@ jobs:
             source: centos-9-64-base
             target: centos-9-64
 
-          - group: opensuse 15.6
-            task: opensuse-15-6
-            source: opensuse-15.6-64-base
-            target: opensuse-15.6-64
           - group: opensuse tumbleweed
             task: opensuse-tumbleweed
             source: opensuse-tumbleweed-64-base
