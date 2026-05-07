@@ -279,6 +279,10 @@ backends:
                 image: snapd-base/fedora-42-64-base
             - fedora-42-64:
                 image: snapd-spread/fedora-42-64
+            - fedora-44-64-base:
+                image: snapd-base/fedora-44-64-base
+            - fedora-44-64:
+                image: snapd-spread/fedora-44-64
 
             - opensuse-15.5-64-base:
                 image: snapd-base/opensuse-15.5-64-base

@@ -1,0 +1,16 @@
+summary: Add new fedora 44 image
+
+systems: [ubuntu-*]
+
+environment:
+    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://ask4.mm.fcix.net/fedora/linux/releases/44/Cloud/x86_64/images/Fedora-Cloud-Base-Generic-44-1.7.x86_64.qcow2}")'
+    IMAGE_NAME: '$(HOST: echo "${SPREAD_IMAGE_NAME:-fedora-44-64-base.qcow2}")'
+
+execute: |
+    source_image_name="$(basename $IMAGE_URL)"
+    wget -q -O "$IMAGE_NAME" "$IMAGE_URL"
+    gsutil cp "$IMAGE_NAME" gs://snapd-spread-tests/images/openstack/"$IMAGE_NAME"
+
+restore: |
+    # Remove the project path content
+    rm -rf "$PROJECT_PATH"
