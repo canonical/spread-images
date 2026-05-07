@@ -115,11 +115,6 @@ jobs:
             target: fedora-42-64
             property:
 
-          - group: opensuse 15.6
-            task: opensuse-15.6-64
-            source: opensuse-15.6-64-base
-            target: opensuse-15.6-64
-            property:
           - group: opensuse 16.0
             task: opensuse-16.0-64
             source: opensuse-16.0-64-base
