@@ -340,7 +340,10 @@ update_image(){
     # delete the image is failed to start
     if [ "$start_failed" == "true" ]; then
         echo "Deleting image that failed to start after the update"
-        openstack image delete "$target_id"
+        if ! openstack image delete "$target_id"; then
+            echo "Failed to delete image, deactivating instead"
+            openstack image set --deactivate "$target_id"
+        fi
     fi
 
     # check spread and os commands didn't fail
