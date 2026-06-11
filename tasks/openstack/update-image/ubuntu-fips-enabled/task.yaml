@@ -1,0 +1,69 @@
+summary: Update Ubuntu 64 bits images with the latest updates and fips enabled
+
+systems: [ubuntu-20.04-64-base, ubuntu-22.04-64-base, ubuntu-24.04-64-base, ubuntu-26.04-64-base]
+
+environment:
+    UBUNTU_PRO_TOKEN: '$(HOST: echo "$SPREAD_UBUNTU_PRO_TOKEN")' 
+
+execute: |
+    case "$SPREAD_SYSTEM" in
+        ubuntu-20.04-64-base)
+            TARGET_SYSTEM=ubuntu-20.04-64-pro-fips
+        ;;
+        ubuntu-22.04-64-base)
+            TARGET_SYSTEM=ubuntu-22.04-64-pro-fips
+        ;;
+        ubuntu-24.04-64-base)
+            TARGET_SYSTEM=ubuntu-24.04-64-pro-fips
+        ;;
+        ubuntu-26.04-64-base)
+            TARGET_SYSTEM=ubuntu-26.04-64-pro-fips
+        ;;
+        *)
+            echo "System not supported"
+            exit 1
+        ;;
+    esac
+
+    . "$TESTSLIB/pkgdb.sh"
+    . "$TESTSLIB/utils.sh"
+
+    if [ "$SPREAD_REBOOT" = 0 ]; then
+        # Make the upgrade and install the dependencies needed to run snapd tests
+        distro_update_package_db
+        distro_upgrade_packages
+        # As those images are not used to run the whole test suite, we don't need
+        # to install all the test dependencies
+        # install_test_dependencies "$TARGET_SYSTEM"
+        remove_pkg_blacklist
+
+        apt install -y ubuntu-pro-client
+        pro attach "$UBUNTU_PRO_TOKEN" || true
+        pro enable fips-updates --assume-yes
+
+        REBOOT
+    fi
+
+    pro status | MATCH 'fips-updates.*yes.*enabled'
+    add-apt-repository --yes ppa:ubuntu-toolchain-r/golang-fips
+    apt update
+
+    # make sure we clean the token
+    rm -f /var/lib/ubuntu-advantage/machine-token.json
+
+    # Avoid checking for new release, it could cause lock on apt
+    sed -i 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
+
+    # Disable daily checks for updates to avoid apt locks
+    sudo systemctl disable --now apt-daily{,-upgrade}.{timer,service}
+
+    # Setup ntp server depending on the openstack environment
+    update_ntp
+
+    # Clean disk before create the shapshot
+    clean_machine
+
+restore: |
+    # Remove the project path content
+    rm -rf "$PROJECT_PATH"
+    sync
