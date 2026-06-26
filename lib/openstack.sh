@@ -33,6 +33,7 @@ show_help_add() {
     echo "./lib/openstack.sh add-image --backend openstack --task opensuse-15.6-64 --target-system opensuse-15.6-64-base"
     echo "./lib/openstack.sh add-image --backend openstack --task opensuse-16.0-64 --target-system opensuse-16.0-64-base"
     echo "./lib/openstack.sh add-image --backend openstack --task opensuse-tumbleweed-64 --target-system opensuse-tumbleweed-64-base"
+    echo "./lib/openstack.sh add-image --backend openstack --task ubuntu-14.04-64 --target-system ubuntu-14.04-64-base"
     echo "./lib/openstack.sh add-image --backend openstack --task ubuntu-25.10-64 --target-system ubuntu-25.10-64-base"
 }
 
@@ -63,6 +64,7 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --backend openstack --task opensuse-tumbleweed-64-selinux --source-system opensuse-tumbleweed-64-base --target-system opensuse-tumbleweed-64-selinux-enabled"
     echo ""
     echo "examples for ubuntu images:"
+    echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-14.04-64 --source-system ubuntu-14.04-64-base --target-system ubuntu-14.04-64"
     echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-16.04-64 --source-system ubuntu-16.04-64-base --target-system ubuntu-16.04-64"
     echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-18.04-64 --source-system ubuntu-18.04-64-base --target-system ubuntu-18.04-64"
     echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-20.04-64 --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64"
@@ -99,6 +101,12 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --backend openstack-arm --task ubuntu-22.04-arm-64 --source-system ubuntu-22.04-arm-64-base --target-system ubuntu-22.04-arm-64-uefi --property hw_firmware_type=uefi"
     echo "./lib/openstack.sh update-image --backend openstack-arm --task ubuntu-24.04-arm-64 --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64-uefi --property hw_firmware_type=uefi"
     echo "./lib/openstack.sh update-image --backend openstack-arm --task ubuntu-26.04-arm-64 --source-system ubuntu-26.04-arm-64-base --target-system ubuntu-26.04-arm-64-uefi --property hw_firmware_type=uefi"
+    echo ""
+    echo "examples for ubuntu images for nested tests:"
+    echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-24.04-64-nested --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64-nested"
+    echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-26.04-64-nested --source-system ubuntu-26.04-64-base --target-system ubuntu-26.04-64-nested"
+    echo "./lib/openstack.sh update-image --backend openstack-arm --task ubuntu-24.04-arm-64-nested --source-system ubuntu-24.04-arm-64-base --target-system ubuntu-24.04-arm-64-nested"
+    echo "./lib/openstack.sh update-image --backend openstack-arm --task ubuntu-26.04-arm-64-nested --source-system ubuntu-26.04-arm-64-base --target-system ubuntu-26.04-arm-64-nested"
     echo ""
     echo "examples for base images:"
     echo "./lib/openstack.sh update-image --backend openstack --task opensuse-15.5-64-base --source-system opensuse-15.5-64-base --target-system opensuse-15.5-64-base"

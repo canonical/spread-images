@@ -221,6 +221,10 @@ backends:
             NO_PROXY: '127.0.0.1'
             NTP_SERVER: 'ntp.ps7.internal'
         systems: &openstack-systems
+            - ubuntu-14.04-64-base:
+                image: snapd-base/ubuntu-14.04-64-base
+            - ubuntu-14.04-64:
+                image: snapd-spread/ubuntu-14.04-64
             - ubuntu-16.04-64-base:
                 image: auto-sync/ubuntu-xenial-16.04-amd64-server
             - ubuntu-16.04-64:
@@ -259,6 +263,8 @@ backends:
                 image: snapd-spread/ubuntu-24.04-64-secboot
             - ubuntu-24.04-64-pro-fips-enabled:
                 image: snapd-spread/ubuntu-24.04-64-pro-fips
+            - ubuntu-24.04-64-nested:
+                image: snapd-spread/ubuntu-24.04-64-nested
             - ubuntu-25.04-64-base:
                 image: auto-sync/ubuntu-plucky-25.04-amd64-server
             - ubuntu-25.04-64:
@@ -275,6 +281,8 @@ backends:
                 image: snapd-spread/ubuntu-26.04-64-uefi
             - ubuntu-26.04-64-pro-fips-enabled:
                 image: snapd-spread/ubuntu-26.04-64-pro-fips
+            - ubuntu-26.04-64-nested:
+                image: snapd-spread/ubuntu-26.04-64-nested
 
             - ubuntu-core-20-64:
                 image: snapd-spread/ubuntu-20.04-64-uefi
@@ -384,12 +392,16 @@ backends:
                 image: snapd-spread/ubuntu-24.04-arm-64
             - ubuntu-24.04-arm-64-uefi:
                 image: snapd-spread/ubuntu-24.04-arm-64-uefi
+            - ubuntu-24.04-arm-64-nested:
+                image: snapd-spread/ubuntu-24.04-arm-64-nested
             - ubuntu-26.04-arm-64-base:
                 image: auto-sync/ubuntu-resolute-daily-arm64-server
             - ubuntu-26.04-arm-64:
                 image: snapd-spread/ubuntu-26.04-arm-64
             - ubuntu-26.04-arm-64-uefi:
                 image: snapd-spread/ubuntu-26.04-arm-64-uefi
+            - ubuntu-26.04-arm-64-nested:
+                image: snapd-spread/ubuntu-26.04-arm-64-nested
 
     openstack-stg:
         type: openstack
