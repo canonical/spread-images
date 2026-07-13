@@ -283,6 +283,10 @@ backends:
                 image: snapd-spread/ubuntu-26.04-64-pro-fips
             - ubuntu-26.04-64-nested:
                 image: snapd-spread/ubuntu-26.04-64-nested
+            - ubuntu-26.10-64-base:
+                image: snapd-base/ubuntu-26.10-64-base
+            - ubuntu-26.10-64:
+                image: snapd-spread/ubuntu-26.10-64
 
             - ubuntu-core-20-64:
                 image: snapd-spread/ubuntu-20.04-64-uefi

@@ -1,10 +1,10 @@
-summary: Add new fedora 42 image
+summary: Add new ubuntu 26.10 image
 
 systems: [ubuntu-*]
 
 environment:
-    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://cloud-images.ubuntu.com/questing/current/questing-server-cloudimg-amd64.img}")'
-    IMAGE_NAME: '$(HOST: echo "${SPREAD_IMAGE_NAME:-questing-server-cloudimg-amd64.qcow2}")'
+    IMAGE_URL: '$(HOST: echo "${SPREAD_IMAGE_URL:-https://cloud-images.ubuntu.com/stonking/current/stonking-server-cloudimg-amd64.img}")'
+    IMAGE_NAME: '$(HOST: echo "${SPREAD_IMAGE_NAME:-stonking-server-cloudimg-amd64.qcow2}")'
 
 execute: |
     source_image_name="$(basename $IMAGE_URL)"

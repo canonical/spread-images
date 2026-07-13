@@ -1,9 +1,9 @@
-summary: Update Ubuntu 25.04 64 bits image with the latest updates
+summary: Update Ubuntu 26.10 64 bits image with the latest updates
 
-systems: [ubuntu-25.04-64-base]
+systems: [ubuntu-26.10-64-base]
 
 environment:
-    TARGET_SYSTEM: ubuntu-25.04-64
+    TARGET_SYSTEM: ubuntu-26.10-64
 
 execute: |
     . "$TESTSLIB/pkgdb.sh"
