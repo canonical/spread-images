@@ -38,20 +38,15 @@ jobs:
             source: ubuntu-24.04-64-base
             target: ubuntu-24.04-64
             property: hw_firmware_type=uefi
-          - group: ubuntu 25.04
-            task: ubuntu-25.04-64
-            source: ubuntu-25.04-64-base
-            target: ubuntu-25.04-64
-            property: hw_firmware_type=uefi
-          - group: ubuntu 25.10
-            task: ubuntu-25.10-64
-            source: ubuntu-25.10-64-base
-            target: ubuntu-25.10-64
-            property: hw_firmware_type=uefi
           - group: ubuntu 26.04
             task: ubuntu-26.04-64
             source: ubuntu-26.04-64-base
             target: ubuntu-26.04-64
+            property: hw_firmware_type=uefi
+          - group: ubuntu 26.10
+            task: ubuntu-26.10-64
+            source: ubuntu-26.10-64-base
+            target: ubuntu-26.10-64
             property: hw_firmware_type=uefi
 
           - group: ubuntu 20.04 uefi

@@ -34,7 +34,7 @@ show_help_add() {
     echo "./lib/openstack.sh add-image --backend openstack --task opensuse-16.0-64 --target-system opensuse-16.0-64-base"
     echo "./lib/openstack.sh add-image --backend openstack --task opensuse-tumbleweed-64 --target-system opensuse-tumbleweed-64-base"
     echo "./lib/openstack.sh add-image --backend openstack --task ubuntu-14.04-64 --target-system ubuntu-14.04-64-base"
-    echo "./lib/openstack.sh add-image --backend openstack --task ubuntu-25.10-64 --target-system ubuntu-25.10-64-base"
+    echo "./lib/openstack.sh add-image --backend openstack --task ubuntu-26.10-64 --target-system ubuntu-26.10-64-base"
 }
 
 show_help_update() {
@@ -71,9 +71,8 @@ show_help_update() {
     echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-20.04-64-hwe --source-system ubuntu-20.04-64-base --target-system ubuntu-20.04-64-hwe"
     echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-22.04-64"
     echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-24.04-64 --source-system ubuntu-24.04-64-base --target-system ubuntu-24.04-64"
-    echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-25.04-64 --source-system ubuntu-25.04-64-base --target-system ubuntu-25.04-64"
-    echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-25.10-64 --source-system ubuntu-25.10-64-base --target-system ubuntu-25.10-64"
     echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-26.04-64 --source-system ubuntu-26.04-64-base --target-system ubuntu-26.04-64"
+    echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-26.10-64 --source-system ubuntu-26.10-64-base --target-system ubuntu-26.10-64"
     echo ""
     echo "examples for ubuntu images with secboot:"
     echo "./lib/openstack.sh update-image --backend openstack --task ubuntu-22.04-64 --source-system ubuntu-22.04-64-base --target-system ubuntu-24.04-64-secboot --property os_secure_boot=required --property hw_firmware_type=uefi --property hw_machine_type=q35"
