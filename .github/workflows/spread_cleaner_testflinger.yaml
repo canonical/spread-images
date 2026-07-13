@@ -28,8 +28,12 @@ jobs:
 
     - name: Run cleanup
       shell: bash
+      env: 
+          TESTFLINGER_CLIENT_ID: ${{ secrets.TESTFLINGER_CLIENT_ID }}
+          TESTFLINGER_SECRET_KEY: ${{ secrets.TESTFLINGER_SECRET_KEY }}
+          no_proxy: testflinger.canonical.com
       run: |
           cd ./cleaner/testflinger          
-          no_proxy=testflinger.canonical.com spread -gc
+          spread -gc
 
     
