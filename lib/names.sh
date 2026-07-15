@@ -169,10 +169,10 @@ else
             FAMILY="fedora-40-64"
             DESCRIPTION="Fedora 40 64 bits with test dependencies"
             ;;
-        fedora-42-64)
-            IMAGE="fedora-42-64-v$(date +'%Y%m%d')"
-            FAMILY="fedora-42-64"
-            DESCRIPTION="Fedora 42 64 bits with test dependencies"
+        fedora-44-64)
+            IMAGE="fedora-44-64-v$(date +'%Y%m%d')"
+            FAMILY="fedora-44-64"
+            DESCRIPTION="Fedora 44 64 bits with test dependencies"
             ;;
         fedora-rawhide-64)
             IMAGE="fedora-rawhide-64-v$(date +'%Y%m%d')"
@@ -216,17 +216,6 @@ else
             IMAGE="opensuse-tumbleweed-64-selinux-enabled-v$(date +'%Y%m%d')"
             FAMILY="opensuse-tumbleweed-64-selinux-enabled"
             DESCRIPTION="Opensuse tumbleweed 64 bits with selinux enabled"
-            ;;
-        # Amazon linux 2
-        amazon-linux-2-64-base)
-            IMAGE="amazon-linux-2-64-base-v$(date +'%Y%m%d')"
-            FAMILY="amazon-linux-2-64-base"
-            DESCRIPTION="Base image"
-            ;;
-        amazon-linux-2-64)
-            IMAGE="amazon-linux-2-64-v$(date +'%Y%m%d')"
-            FAMILY="amazon-linux-2-64"
-            DESCRIPTION="Amazon Linux 2 64 bits"
             ;;
         # Amazon linux 2023
         amazon-linux-2023-64-base)

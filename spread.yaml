@@ -122,12 +122,6 @@ backends:
             - arch-linux-64:
                 image: arch-linux-64
 
-            - amazon-linux-2-64-base:
-                image: amazon-linux-2-64-base
-                storage: preserve-size
-            - amazon-linux-2-64:
-                image: amazon-linux-2-64
-                storage: preserve-size
             - amazon-linux-2023-64-base:
                 image: amazon-linux-2023-64-base
                 storage: preserve-size
@@ -299,10 +293,6 @@ backends:
                 image: snapd-base/fedora-40-64-base
             - fedora-40-64:
                 image: snapd-spread/fedora-40-64
-            - fedora-42-64-base:
-                image: snapd-base/fedora-42-64-base
-            - fedora-42-64:
-                image: snapd-spread/fedora-42-64
             - fedora-44-64-base:
                 image: snapd-base/fedora-44-64-base
             - fedora-44-64:
@@ -346,12 +336,6 @@ backends:
             - debian-sid-64:
                 image: snapd-spread/debian-sid-64
 
-            - amazon-linux-2-64-base:
-                image: snapd-base/amazon-linux-2-64-base
-                storage: 50G
-            - amazon-linux-2-64:
-                image: snapd-spread/amazon-linux-2-64
-                storage: 50G
             - amazon-linux-2023-64-base:
                 image: snapd-base/amazon-linux-2023-64-base
                 storage: 50G
