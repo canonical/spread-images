@@ -19,9 +19,9 @@ execute: |
         # Remove the Existing Tumbleweed Repositories
         zypper rr repo-oss repo-non-oss repo-update
         # Add repos
-        zypper ar -f -n "GWDG-Tumbleweed-OSS" https://gwdg.de repo-oss
-        zypper ar -f -n "GWDG-Tumbleweed-Non-OSS" https://gwdg.de repo-non-oss
-        zypper ar -f -n "GWDG-Tumbleweed-Update" https://gwdg.de repo-update
+        zypper ar -f https://ftp.gwdg.de/pub/opensuse/tumbleweed/repo/oss/ repo-oss
+        zypper ar -f https://ftp.gwdg.de/pub/opensuse/tumbleweed/repo/non-oss/ repo-non-oss
+        zypper ar -f https://ftp.gwdg.de/pub/opensuse/update/tumbleweed/ repo-update
 
         # Make the upgrade and install the dependencies needed to run snapd tests
         # In case some repo cannot be updated due to proxy restriction
