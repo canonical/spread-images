@@ -81,11 +81,6 @@ jobs:
             target: debian-sid-64
             property:
 
-          - group: amazon-linux 2
-            task: amazon-linux-2-64
-            source: amazon-linux-2-64-base
-            target: amazon-linux-2-64
-            property: os_secure_boot=required
           - group: amazon-linux 2023
             task: amazon-linux-2023-64
             source: amazon-linux-2023-64-base
@@ -104,11 +99,6 @@ jobs:
             target: centos-9-64
             property:
 
-          - group: fedora 42
-            task: fedora-42-64
-            source: fedora-42-64-base
-            target: fedora-42-64
-            property:
           - group: fedora 44
             task: fedora-44-64
             source: fedora-44-64-base
