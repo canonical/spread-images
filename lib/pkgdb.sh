@@ -318,7 +318,7 @@ distro_upgrade_packages() {
             apt upgrade -y
             ;;
         fedora-*)
-            dnf upgrade --nogpgcheck -y
+            dnf distro-sync --nogpgcheck -y
             ;;
         opensuse-*)
             zypper dup -y --force-resolution --no-recommends --replacefiles
