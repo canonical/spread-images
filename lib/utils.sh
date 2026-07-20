@@ -128,12 +128,13 @@ setup_ntp_chrony() {
 }
 
 setup_ntp_timesyncd(){
-    if [ ! -f /etc/systemd/timesyncd.conf ]; then
-        echo "Configuration file timesyncd.conf not found, skipping..."
-        return
-    fi
-
+    # We configure systemd-timesyncd to use the NTP_SERVER if it is defined
+    # We make sure the package is installed
     CONF_FILE="/etc/systemd/timesyncd.conf"
+
+    if [ ! -f "$CONF_FILE" ]; then
+        distro_install_package systemd-timesyncd
+    fi
 
     # Backup the original file
     cp "$CONF_FILE" "${CONF_FILE}.bak"
