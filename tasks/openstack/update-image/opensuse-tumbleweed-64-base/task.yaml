@@ -13,15 +13,15 @@ execute: |
     selinuxenabled
 
     if [ "$SPREAD_REBOOT" = 0 ]; then
-        # Use mirrorcache avoids errors trying to access the repo metadata
+        # Using default repos, but keep the code used to enable repos in case we need to use it
         # Back Up Your Current Repositories
-        cp -r /etc/zypp/repos.d /etc/zypp/repos.d.bak
+        #cp -r /etc/zypp/repos.d /etc/zypp/repos.d.bak
         # Remove the Existing Tumbleweed Repositories
-        zypper rr repo-oss repo-non-oss repo-update
+        #zypper rr repo-oss repo-non-oss repo-update
         # Add repos
-        zypper ar -f https://ftp.gwdg.de/pub/opensuse/tumbleweed/repo/oss/ repo-oss
-        zypper ar -f https://ftp.gwdg.de/pub/opensuse/tumbleweed/repo/non-oss/ repo-non-oss
-        zypper ar -f https://ftp.gwdg.de/pub/opensuse/update/tumbleweed/ repo-update
+        #zypper ar -f https://ftp.gwdg.de/pub/opensuse/tumbleweed/repo/oss/ repo-oss
+        #zypper ar -f https://ftp.gwdg.de/pub/opensuse/tumbleweed/repo/non-oss/ repo-non-oss
+        #zypper ar -f https://ftp.gwdg.de/pub/opensuse/update/tumbleweed/ repo-update
 
         # Make the upgrade and install the dependencies needed to run snapd tests
         # In case some repo cannot be updated due to proxy restriction
