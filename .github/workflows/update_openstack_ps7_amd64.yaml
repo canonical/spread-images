@@ -9,6 +9,7 @@ jobs:
     name: os-amd64-ps7 (${{ matrix.group }})
     runs-on: [self-hosted, spread-enabled]
     environment: OS_AMD64_PS7
+    secrets: inherit
     strategy:
       fail-fast: false
       matrix:
@@ -69,6 +70,29 @@ jobs:
             source: ubuntu-26.04-64-base
             target: ubuntu-26.04-64-uefi
             property: hw_firmware_type=uefi
+
+          - group: nested ubuntu 20.04
+            task: ubuntu-20.04-64-hwe
+            source: ubuntu-20.04-64-base
+            target: ubuntu-20.04-64-hwe
+            property:
+
+          - group: ubuntu-22-fips-enabled
+            task: ubuntu-fips-enabled
+            source: ubuntu-22.04-64-base
+            target: ubuntu-22.04-64-pro-fips
+            property:
+          - group: ubuntu-24-fips-enabled
+            task: ubuntu-fips-enabled
+            source: ubuntu-24.04-64-base
+            target: ubuntu-24.04-64-pro-fips
+            property:
+
+          - group: ubuntu-24.04-secboot
+            task: ubuntu-24.04-64
+            source: ubuntu-24.04-64-base
+            target: ubuntu-24.04-64-secboot
+            property: os_secure_boot=required --property hw_firmware_type=uefi --property hw_machine_type=q35
 
           - group: debian 12
             task: debian-12-64
