@@ -9,7 +9,6 @@ jobs:
     name: os-amd64-ps7 (${{ matrix.group }})
     runs-on: [self-hosted, spread-enabled]
     environment: OS_AMD64_PS7
-    secrets: inherit
     strategy:
       fail-fast: false
       matrix:
