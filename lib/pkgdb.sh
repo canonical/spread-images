@@ -140,7 +140,9 @@ distro_upgrade_packages() {
             dnf distro-sync --nogpgcheck -y
             ;;
         opensuse-*)
-            zypper dup -y --force-resolution --no-recommends --replacefiles
+            # --gpg-auto-import-keys picks up rotated signing keys from repo-update
+            # before packages are verified, otherwise a stale image cannot upgrade.
+            zypper --gpg-auto-import-keys dup -y --force-resolution --no-recommends --replacefiles
             ;;
         arch-*)
             pacman --needed --noconfirm -Syu
@@ -153,6 +155,49 @@ distro_upgrade_packages() {
             exit 1
             ;;
     esac
+}
+
+# openSUSE repository base, https://mirrors.opensuse.org. Defaults to the
+# canonical server; override with a mirror when the infrastructure can only
+# reach one. The mirror must also serve current signing keys, otherwise an
+# image older than a key rotation cannot be upgraded.
+TUMBLEWEED_MIRROR="${TUMBLEWEED_MIRROR:-http://download.opensuse.org}"
+
+_tumbleweed_set_repo() {
+    local repo="$1" url="$2"
+    zypper -q rr "$repo" 2>/dev/null || true
+    zypper -q ar -f "$url" "$repo"
+}
+
+distro_tumbleweed_update() {
+    local snapshot
+    snapshot="$(curl --fail --silent -L "$TUMBLEWEED_MIRROR/history/latest" || true)"
+    if [ -z "$snapshot" ]; then
+        echo "ERROR: cannot determine latest Tumbleweed snapshot from $TUMBLEWEED_MIRROR"
+        exit 1
+    fi
+    echo "Pinning Tumbleweed repos to snapshot $snapshot from $TUMBLEWEED_MIRROR"
+
+    # libzypp expands $snapshotVersion from this drop-in, so stepping the
+    # snapshot is a single write and the repo URLs never change.
+    mkdir -p /etc/zypp/vars.d
+    printf '%s\n' "$snapshot" > /etc/zypp/vars.d/snapshotVersion
+
+    # Only the main repos are archived per snapshot.
+    _tumbleweed_set_repo repo-oss \
+        "$TUMBLEWEED_MIRROR/history/\$snapshotVersion/tumbleweed/repo/oss/"
+    _tumbleweed_set_repo repo-non-oss \
+        "$TUMBLEWEED_MIRROR/history/\$snapshotVersion/tumbleweed/repo/non-oss/"
+    # The update repo has no snapshot history and carries the signing key
+    # rotations, so it stays on the mirror's floating path.
+    _tumbleweed_set_repo repo-update "$TUMBLEWEED_MIRROR/update/tumbleweed/"
+    # Not mirrored and not needed by the tests.
+    zypper -q mr -d repo-openh264 2>/dev/null || true
+
+    zypper -q clean --all
+    # Pick up rotated signing keys from the update repo before upgrading.
+    zypper --gpg-auto-import-keys refresh || true
+    distro_upgrade_packages
 }
 
 distro_clean_package_cache() {
