@@ -159,9 +159,11 @@ distro_upgrade_packages() {
 
 # openSUSE repository base, https://mirrors.opensuse.org. Defaults to the
 # canonical server; override with a mirror when the infrastructure can only
-# reach one. The mirror must also serve current signing keys, otherwise an
-# image older than a key rotation cannot be upgraded.
-TUMBLEWEED_MIRROR="${TUMBLEWEED_MIRROR:-http://download.opensuse.org}"
+# reach one. Must be HTTPS: --gpg-auto-import-keys trusts the repository
+# metadata when bootstrapping a rotated signing key. The mirror must also
+# serve current signing keys, otherwise an image older than a key rotation
+# cannot be upgraded.
+TUMBLEWEED_MIRROR="${TUMBLEWEED_MIRROR:-https://download.opensuse.org}"
 
 _tumbleweed_set_repo() {
     local repo="$1" url="$2"
@@ -170,10 +172,18 @@ _tumbleweed_set_repo() {
 }
 
 distro_tumbleweed_update() {
+    if [[ "$TUMBLEWEED_MIRROR" != https://* ]]; then
+        echo "ERROR: TUMBLEWEED_MIRROR must be an https URL, got '$TUMBLEWEED_MIRROR'"
+        exit 1
+    fi
+
     local snapshot
     snapshot="$(curl --fail --silent -L "$TUMBLEWEED_MIRROR/history/latest" || true)"
-    if [ -z "$snapshot" ]; then
-        echo "ERROR: cannot determine latest Tumbleweed snapshot from $TUMBLEWEED_MIRROR"
+    # Reject anything that is not a snapshot date so a proxy or captive portal
+    # error page is not written out as the snapshot version.
+    snapshot="${snapshot//[[:space:]]/}"
+    if [[ ! "$snapshot" =~ ^[0-9]+$ ]]; then
+        echo "ERROR: unexpected Tumbleweed snapshot '$snapshot' from $TUMBLEWEED_MIRROR"
         exit 1
     fi
     echo "Pinning Tumbleweed repos to snapshot $snapshot from $TUMBLEWEED_MIRROR"
