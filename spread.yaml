@@ -6,6 +6,7 @@ environment:
     PROJECT_PATH: /root/spread
     TESTSLIB: $PROJECT_PATH/lib
     TESTSFILES: $PROJECT_PATH/files
+    TUMBLEWEED_MIRROR: https://ftp.gwdg.de/pub/opensuse
     TMP_IMAGE_ID: "$(HOST: echo ${SPREAD_TMP_IMAGE_ID})"
     HTTP_PROXY: '$(HOST: echo "$SPREAD_HTTP_PROXY")'
     HTTPS_PROXY: '$(HOST: echo "$SPREAD_HTTPS_PROXY")'

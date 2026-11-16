@@ -13,20 +13,9 @@ execute: |
         # the image has SELinux enabled by default
         selinuxenabled
 
-        # Using default repos, but keep the code used to enable repos in case we need to use it
-        # Back Up Your Current Repositories
-        #cp -r /etc/zypp/repos.d /etc/zypp/repos.d.bak
-        # Remove the Existing Tumbleweed Repositories
-        #zypper rr repo-oss repo-non-oss repo-update
-        # Add repos
-        #zypper ar -f https://ftp.gwdg.de/pub/opensuse/tumbleweed/repo/oss/ repo-oss
-        #zypper ar -f https://ftp.gwdg.de/pub/opensuse/tumbleweed/repo/non-oss/ repo-non-oss
-        #zypper ar -f https://ftp.gwdg.de/pub/opensuse/update/tumbleweed/ repo-update
-
-        # Make the upgrade and install the dependencies needed to run snapd tests
-        # In case some repo cannot be updated due to proxy restriction
-        distro_update_package_db || true
-        distro_upgrade_packages
+        # Point the repos at the reachable mirror and pin them to a single
+        # snapshot so packages from different repos cannot drift out of sync.
+        distro_tumbleweed_update
 
         install_pkg_dependencies
         install_test_dependencies "$TARGET_SYSTEM"
