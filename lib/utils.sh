@@ -40,7 +40,7 @@ setup_chrony_config() {
     # /etc to edit the drop-in above should have applied instead.
     if [ ! -f "$CRONY_CONF" ]; then
         echo "ERROR: no chrony config in /etc and no drop-in snippets support" >&2
-        return 1
+        exit 1
     fi
 
     # When Running in PS7+, Configure ntp to the $NTP_SERVER
@@ -58,7 +58,7 @@ get_chrony_etc_sources_dir(){
     done
 
     [ -n "${CHRONY_CONF-}" ] || return
-    grep -E '^sourcedir' $CRONY_CONF | grep /etc/ | awk '{print $2}'
+    grep -E '^sourcedir' $CHRONY_CONF | grep /etc/ | awk '{print $2}'
 }
 
 
