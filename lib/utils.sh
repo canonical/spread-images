@@ -26,9 +26,21 @@ update_ntp() {
 }
 
 setup_chrony_config() {
+    if [ -d /etc/chrony.d ]; then
+        # drop in snippets under /etc/chrony.d - e.g. openSUSE
+        echo "pool $NTP_SERVER iburst" > /etc/chrony.d/snapd-ntp-pool.conf
+        return
+    fi
+
     CRONY_CONF=/etc/chrony/chrony.conf
     if [ -f /etc/chrony.conf ]; then
         CRONY_CONF=/etc/chrony.conf
+    fi
+    # Never write the vendor config in /usr/etc; if there is no config under
+    # /etc to edit the drop-in above should have applied instead.
+    if [ ! -f "$CRONY_CONF" ]; then
+        echo "ERROR: no chrony config in /etc and no drop-in snippets support" >&2
+        exit 1
     fi
 
     # When Running in PS7+, Configure ntp to the $NTP_SERVER
@@ -39,11 +51,14 @@ setup_chrony_config() {
 }
 
 get_chrony_etc_sources_dir(){
-    CRONY_CONF=/etc/chrony/chrony.conf
-    if [ -f /etc/chrony.conf ]; then
-        CRONY_CONF=/etc/chrony.conf
-    fi
-    grep -E '^sourcedir' $CRONY_CONF | grep /etc/ | awk '{print $2}'
+    for f in  /usr/etc/chrony.conf /etc/chrony/chrony.conf /etc/chrony.conf; do
+        if [ -f "$f" ]; then
+            CHRONY_CONF="$f"
+        fi
+    done
+
+    [ -n "${CHRONY_CONF-}" ] || return
+    grep -E '^sourcedir' $CHRONY_CONF | grep /etc/ | awk '{print $2}'
 }
 
 
@@ -51,8 +66,8 @@ setup_chrony_sources(){
     chrony_usr_dir=/usr/share/chrony
     chrony_sources_dir="$(get_chrony_etc_sources_dir)"
     
-    # Update  sources found in /etc sources dir
-    if [ -d "$chrony_sources_dir" ]; then
+    # Update sources found in /etc sources dir
+    if [ -n "$chrony_sources_dir" ] && [ -d "$chrony_sources_dir" ]; then
         CHRONY_SOURCES="$(find "$chrony_sources_dir" -type f -name *.sources)"
         for chrony_source in $CHRONY_SOURCES; do
             sed -i -e "s/^pool /#pool /g" "$chrony_source"
@@ -84,7 +99,7 @@ setup_chrony_sources(){
     fi
 
     # Remove any sources link in /run which could fail to ln when the service is started
-    for chrony_run_dir in /run/chrony /run/chrony.d; do
+    for chrony_run_dir in /run/chrony /run/chrony.d /run/chrony-dhcp; do
         if [ ! -d "$chrony_run_dir" ]; then
             continue
         fi
